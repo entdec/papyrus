@@ -3,7 +3,7 @@
 require 'delegate'
 
 # http://nithinbekal.com/posts/rails-presenters/
-modulue Decoro
+module Decoro
   class Base < SimpleDelegator
     delegate :t, to: I18n
 
