@@ -2,8 +2,8 @@
 
 class CreatePapyrusTemplates < ActiveRecord::Migration[6.0]
   def change
-    create_table :papyrus_templates do |t|
-      t.text :description
+    create_table :papyrus_templates, id: :uuid do |t|
+      t.string :description
       t.text :data
       t.jsonb :metadata
 

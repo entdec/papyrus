@@ -4,7 +4,7 @@ class PapyrusTemplatesTable < ActionTable::ActionTable
   model Papyrus::Template
 
   column(:description)
-  column(:metadata) { |template| Nuntius.config.metadata_humanize(template.metadata) }
+  column(:metadata) { |template| Papyrus.config.metadata_humanize(template.metadata) }
   initial_order :description, :asc
 
   row_link { |template| papyrus.edit_admin_template_path(template) }

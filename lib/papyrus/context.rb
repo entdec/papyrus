@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Nuntius
+module Papyrus
   class Context
   end
 end
