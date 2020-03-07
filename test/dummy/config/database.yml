@@ -1,0 +1,18 @@
+default: &default
+  adapter: postgresql
+  # username: postgres
+  encoding: utf8
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *default
+  database: papyrus_development
+
+test:
+  <<: *default
+  database: papyrus_test
+
+production:
+  <<: *default
+  database: papyrus_production
