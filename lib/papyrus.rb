@@ -26,7 +26,16 @@ require 'barby/outputter/prawn_outputter'
 require 'papyrus/engine'
 require 'papyrus/configuration'
 require 'papyrus/context'
+require 'papyrus/active_storage_helpers'
 
 module Papyrus
   # Your code goes here...
+  class << self
+    attr_reader :config
+
+    def setup
+      @config = Configuration.new
+      yield config
+    end
+  end
 end

@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
-# require_dependency 'papyrus/application_admin_controller'
+require_dependency 'papyrus/application_admin_controller'
 
 module Papyrus
   module Admin
-    class TemplatesController < ApplicationController
+    class TemplatesController < ApplicationAdminController
       before_action :set_objects, except: [:index]
 
-      def index
-        @templates = Papyrus::Template.visible.order(:description)
-      end
+      def index; end
 
       def new
         @template = Papyrus::Template.new
@@ -41,12 +39,10 @@ module Papyrus
 
       private
 
-      def set_objects
-        @layouts = Papyrus::Layout.visible
-      end
+      def set_objects; end
 
       def template_params
-        params.require(:template).permit(:enabled, :klass, :event, :transport, :description, :metadata, :payload, :from, :to, :subject, :layout_id, :html, :text, :payload).tap do |w|
+        params.require(:template).permit(:description, :metadata, :data).tap do |w|
           w[:metadata] = YAML.safe_load(params[:template][:metadata])
         end
       end

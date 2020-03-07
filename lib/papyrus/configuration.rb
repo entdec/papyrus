@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Nuntius
+module Papyrus
   class Configuration
     attr_accessor :admin_authentication_module
     attr_accessor :base_controller
