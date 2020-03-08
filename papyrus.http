@@ -32,11 +32,11 @@ Content-Type: application/json
       ],
       "block5": [
          "Consignee",
-         "PSE Poznan",
-         "ul. Marcelinska 71,",
+         "PSE Poznań",
+         "ul. Marcelińska 71,",
          "",
          "",
-         "Poznan, 60-354",
+         "Poznań, 60-354",
          "POLAND",
          "Attn To : -",
          "48-724990151"
@@ -67,7 +67,7 @@ Content-Type: application/json
          "48-724990151",
          "",
          "Shipping Mark:",
-         "PSE Poznan",
+         "PSE Poznań",
          "Reference: 6709512"
       ],
       "block9": [

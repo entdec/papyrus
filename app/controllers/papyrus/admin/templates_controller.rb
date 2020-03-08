@@ -42,7 +42,7 @@ module Papyrus
       def set_objects; end
 
       def template_params
-        params.require(:template).permit(:description, :metadata, :data, :attachments).tap do |w|
+        params.require(:template).permit(:description, :metadata, :data, attachments: []).tap do |w|
           w[:metadata] = YAML.safe_load(params[:template][:metadata])
         end
       end

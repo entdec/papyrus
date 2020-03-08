@@ -13,3 +13,6 @@ gemspec
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
+
+# I need higher than 2.2.2
+gem 'prawn', github: 'prawnpdf/prawn', branch: 'master'

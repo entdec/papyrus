@@ -2,6 +2,6 @@
   = f.input :description
   = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
   = f.input :metadata, as: :editor, input_html: { value: YAML.dump(f.object.metadata) }, mode: 'application/yaml', height: '80px'
-  = f.input :attachments, as: :file, multiple: true
+  = f.input :attachments, as: :file, input_html: { multiple: true }
   - f.object.attachments.each do |attachment|
-    = attachment.blob.filename
+    div = attachment.blob.filename
