@@ -6,7 +6,7 @@ module Papyrus
 
     def render(context)
       template = Tilt::PrawnTemplate.new(metadata) { |_t| data }
-      template.render(Papyrus::Context.new, context: context)
+      template.render(Papyrus::Context.new(self), data: context)
     end
   end
 end
