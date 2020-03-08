@@ -1,0 +1,151 @@
+#POST http://localhost:9494/papyrus/templates/c8eb5349-3da4-4b87-a827-3e2e752cbd17/paper
+POST https://oms.degrunt.net/papers/templates/c8eb5349-3da4-4b87-a827-3e2e752cbd17/paper
+Content-Type: application/json
+
+{
+   "data": {
+      "block1": [
+         "Date",
+         "02-03-2020"
+      ],
+      "block2": [
+         "Reference",
+         "Invoice #: 7447713",
+         "RMA #: NLS|SBL900959|4126180"
+      ],
+      "block3": [
+         "",
+         "",
+         "",
+         ""
+      ],
+      "block4": [
+         "Shipper",
+         "Plantronics c/o Rapid Logistics",
+         "Incheonweg 7",
+         "Rozenburg, NH 1437 EK",
+         "NETHERLANDS",
+         "TAX ID # NL 804502717",
+         "",
+         "",
+         ""
+      ],
+      "block5": [
+         "Consignee",
+         "PSE Poznan",
+         "ul. Marcelinska 71,",
+         "",
+         "",
+         "Poznan, 60-354",
+         "POLAND",
+         "Attn To : -",
+         "48-724990151"
+      ],
+      "block6": [
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         ""
+      ],
+      "block7": [
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         ""
+      ],
+      "block8": [
+         "Delivery info",
+         "Attn To : -",
+         "48-724990151",
+         "",
+         "Shipping Mark:",
+         "PSE Poznan",
+         "Reference: 6709512"
+      ],
+      "block9": [
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         ""
+      ],
+      "total_kg": 0,
+      "ship_via": "FedEx_International_Priority",
+      "freight_term": "DAP",
+      "license": "",
+      "lines": [
+                  {
+            "coo": "TH",
+            "part_nr": "2201-69777-001",
+            "serial_nr": "8215264444B7RK",
+            "description": "ASSY,BASE,EAGLE EYE PRODUCE",
+            "eu_hts": "8543709099",
+            "eccn": "EAR99",
+            "qty": 1,
+            "uom": "EACH",
+            "dimensions": "0x0x0",
+            "value": 306.63
+         }
+      ]
+   }
+}
+
+
+###
+POST http://localhost:9494/papyrus/templates/de3e8f60-06c8-4170-a9c4-0eca8a059715/paper
+Content-Type: application/json
+
+{
+  "data": {
+    "debug": true,
+    "from": {
+      "company": "SGS Nederland B.V.",
+      "address1": "Nieuw Zeeland 5A",
+      "address2": "1045 AL Amsterdam",
+      "tel": "020 4073200",
+      "email": "nl.ogc.amsterdam@sgs.com"
+    },
+    "to": {
+      "location": "ADNOC",
+      "customer": false
+    },
+    "product": {
+      "product_name": "A76",
+      "cas": "86290-81-5",
+      "UN": "1203",
+      "date": "02\/03\/19",
+      "file_no": "34433",
+      "time": "11:22",
+      "tag_id": "",
+      "operation": false,
+      "whmis": [
+        "flammable",
+        "carcinogenic",
+        "irritating",
+        "harmful"
+      ],
+      "unit": null,
+      "nr": "228",
+      "danger_codes": "H224 H304 H315 H336 H340 H350 H361 H411 P201 P210 P280 P301+P310 P403+P233 P501",
+      "subject": "test"
+    },
+    "labels": [
+      {
+        "barcode": "90168025"
+      }
+    ]
+  }
+}
+
+###
