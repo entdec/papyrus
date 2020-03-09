@@ -1,7 +1,12 @@
 = ui_form_for(@template, url: @template.new_record? ? admin_templates_path : admin_template_path, html: {multipart: true}) do |f|
-  = f.input :description
-  = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
-  = f.input :metadata, as: :editor, input_html: { value: YAML.dump(f.object.metadata) }, mode: 'application/yaml', height: '80px'
-  = f.input :attachments, as: :file, input_html: { multiple: true }
-  - f.object.attachments.each do |attachment|
-    div = attachment.blob.filename
+  - ui_tab :basics
+    = f.input :description
+    = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
+  - ui_tab :media
+    = f.input :attachments, as: :file, input_html: { multiple: true }
+    - f.object.attachments.each do |attachment|
+      div = attachment.blob.filename
+  - ui_tab :example_data
+    = f.input :example_data, as: :editor, input_html: { value: JSON.pretty_generate(f.object.example_data) }, mode: 'application/json', height: '600px'
+  - ui_tab :metadata
+    = f.input :metadata, as: :editor, input_html: { value: YAML.dump(f.object.metadata) }, mode: 'application/yaml'

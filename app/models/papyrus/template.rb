@@ -8,5 +8,9 @@ module Papyrus
       template = Tilt::PrawnTemplate.new(metadata.deep_symbolize_keys) { |_t| data }
       template.render(Papyrus::Context.new(self), data: context)
     end
+
+    def file_name
+      description.gsub(/[^a-zA-Z0-9]/, '_').downcase + '.pdf'
+    end
   end
 end

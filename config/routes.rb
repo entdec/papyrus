@@ -6,6 +6,7 @@ Papyrus::Engine.routes.draw do
   end
   resources :templates do
     member do
+      get 'paper'
       post 'paper'
     end
   end

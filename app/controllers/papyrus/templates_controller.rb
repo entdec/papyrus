@@ -7,7 +7,9 @@ module Papyrus
     skip_before_action :verify_authenticity_token
 
     def paper
-      send_data Template.find(params[:id]).render(params[:data]), type: 'application/pdf', disposition: 'inline'
+      template = Template.find(params[:id])
+      data = request.post? ? params[:data] : HashWithIndifferentAccess.new(template.example_data)[:data]
+      send_data template.render(data), type: 'application/pdf', disposition: 'inline', filename: template.file_name
     end
   end
 end
