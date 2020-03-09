@@ -10,3 +10,5 @@
     = f.input :example_data, as: :editor, input_html: { value: JSON.pretty_generate(f.object.example_data) }, mode: 'application/json', height: '600px'
   - ui_tab :metadata
     = f.input :metadata, as: :editor, input_html: { value: YAML.dump(f.object.metadata) }, mode: 'application/yaml'
+
+=  link_to "Preview", paper_template_url(@template), 'data-turbolinks' => false
