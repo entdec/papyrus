@@ -12,5 +12,11 @@ module Papyrus
     def file_name
       description.gsub(/[^a-zA-Z0-9]/, '_').downcase + '.pdf'
     end
+
+    def translation_scope
+      scope = %w[]
+      scope << description.underscore.gsub(/[^a-z]+/, '_') if description
+      scope.join('.')
+    end
   end
 end

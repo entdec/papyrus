@@ -23,10 +23,11 @@ require 'barby/barcode/qr_code'
 require 'barby/barcode/upc_supplemental'
 require 'barby/outputter/prawn_outputter'
 
-require 'papyrus/engine'
+require 'papyrus/active_storage_helpers'
 require 'papyrus/configuration'
 require 'papyrus/context'
-require 'papyrus/active_storage_helpers'
+require 'papyrus/engine'
+require 'papyrus/i18n_store'
 
 module Papyrus
   # Your code goes here...
@@ -36,6 +37,10 @@ module Papyrus
     def setup
       @config = Configuration.new
       yield config
+    end
+
+    def i18n_store
+      @i18n_store ||= Papyrus::I18nStore.new
     end
   end
 end

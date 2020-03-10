@@ -11,4 +11,4 @@
   - ui_tab :metadata
     = f.input :metadata, as: :editor, input_html: { value: YAML.dump(f.object.metadata) }, mode: 'application/yaml'
 
-=  link_to "Preview", paper_template_url(@template), 'data-turbolinks' => false
+=  link_to "Preview", paper_template_url(@template), "target": "blank", 'data-turbolinks' => false

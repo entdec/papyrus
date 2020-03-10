@@ -24,5 +24,34 @@ module Papyrus
       # Not ideal
       StringIO.new(attachment.blob.download)
     end
+
+    def translate(input, options = {})
+      result = nil
+
+      Papyrus.i18n_store.with(@template) do |obj|
+        locale = options.delete('locale')
+
+        key = input
+        scope = nil
+
+        if key.start_with?('.')
+          key = input[1..-1]
+          scope = obj.translation_scope
+        end
+
+        result = I18n.t(key, options, locale: locale, scope: scope, cascade: { skip_root: false })
+        if result
+          result = I18n::Backend::Simple.new.send(:interpolate, I18n.locale, result, options.symbolize_keys)
+        end
+      end
+
+      result
+    end
+    alias t translate
+
+    def localize(input, locale = 'en', format = nil)
+      I18n.l(input, format: format, locale: locale)
+    end
+    alias l localize
   end
 end
