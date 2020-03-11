@@ -5,8 +5,8 @@ module Papyrus
     include Papyrus::Concerns::MetadataScoped
 
     def render(context)
-      template = Tilt::PrawnTemplate.new(metadata.deep_symbolize_keys) { |_t| data }
-      template.render(Papyrus::Context.new(self), data: context)
+      template = Tilt::PrawnTemplate.new(file_name, metadata.deep_symbolize_keys) { |_t| data }
+      template.render(Papyrus::Context.new(self), context)
     end
 
     def file_name

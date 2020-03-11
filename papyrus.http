@@ -12,7 +12,8 @@ POST http://localhost:9494/papyrus/templates/de3e8f60-06c8-4170-a9c4-0eca8a05971
 Content-Type: application/json
 
 {
-  "data": {
+  "locale": "en",
+  "context": {
     "debug": true,
     "from": {
       "company": "SGS Nederland B.V.",

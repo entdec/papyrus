@@ -8,7 +8,11 @@ module Papyrus
 
     def paper
       template = Template.find(params[:id])
-      data = request.post? ? params[:data] : HashWithIndifferentAccess.new(template.example_data)[:data]
+      data = if request.post?
+               params[:context]
+             else
+               HashWithIndifferentAccess.new(template.example_data)[:context]
+             end
       send_data template.render(data), type: 'application/pdf', disposition: 'inline', filename: template.file_name
     end
   end
