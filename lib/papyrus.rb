@@ -28,6 +28,7 @@ require 'papyrus/configuration'
 require 'papyrus/context'
 require 'papyrus/engine'
 require 'papyrus/i18n_store'
+require 'papyrus/prawn_extensions'
 
 module Papyrus
   # Your code goes here...
