@@ -18,5 +18,9 @@ module Papyrus
       scope << description.underscore.gsub(/[^a-z]+/, '_') if description
       scope.join('.')
     end
+
+    def previewable?
+      persisted? && example_data.present?
+    end
   end
 end
