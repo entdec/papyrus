@@ -1,0 +1,4 @@
+= ui_table :papyrus_papers
+
+- content_for :context_menu do
+  =< link_to(t('papyrus.context_menu.add'), papyrus.new_admin_template_path, class: 'btn btn-primary')

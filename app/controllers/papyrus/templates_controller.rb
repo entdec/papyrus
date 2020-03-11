@@ -22,7 +22,12 @@ module Papyrus
         template.render(ctx)
       end
 
-      send_data data, type: 'application/pdf', disposition: 'inline', filename: template.file_name
+      # if request.post?
+      paper = Paper.create(template: template, data: params.permit!)
+      paper.attachment.attach(io: data, filename: template.file_name, content_type: 'application/pdf')
+      # end
+      data.rewind
+      send_data data.read, type: 'application/pdf', disposition: 'inline', filename: template.file_name
     end
   end
 end

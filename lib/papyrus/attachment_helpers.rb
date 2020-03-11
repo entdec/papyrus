@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module Papyrus::ActiveStorageHelpers
+module Papyrus::AttachmentHelpers
   extend ActiveSupport::Concern
   included do
-    has_many_attached :attachments
+    has_one_attached :attachment
   end
 end

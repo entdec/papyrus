@@ -6,7 +6,8 @@ module Papyrus
 
     def render(context)
       template = Tilt::PrawnTemplate.new(file_name, metadata.deep_symbolize_keys) { |_t| data }
-      template.render(Papyrus::Context.new(self), context)
+      result = template.render(Papyrus::Context.new(self), context)
+      StringIO.new(result)
     end
 
     def file_name

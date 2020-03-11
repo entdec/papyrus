@@ -11,4 +11,5 @@ Papyrus::Engine.routes.draw do
       post 'paper'
     end
   end
+  root to: 'dashboard#show'
 end
