@@ -18,6 +18,7 @@ module Papyrus
         locale = example_data[:locale]
       end
 
+      ctx[:locale] = locale
       data = I18n.with_locale(locale) do
         template.render(ctx)
       end
