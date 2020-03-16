@@ -24,7 +24,7 @@ module Papyrus
       end
 
       # if request.post?
-      paper = Paper.create(template: template, data: params.permit!)
+      paper = Paper.create(template: template, data: ctx.reject { |h| h == 'pdf' })
       paper.attachment.attach(io: data, filename: template.file_name, content_type: 'application/pdf')
       # end
       data.rewind
