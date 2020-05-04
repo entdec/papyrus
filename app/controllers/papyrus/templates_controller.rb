@@ -9,10 +9,10 @@ module Papyrus
     def paper
       template = Template.find(params[:id])
 
-      ctx = params[:context]
-      locale = params[:locale]
-
-      if request.get?
+      if params[:context]
+        ctx = params[:context]
+        locale = params[:locale]
+      elsif request.get?
         example_data = HashWithIndifferentAccess.new(template.example_data)
         ctx = example_data[:context]
         locale = example_data[:locale]

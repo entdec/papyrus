@@ -23,8 +23,6 @@ require 'barby/barcode/qr_code'
 require 'barby/barcode/upc_supplemental'
 require 'barby/outputter/prawn_outputter'
 
-require 'papyrus/attachments_helpers'
-require 'papyrus/attachment_helpers'
 require 'papyrus/configuration'
 require 'papyrus/context'
 require 'papyrus/engine'
