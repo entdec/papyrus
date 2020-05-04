@@ -11,5 +11,14 @@ module Papyrus
         end
       end
     end
+
+    initializer 'active_storage.attached' do
+      config.after_initialize do
+        ActiveSupport.on_load(:active_record) do
+          Papyrus::Template.include(AttachmentsHelpers)
+          Papyrus::Paper.include(AttachmentHelpers)
+        end
+      end
+    end
   end
 end
