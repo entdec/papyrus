@@ -15,14 +15,18 @@ module Papyrus
 
     # Open one of the named attachments on a template
     def open(filename)
-      attachment = template.attachments.detect do |a|
-        a.blob.filename == filename
+      @files ||= {}
+      if @files[filename]
+        @files[filename].rewind
+
+        return @files[filename]
       end
 
+      attachment = template.attachments.detect { |a| a.blob.filename == filename }
       return unless attachment
 
       # Not ideal
-      StringIO.new(attachment.blob.download)
+      @files[filename] = StringIO.new(attachment.blob.download)
     end
 
     def translate(input, options = {})

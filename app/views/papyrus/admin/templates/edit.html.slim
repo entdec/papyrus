@@ -4,10 +4,10 @@
     = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
   - ui_tab :media
     = f.input :attachments, as: :file, input_html: { multiple: true }
-    div WARNING: Uploading new attachments will replace ALL old attachments
+    .warning WARNING: Uploading new attachments will replace ALL old attachments
+    .warning WARNING: Large images( >1000px wide) or SVG's will cause a SIGNIFICANT slowdown (seconds)
     - f.object.attachments.each do |attachment|
-      div
-        = link_to(attachment.filename, main_app.rails_blob_path(attachment, disposition: "attachment"), title: attachment.filename)
+      div= link_to(attachment.filename, main_app.rails_blob_path(attachment, disposition: "attachment"), title: attachment.filename)
   - ui_tab :example_data
     = f.input :example_data, as: :editor, input_html: { value: JSON.pretty_generate(f.object.example_data) }, mode: 'application/json', height: '600px'
   - ui_tab :metadata
