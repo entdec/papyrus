@@ -3,13 +3,13 @@
 class PapyrusPapersTable < ActionTable::ActionTable
   model Papyrus::Paper
 
-  column(:template) { |paper| paper.template.description }
+  column(:template, sort_field: :template_id) { |paper| paper.template.description }
   column(:attachment) do |paper|
-    link_to(paper.attachment.filename, main_app.rails_blob_path(paper.attachment, disposition: 'attachment'), title: paper.attachment.filename)
+    link_to(paper.attachment.filename, main_app.rails_blob_path(paper.attachment, disposition: 'attachment'), title: paper.attachment.filename) rescue $!.message
   end
-  column(:created) { |paper| ln(paper.created_at) }
+  column(:created_at) { |paper| ln(paper.created_at) }
 
-  initial_order :description, :asc
+  initial_order :created_at, :desc
 
   row_link { |paper| papyrus.edit_admin_template_path(paper.template) }
 
