@@ -2,6 +2,6 @@
 
 module Papyrus
   class Locale < ApplicationRecord
-    include Nuntius::Concerns::MetadataScoped
+    include Papyrus::Concerns::MetadataScoped
   end
 end

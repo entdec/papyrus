@@ -51,9 +51,9 @@ module Papyrus
 
     def with(template)
       with_custom_backend do
-        @template = template
+        self.template = template
         yield(template)
-        @template = nil
+        self.template = nil
       end
     end
 
