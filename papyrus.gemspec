@@ -25,7 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'prawn-svg', '~> 0.29'
   spec.add_dependency 'rails', '~> 6.0.2', '>= 6.0.2.1'
   spec.add_dependency 'rqrcode', '~> 0.10'
-  spec.add_dependency 'semacode-ruby19', '~> 0.7'
   spec.add_dependency 'tilt', '~> 2.0'
 
   spec.add_development_dependency 'pry', '~> 0.11'
