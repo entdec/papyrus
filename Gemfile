@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+git_source(:entdec) { |repo_name| "git@code.entropydecelerator.com:#{repo_name}.git" }
 
 # Declare your gem's dependencies in papyrus.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
@@ -16,3 +17,5 @@ gemspec
 
 # I need higher than 2.2.2
 gem 'prawn', github: 'prawnpdf/prawn', branch: 'master'
+
+gem 'auxilium', '~> 0.2', entdec: 'components/auxilium'

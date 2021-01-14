@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rqrcode', '~> 0.10'
   spec.add_dependency 'tilt', '~> 2.0'
 
+  spec.add_development_dependency 'auxilium', '~> 0.2'  
   spec.add_development_dependency 'pry', '~> 0.11'
   spec.add_development_dependency 'rubocop', '~> 0'
 end
