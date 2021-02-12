@@ -2,7 +2,11 @@
 
 Papyrus::Engine.routes.draw do
   namespace :admin do
-    resources :templates
+    resources :templates do
+      scope module: :templates do
+        resources :attachments
+      end
+    end
     resources :locales
   end
   resources :templates do

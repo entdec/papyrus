@@ -27,6 +27,7 @@
   },
   "browserslist": "> 1%",
   "dependencies": {
+    "@rails/actioncable": "^6.1.2-1",
     "element-closest": "^3.0.1",
     "jsprintmanager": "^3.0.6",
     "stimulus": "^2"

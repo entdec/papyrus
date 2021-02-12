@@ -34,7 +34,14 @@ module Papyrus
 
       def destroy
         @template = Papyrus::Template.visible.find(params[:id])
-        respond @template.destroy, notice: 'The template was deleted', error: 'There were problems deleting the template'
+        respond @template.destroy, notice: 'The template was deleted',
+                                   error: 'There were problems deleting the template'
+      end
+
+      def purge_attachment
+        @template = Papyrus::Template.visible.find(params[:id])
+        attachment = @template.attachments.find_by(id: params[:attachment_id])
+        attachment.purge if attachment
       end
 
       private

@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  printer: one
+  url: MyString
+  data: MyText
+
+two:
+  printer: two
+  url: MyString
+  data: MyText

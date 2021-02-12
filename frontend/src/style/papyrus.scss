@@ -1,0 +1,39 @@
+.attachments {
+  .attachment-upload {
+    border-style: dashed;
+    display: inline-block;
+    height: 100px;
+    width: 100px;
+    .icon {
+      color: #666;
+      text-align: center;
+      //   background-color: #f0f0f0;
+      //   @media screen and (prefers-color-scheme: dark) {
+      //     background-color: #333;
+      //   }
+
+      i {
+        margin-top: 25px;
+      }
+    }
+
+    .icon {
+      display: inline-block;
+      height: 100px;
+      width: 100px;
+    }
+
+    .icon.uploading {
+      display: none;
+    }
+
+    &.uploading {
+      .icon.upload {
+        display: none;
+      }
+      .icon.uploading {
+        display: block;
+      }
+    }
+  }
+}
