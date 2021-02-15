@@ -3,7 +3,6 @@
     = f.input :description
     = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
   - ui_tab :media
-    / = f.input :attachments, as: :file, input_html: { multiple: true }
     = render partial: 'papyrus/admin/templates/attachments/index', locals: { attachments: @template.attachments, upload_url: admin_template_attachments_path(@template) }
     .warning WARNING: Large images( >1000px wide) or SVG's will cause a SIGNIFICANT slowdown (seconds)
 

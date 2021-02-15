@@ -19,6 +19,7 @@ module Papyrus
         def destroy
           attachment = @template.attachments.find_by(id: params[:id])
           attachment.purge if attachment
+          render :create
         end
 
         private

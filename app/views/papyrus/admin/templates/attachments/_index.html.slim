@@ -1,18 +1,2 @@
 div.attachments
-  - attachments.each do |attachment|
-    span.attachment
-      - if attachment.previewable?
-        = image_tag attachment.blob.preview(resize_to_limit: [100, 100]).processed.url
-      - elsif attachment.image?
-        = image_tag main_app.url_for(attachment.variant(resize_to_limit: [100, 100]))
-      - else
-        = attachment.filename
-      = link_to admin_template_attachment_path(@template, attachment.id), method: :delete, remote: true do
-        i.fal.fa-times
-
-  span.attachment-upload data-controller="attachment-upload" data-attachment-upload-url="#{upload_url}" data-attachment-upload-param-name="attachments[]" data-attachment-upload-extra-data='{}'
-    span.icon.upload
-      i.fal.fa-upload.fa-2x
-    span.icon.uploading
-      i.fal.fa-circle-notch.fa-2x.fa-spin
-
+  = render partial: 'papyrus/admin/templates/attachments/attachments', locals: { attachments: @template.attachments, upload_url: admin_template_attachments_path(@template) }
