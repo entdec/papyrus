@@ -3,7 +3,8 @@
 module Papyrus
   class Paper < ApplicationRecord
     belongs_to :template
+    belongs_to :papyrable, polymorphic: true, optional: true
 
-    has_one_attached :attachment rescue nil # SAD, but for development mode this is needed? in production mode this seems not to work?
+    has_one_attached :attachment
   end
 end

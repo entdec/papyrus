@@ -45,6 +45,19 @@ module Papyrus
     def i18n_store
       @i18n_store ||= Papyrus::I18nStore.new
     end
+
+    def generate(event)
+      return unless event
+
+      Papyrus::GenerateJob.perform_later(@obj, event.to_s, @context)
+    end
+
+    def with(obj, context = {})
+      @obj = obj
+      @context = context
+
+      self
+    end
   end
 
   # Include helpers

@@ -2,12 +2,21 @@
 
 module Papyrus
   class Template < ApplicationRecord
+    KINDS = [%w[PDF pdf], %w[Liquid liquid]].freeze
+
+    has_many :papers
+    has_many_attached :attachments
+
     include Papyrus::Concerns::MetadataScoped
 
-    begin
-      has_many_attached :attachments
-    rescue StandardError
-      nil
+    def generate(context, object: nil, locale: I18n.locale)
+      data = render(context, locale: locale)
+
+      paper = Paper.create(template: self, data: context.reject { |h| h == 'pdf' }, papyrable: object)
+      paper.attachment.attach(io: data, filename: file_name, content_type: 'application/pdf')
+      data.rewind
+
+      [paper, data]
     end
 
     def render(context, locale: I18n.locale)

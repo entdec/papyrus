@@ -27,14 +27,14 @@ module Papyrus
       if options[:use_state_machine]
         orchestrator.after_audit_trail_commit(:papyrus) do |resource_state_transition|
           resource = resource_state_transition.resource
-          # Nuntius.with(resource).message(event.to_s) if resource.nuntiable?
+          Papyrus.with(resource).generate(event.to_s) if resource.papyrable?
         end
       end
 
       orchestrator.after_transaction_log_commit(:papyrus) do |transaction_log_entry|
         record  = transaction_log_entry.transaction_loggable
         event   = transaction_log_entry.event
-        # Nuntius.with(record).message(event.to_s) if record.nuntiable? && event.present?
+        Papyrus.with(record).generate(event.to_s) if record.papyrable? && event.present?
       end
     end
 
