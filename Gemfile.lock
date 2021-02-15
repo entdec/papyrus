@@ -6,30 +6,67 @@ GIT
       activesupport (> 5.1)
 
 GIT
-  remote: https://github.com/prawnpdf/prawn.git
-  revision: d980247be8a00e7c59cd4e5785e3aa98f9856db1
-  branch: master
+  remote: git@code.entropydecelerator.com:components/decoro.git
+  revision: 7cec87c06fb608e06a994bfe59d08d7912cc9aa2
   specs:
-    prawn (2.2.2)
-      pdf-core (~> 0.8.1)
-      ttfunk (~> 1.5)
+    decoro (0.1.2)
+
+GIT
+  remote: git@code.entropydecelerator.com:components/evento.git
+  revision: 3201c864c8539d245f2bcd7b2f33d34645eefd84
+  tag: 0.1.4
+  specs:
+    evento (0.1.4)
+
+GIT
+  remote: git@code.entropydecelerator.com:components/liquor.git
+  revision: c5472b47315a5fda33e93c2a5f754a250c32b122
+  specs:
+    liquor (0.7.0)
+      addressable (~> 2)
+      babel-transpiler (~> 0.7)
+      kramdown (~> 2.1)
+      kramdown-parser-gfm (~> 1.0)
+      liquid (~> 4.0)
+      parslet
+      pg
+      rails (>= 5.2)
+      sassc (~> 2.2)
+      slim-rails (~> 3.2.0)
+
+GIT
+  remote: git@code.entropydecelerator.com:components/servitium.git
+  revision: 70b490d5f782fb98225b39a22f00dbbed8353042
+  specs:
+    servitium (1.2.6)
+      active_attr (>= 0.15)
+      activejob (> 5.1)
+      activemodel (> 5.1)
+      activerecord (> 5.1)
+      activesupport (> 5.1)
+      i18n (>= 0.7)
 
 PATH
   remote: .
   specs:
     papyrus (0.1.15)
       barby (~> 0.6)
+      decoro (~> 0.1)
+      evento (~> 0.1)
+      liquor
       pg
       prawn (~> 2.2)
       prawn-svg (~> 0.29)
       prawn-table (~> 0.2)
       rails (~> 6.0, >= 6.0.2.1)
       rqrcode (~> 0.10)
+      servitium (~> 1.1)
       tilt (~> 2.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
+    Ascii85 (1.1.0)
     actioncable (6.0.3.4)
       actionpack (= 6.0.3.4)
       nio4r (~> 2.0)
@@ -66,6 +103,10 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_attr (0.15.1)
+      actionpack (>= 3.0.2, < 6.2)
+      activemodel (>= 3.0.2, < 6.2)
+      activesupport (>= 3.0.2, < 6.2)
     activejob (6.0.3.4)
       activesupport (= 6.0.3.4)
       globalid (>= 0.3.6)
@@ -87,21 +128,38 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    afm (0.2.2)
     ast (2.4.0)
+    babel-source (5.8.35)
+    babel-transpiler (0.7.0)
+      babel-source (>= 4.0, < 6)
+      execjs (~> 2.0)
+    backport (1.1.2)
     barby (0.6.8)
+    benchmark (0.1.1)
     builder (3.2.4)
     chunky_png (1.4.0)
     coderay (1.1.2)
     concurrent-ruby (1.1.7)
+    connection_pool (2.2.3)
     crass (1.0.6)
     css_parser (1.9.0)
       addressable
+    e2mmap (0.1.0)
     erubi (1.10.0)
+    execjs (2.7.0)
+    ffi (1.14.2)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    hashery (2.1.2)
     i18n (1.8.7)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.4)
+    kramdown (2.3.0)
+      rexml
+    kramdown-parser-gfm (1.1.0)
+      kramdown (~> 2.0)
+    liquid (4.0.3)
     loofah (2.9.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -121,8 +179,20 @@ GEM
     parallel (1.19.1)
     parser (2.7.1.2)
       ast (~> 2.4.0)
-    pdf-core (0.8.1)
+    parslet (2.0.0)
+    pdf-core (0.9.0)
+    pdf-inspector (1.3.0)
+      pdf-reader (>= 1.0, < 3.0.a)
+    pdf-reader (2.4.2)
+      Ascii85 (~> 1.0)
+      afm (~> 0.2.1)
+      hashery (~> 2.0)
+      ruby-rc4
+      ttfunk
     pg (1.2.3)
+    prawn (2.4.0)
+      pdf-core (~> 0.9.0)
+      ttfunk (~> 1.7)
     prawn-svg (0.31.0)
       css_parser (~> 1.6)
       prawn (>= 0.11.1, < 3)
@@ -164,6 +234,9 @@ GEM
       thor (>= 0.20.3, < 2.0)
     rainbow (3.0.0)
     rake (13.0.3)
+    redis (4.2.5)
+    reverse_markdown (2.0.0)
+      nokogiri
     rexml (3.2.4)
     rqrcode (0.10.1)
       chunky_png (~> 1.0)
@@ -176,6 +249,34 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
     ruby-progressbar (1.10.1)
+    ruby-rc4 (0.1.5)
+    sassc (2.4.0)
+      ffi (~> 1.9)
+    sidekiq (6.1.3)
+      connection_pool (>= 2.2.2)
+      rack (~> 2.0)
+      redis (>= 4.2.0)
+    slim (4.1.0)
+      temple (>= 0.7.6, < 0.9)
+      tilt (>= 2.0.6, < 2.1)
+    slim-rails (3.2.0)
+      actionpack (>= 3.1)
+      railties (>= 3.1)
+      slim (>= 3.0, < 5.0)
+    solargraph (0.40.1)
+      backport (~> 1.1)
+      benchmark
+      bundler (>= 1.17.2)
+      e2mmap
+      jaro_winkler (~> 1.5)
+      kramdown (~> 2.3)
+      kramdown-parser-gfm (~> 1.1)
+      parser (~> 2.3)
+      reverse_markdown (>= 1.0.5, < 3)
+      rubocop (>= 0.52)
+      thor (~> 1.0)
+      tilt (~> 2.0)
+      yard (~> 0.9, >= 0.9.24)
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -183,16 +284,18 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    temple (0.8.2)
     thor (1.1.0)
     thread_safe (0.3.6)
     tilt (2.0.10)
-    ttfunk (1.6.2.1)
+    ttfunk (1.7.0)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
     unicode-display_width (1.7.0)
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    yard (0.9.26)
     zeitwerk (2.4.2)
 
 PLATFORMS
@@ -200,10 +303,16 @@ PLATFORMS
 
 DEPENDENCIES
   auxilium (~> 0.2)!
+  decoro (~> 0.1)!
+  evento!
+  liquor!
   papyrus!
-  prawn!
-  pry (~> 0.11)
+  pdf-inspector (>= 1.2.1, < 2.0.a)
+  pry
   rubocop (~> 0)
+  servitium (~> 1.1)!
+  sidekiq
+  solargraph
 
 BUNDLED WITH
    2.1.4

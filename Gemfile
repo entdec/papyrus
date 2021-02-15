@@ -15,7 +15,12 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
-# I need higher than 2.2.2
-gem 'prawn', github: 'prawnpdf/prawn', branch: 'master'
-
 gem 'auxilium', '~> 0.2', entdec: 'components/auxilium'
+gem 'decoro', '~> 0.1', entdec: 'components/decoro'
+gem 'evento', entdec: 'components/evento', tag: '0.1.4'
+gem 'liquor', entdec: 'components/liquor'
+gem 'servitium', '~> 1.1', entdec: 'components/servitium'
+
+gem 'pry'
+gem 'solargraph'
+gem 'sidekiq'

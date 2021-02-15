@@ -3,11 +3,20 @@
 module Papyrus
   class Template < ApplicationRecord
     include Papyrus::Concerns::MetadataScoped
-    has_many_attached :attachments rescue nil # SAD, but for development mode this is needed? in production mode this seems not to work?
 
-    def render(context)
-      template = Tilt::PrawnTemplate.new(file_name, metadata.deep_symbolize_keys) { |_t| data }
-      result = template.render(Papyrus::Context.new(self), context)
+    begin
+      has_many_attached :attachments
+    rescue StandardError
+      nil
+    end
+
+    def render(context, locale: I18n.locale)
+      template = Tilt::PrawnTemplate.new(file_name, (metadata || {}).deep_symbolize_keys) { |_t| data }
+
+      result = I18n.with_locale(locale) do
+        template.render(Papyrus::Context.new(self), context)
+      end
+
       StringIO.new(result)
     end
 

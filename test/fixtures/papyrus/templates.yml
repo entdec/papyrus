@@ -1,0 +1,4 @@
+pdf:
+  description: Invoice
+  data: |
+    pdf.text 'Commercial Invoice', size: 24

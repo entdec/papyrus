@@ -5,6 +5,7 @@ require 'prawn'
 require 'prawn-svg'
 require 'prawn/table'
 require 'prawn/measurement_extensions'
+require 'servitium'
 
 require 'barby'
 require 'barby/barcode/bookland'
@@ -22,6 +23,7 @@ require 'barby/barcode/qr_code'
 require 'barby/barcode/upc_supplemental'
 require 'barby/outputter/prawn_outputter'
 
+require 'papyrus/active_record_helpers'
 require 'papyrus/attachments_helpers'
 require 'papyrus/attachment_helpers'
 require 'papyrus/configuration'
@@ -43,5 +45,10 @@ module Papyrus
     def i18n_store
       @i18n_store ||= Papyrus::I18nStore.new
     end
+  end
+
+  # Include helpers
+  ActiveSupport.on_load(:active_record) do
+    include Papyrus::ActiveRecordHelpers
   end
 end

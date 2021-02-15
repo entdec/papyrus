@@ -18,10 +18,7 @@ module Papyrus
         locale = params[:locale]
       end
 
-      ctx[:locale] = locale
-      data = I18n.with_locale(locale) do
-        template.render(ctx)
-      end
+      data = template.render(ctx, ctx[:locale])
 
       # if request.post?
       paper = Paper.create(template: template, data: ctx.reject { |h| h == 'pdf' })

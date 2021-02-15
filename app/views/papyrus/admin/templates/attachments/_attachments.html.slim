@@ -4,8 +4,7 @@
       = image_tag attachment.blob.preview(resize_to_limit: [100, 100]).processed.url
     - elsif attachment.image?
       = image_tag main_app.url_for(attachment.variant(resize_to_limit: [100, 100]))
-    - else
-      = attachment.filename
+    = attachment.filename
     = link_to admin_template_attachment_path(@template, attachment.id), data: { controller: 'attachment-delete', 'action': 'attachment-delete#delete' } do
       i.fal.fa-times
 

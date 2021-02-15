@@ -1,15 +1,50 @@
-= ui_form_for(@template, url: @template.new_record? ? admin_templates_path : admin_template_path, html: {multipart: true}) do |f|
-  - ui_tab :basics
-    = f.input :description
-    = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
-  - ui_tab :media
-    = render partial: 'papyrus/admin/templates/attachments/index', locals: { attachments: @template.attachments, upload_url: admin_template_attachments_path(@template) }
-    .warning WARNING: Large images( >1000px wide) or SVG's will cause a SIGNIFICANT slowdown (seconds)
+- decorate(@template, Papyrus::TemplateDecorator) do |template|
+  = clg.simple_form_for(@template, url: @template.new_record? ? admin_templates_path : admin_template_path) do |f|
+    = clg.card do |card|
+      - card.slot :title
+        | Template
+      - card.slot :action
+        = f.button(:button, t('.update'), name: 'commit', value: 'save', class: clg.bem("button").block(:primary), data: { disable_with: t('.updating') })
 
-  - ui_tab :example_data
-    = f.input :example_data, as: :editor, input_html: { value: JSON.pretty_generate(f.object.example_data) }, mode: 'application/json', height: '600px'
-  - ui_tab :metadata
-    = f.input :metadata, as: :editor, input_html: { value: YAML.dump(f.object.metadata) }, mode: 'application/yaml'
+      - if @template.previewable?
+        - card.slot :action
+          =  link_to "Preview", paper_template_url(@template), class: clg.bem("button").block, "target": "blank", 'data-turbolinks' => false
 
-- if @template.previewable?
-  =  link_to "Preview", paper_template_url(@template), "target": "blank", 'data-turbolinks' => false
+      = clg.layout modifier: "compact" do |layout|
+        - layout.row
+          - layout.cell
+
+            = clg.tabbable_pane do |pane|
+              - pane.slot :tab, id: :basics, title: 'Basics'
+                = clg.layout do |lt|
+                  - lt.row
+                    - lt.cell
+                      = f.input :description
+                  - lt.row
+                    - lt.cell
+                      = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
+
+                  - lt.row html: { data: {controller: 'toggle'} }
+                    - lt.cell
+                      = f.input :klass, collection: Papyrus.config.papyrable_class_names.sort, selected: @template.klass, include_blank: true
+
+                    - lt.cell
+                      = f.input :event, collection: template.all_events, include_blank: false, input_html: { data: { controller: 'chained-input', 'chained-input-to': '#template_klass' } }
+
+              - pane.slot :tab, id: :media, title: 'Media'
+                = clg.layout do |lt|
+                  - lt.row
+                    - lt.cell
+                      = render partial: 'papyrus/admin/templates/attachments/index', locals: { attachments: @template.attachments, upload_url: admin_template_attachments_path(@template) }
+                      .warning WARNING: Large images( >1000px wide) or SVG's will cause a SIGNIFICANT slowdown (seconds)
+              - pane.slot :tab, id: :example_data, title: 'Example data'
+                = clg.layout do |lt|
+                  - lt.row
+                    - lt.cell
+                      = f.input :example_data, as: :editor, input_html: { value: JSON.pretty_generate(f.object.example_data) }, mode: 'application/json', height: '600px'
+              - pane.slot :tab, id: :metadata, title: 'Meta-data'
+                = clg.layout do |lt|
+                  - lt.row
+                    - lt.cell
+                      = f.input :metadata, as: :editor, input_html: { value: YAML.dump(f.object.metadata) }, mode: 'application/yaml'
+
