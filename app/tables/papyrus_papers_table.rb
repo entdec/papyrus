@@ -5,7 +5,12 @@ class PapyrusPapersTable < ActionTable::ActionTable
 
   column(:template, sort_field: :template_id) { |paper| paper.template.description }
   column(:attachment) do |paper|
-    link_to(paper.attachment.filename, main_app.rails_blob_path(paper.attachment, disposition: 'attachment'), title: paper.attachment.filename) rescue $!.message
+    begin
+      link_to(paper.attachment.filename, main_app.rails_blob_path(paper.attachment, disposition: 'attachment'),
+              title: paper.attachment.filename)
+    rescue StandardError
+      $!.message
+    end
   end
   column(:created_at) { |paper| ln(paper.created_at) }
 

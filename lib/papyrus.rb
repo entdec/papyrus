@@ -33,7 +33,8 @@ require 'papyrus/i18n_store'
 require 'papyrus/prawn_extensions'
 
 module Papyrus
-  # Your code goes here...
+  class Error < StandardError; end
+
   class << self
     attr_reader :config
 

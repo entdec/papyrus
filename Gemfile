@@ -22,5 +22,5 @@ gem 'liquor', entdec: 'components/liquor'
 gem 'servitium', '~> 1.1', entdec: 'components/servitium'
 
 gem 'pry'
-gem 'solargraph'
 gem 'sidekiq'
+gem 'solargraph'

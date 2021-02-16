@@ -4,9 +4,7 @@ module Papyrus
   module AttachmentsHelpers
     extend ActiveSupport::Concern
     included do
-      unless defined?(Papyrus::Template::AttachmentsAttachmentsAssociationExtension)
-        has_many_attached :attachments
-      end
+      has_many_attached :attachments unless defined?(Papyrus::Template::AttachmentsAttachmentsAssociationExtension)
     end
   end
 end

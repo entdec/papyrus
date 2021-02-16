@@ -10,7 +10,7 @@ module Papyrus
       end
 
       unless self.class.public_instance_methods(false).include?(event.to_sym)
-        raise(Vorto::Error, "The #{event} event has not been implemented")
+        raise(Papyrus::Error, "The #{event} event has not been implemented")
       end
 
       @object  = object
@@ -38,7 +38,7 @@ module Papyrus
     class << self
       def create(object, event, context = {})
         generator_class = generator_for_class(object.class)
-        raise(Vorto::Error, "There is no generator for #{object.class}") if generator_class.nil?
+        raise(Papyrus::Error, "There is no generator for #{object.class}") if generator_class.nil?
 
         generator_class.new(object, event, context)
       end

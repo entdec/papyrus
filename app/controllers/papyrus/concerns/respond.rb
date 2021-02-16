@@ -13,7 +13,13 @@ module Papyrus
       # @param model [Object] What model to use for generating the notice/error flashes
       #
       def respond(result, path: nil, notice: nil, error: nil, action: :index, model: nil)
-        human_model_name = model ? model.model_name.human.downcase : Papyrus.const_get(self.class.name.demodulize.gsub(/Controller$/, '').singularize).model_name.human.downcase
+        human_model_name = if model
+                             model.model_name.human.downcase
+                           else
+                             Papyrus.const_get(self.class.name.demodulize.gsub(
+                               /Controller$/, ''
+                             ).singularize).model_name.human.downcase
+                           end
         if result
           if params[:commit] == 'continue'
             flash.now[:notice] = (notice || I18n.t('papyrus.flash.notice', model: human_model_name))
