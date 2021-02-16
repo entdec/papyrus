@@ -16,3 +16,9 @@ if ActiveSupport::TestCase.respond_to?(:fixture_path=)
   ActiveSupport::TestCase.file_fixture_path = ActiveSupport::TestCase.fixture_path + '/files'
   ActiveSupport::TestCase.fixtures :all
 end
+
+# frozen_string_literal: true
+
+class ApplicationTestCase < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+end

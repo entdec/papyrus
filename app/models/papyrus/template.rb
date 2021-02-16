@@ -10,8 +10,7 @@ module Papyrus
     include Papyrus::Concerns::MetadataScoped
 
     def generate(context, object: nil, locale: I18n.locale)
-      data = render(context, locale: locale)
-
+      data = render(context.reject { |h| h == 'pdf' }, locale: locale)
       paper = Paper.create(template: self, data: context.reject { |h| h == 'pdf' }, papyrable: object)
       paper.attachment.attach(io: data, filename: file_name, content_type: 'application/pdf')
       data.rewind
@@ -30,7 +29,7 @@ module Papyrus
     end
 
     def file_name
-      description.gsub(/[^a-zA-Z0-9]/, '_').downcase + '.pdf'
+      "#{description.gsub(/[^a-zA-Z0-9]/, '_').downcase}.pdf"
     end
 
     def translation_scope

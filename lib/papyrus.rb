@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
-require 'tilt'
 require 'prawn'
 require 'prawn-svg'
 require 'prawn/table'
 require 'prawn/measurement_extensions'
 require 'servitium'
+require 'state_machines-activemodel'
+require 'tilt'
+require 'transactio'
 
 require 'barby'
 require 'barby/barcode/bookland'

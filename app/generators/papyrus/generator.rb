@@ -4,7 +4,7 @@ module Papyrus
   class Generator
     delegate :class_names_for, to: :class
 
-    def initialize(object, event, context = {})
+    def initialize(object, event, options = {})
       if self.class.generator_for_class(object.class) != self.class
         raise(Papyrus::Error, "This generator does not handle #{object.class} objects")
       end
@@ -15,24 +15,29 @@ module Papyrus
 
       @object  = object
       @event   = event
-      @context = context
+      @options = options
     end
 
     def call
-      return if flows.count.zero?
+      return if templates.count.zero?
 
-      public_send(@event, @object, @context)
+      public_send(@event, @object, @options)
+
+      context = @object.to_papyrus if @object.respond_to?(:to_papyrus)
+      context ||= @object.as_json({ root: false }.merge(@options[:payload_options] || {}))
+
+      templates.map do |template|
+        template.generate(context.reject { |h| h == 'pdf' }, locale: context[:locale], object: @object)
+
+        # TODO: add auto-print here?
+      end
     end
 
     def templates
       return @templates if @templates
 
-      @templates = Papyrus::Template.where(klass: class_names_for(@object), event: event_name_for(@object, @event))
+      @templates = Papyrus::Template.where(klass: class_names_for(@object), event: @event)
       @templates
-    end
-
-    def process_flow?(_object, _flow)
-      true
     end
 
     class << self
@@ -66,6 +71,18 @@ module Papyrus
         return generator if generator.present?
 
         generator_for_class(klass.superclass) if klass.superclass.present?
+      end
+
+      def class_name_for(obj)
+        if obj.is_a?(Array) || obj.is_a?(ActiveRecord::Relation)
+          obj.first.class.name.demodulize
+        elsif obj.is_a?(Hash)
+          'Custom'
+        elsif obj.is_a?(Class)
+          obj.name.demodulize
+        else
+          obj.class.name
+        end
       end
 
       def class_names_for(obj)

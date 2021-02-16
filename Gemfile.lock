@@ -13,10 +13,10 @@ GIT
 
 GIT
   remote: git@code.entropydecelerator.com:components/evento.git
-  revision: 3201c864c8539d245f2bcd7b2f33d34645eefd84
-  tag: 0.1.4
+  revision: b94c862509a2f4821b419f8a199fd3f46c7a937e
+  tag: 0.1.6
   specs:
-    evento (0.1.4)
+    evento (0.1.6)
 
 GIT
   remote: git@code.entropydecelerator.com:components/liquor.git
@@ -46,6 +46,13 @@ GIT
       activesupport (> 5.1)
       i18n (>= 0.7)
 
+GIT
+  remote: git@code.entropydecelerator.com:components/transactio.git
+  revision: f0284ee674538e6707c933c7cf17fe381b81e45f
+  specs:
+    transactio (0.1.12)
+      activerecord (~> 6)
+
 PATH
   remote: .
   specs:
@@ -61,7 +68,9 @@ PATH
       rails (~> 6.0, >= 6.0.2.1)
       rqrcode (~> 0.10)
       servitium (~> 1.1)
+      state_machines-activemodel
       tilt (~> 2.0)
+      transactio
 
 GEM
   remote: https://rubygems.org/
@@ -284,6 +293,10 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    state_machines (0.5.0)
+    state_machines-activemodel (0.8.0)
+      activemodel (>= 5.1)
+      state_machines (>= 0.5.0)
     temple (0.8.2)
     thor (1.1.0)
     thread_safe (0.3.6)
@@ -313,6 +326,7 @@ DEPENDENCIES
   servitium (~> 1.1)!
   sidekiq
   solargraph
+  transactio (~> 0.1)!
 
 BUNDLED WITH
    2.1.4

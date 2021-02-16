@@ -29,7 +29,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails', '~> 6.0', '>= 6.0.2.1'
   spec.add_dependency 'rqrcode', '~> 0.10'
   spec.add_dependency 'servitium', '~> 1.1'
+  spec.add_dependency 'state_machines-activemodel'
   spec.add_dependency 'tilt', '~> 2.0'
+  spec.add_dependency 'transactio'
 
   spec.add_development_dependency 'auxilium', '~> 0.2'
   spec.add_development_dependency('pdf-inspector', '>= 1.2.1', '< 2.0.a')

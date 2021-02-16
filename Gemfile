@@ -17,9 +17,10 @@ gemspec
 
 gem 'auxilium', '~> 0.2', entdec: 'components/auxilium'
 gem 'decoro', '~> 0.1', entdec: 'components/decoro'
-gem 'evento', entdec: 'components/evento', tag: '0.1.4'
+gem 'evento', entdec: 'components/evento', tag: '0.1.6'
 gem 'liquor', entdec: 'components/liquor'
 gem 'servitium', '~> 1.1', entdec: 'components/servitium'
+gem 'transactio', '~> 0.1', entdec: 'components/transactio'
 
 gem 'pry'
 gem 'sidekiq'
