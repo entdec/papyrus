@@ -13,6 +13,7 @@ module Papyrus
       text = PDF::Inspector::Text.analyze(last_response.body)
 
       assert_equal text.strings[0], 'Commercial Invoice'
+      assert_equal text.strings[1], 'TEST'
     end
 
     private
