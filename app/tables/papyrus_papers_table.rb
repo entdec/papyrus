@@ -3,6 +3,7 @@
 class PapyrusPapersTable < ActionTable::ActionTable
   model Papyrus::Paper
 
+  column(:owner, sort_field: :owner_id) { |row| row.owner ? "#{row.owner&.name} (#{row.owner_type})" : '-' }
   column(:template, sort_field: :template_id) { |paper| paper.template.description }
   column(:attachment) do |paper|
     begin

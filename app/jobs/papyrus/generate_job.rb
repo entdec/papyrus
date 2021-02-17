@@ -1,7 +1,7 @@
 module Papyrus
   class GenerateJob < ApplicationJob
-    def perform(object, event, context)
-      Papyrus::Generator.create(object, event, context).call
+    def perform(object, event, options)
+      Papyrus::Generator.create(object, event, options).call
     end
   end
 end

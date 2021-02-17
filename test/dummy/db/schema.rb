@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_17_095746) do
+ActiveRecord::Schema.define(version: 2021_02_17_144536) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -59,8 +59,11 @@ ActiveRecord::Schema.define(version: 2021_02_17_095746) do
     t.uuid "template_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "owner_type"
+    t.uuid "owner_id"
     t.string "papyrable_type"
     t.uuid "papyrable_id"
+    t.index ["owner_type", "owner_id"], name: "index_papyrus_papers_on_owner_type_and_owner_id"
     t.index ["template_id"], name: "index_papyrus_papers_on_template_id"
   end
 
@@ -75,14 +78,12 @@ ActiveRecord::Schema.define(version: 2021_02_17_095746) do
     t.index ["printer_id"], name: "index_papyrus_preferred_printers_on_printer_id"
   end
 
-  create_table "papyrus_print_jobs", force: :cascade do |t|
+  create_table "papyrus_print_jobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "status"
+    t.uuid "paper_id", null: false
     t.uuid "printer_id", null: false
-    t.string "url"
-    t.text "data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "kind"
-    t.uuid "paper_id", null: false
     t.index ["paper_id"], name: "index_papyrus_print_jobs_on_paper_id"
     t.index ["printer_id"], name: "index_papyrus_print_jobs_on_printer_id"
   end
@@ -111,10 +112,11 @@ ActiveRecord::Schema.define(version: 2021_02_17_095746) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.jsonb "example_data", default: {}
-    t.string "kind"
+    t.string "use"
+    t.string "kind", default: "pdf"
+    t.integer "copies", default: 1
     t.string "klass"
     t.string "event"
-    t.string "use"
   end
 
   create_table "transaction_log_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

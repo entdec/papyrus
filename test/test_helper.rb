@@ -21,4 +21,5 @@ end
 
 class ApplicationTestCase < ActiveSupport::TestCase
   include ActiveJob::TestHelper
+  fixtures :all
 end

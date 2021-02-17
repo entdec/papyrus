@@ -9,9 +9,9 @@ module Papyrus
 
     include Papyrus::Concerns::MetadataScoped
 
-    def generate(context, object: nil, locale: I18n.locale)
+    def generate(context, object: nil, locale: I18n.locale, owner: nil)
       data = render(context.reject { |h| h == 'pdf' }, locale: locale)
-      paper = Paper.create(template: self, data: context.reject { |h| h == 'pdf' }, papyrable: object)
+      paper = Paper.create(template: self, data: context.reject { |h| h == 'pdf' }, papyrable: object, owner: owner)
       paper.attachment.attach(io: data, filename: file_name, content_type: 'application/pdf')
       data.rewind
 

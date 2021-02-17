@@ -1,11 +1,15 @@
 pdf:
+  kind: pdf
   description: Invoice
+  use: document
   data: |
     pdf.text 'Commercial Invoice', size: 24
     pdf.text name
 
 pdf_for_items:
+  kind: pdf
   description: PDF Label
+  use: document
   data: |
     pdf.text 'Label', size: 24
     pdf.text name

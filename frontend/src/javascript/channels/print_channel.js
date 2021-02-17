@@ -2,6 +2,21 @@ import consumer from "./consumer"
 
 import JSPM from "jsprintmanager"
 
+// import * as zip from "@zip.js/zip.js/dist/zip.min.js"
+// import * as zip from "@zip.js/zip.js/dist/zip-fs-full.min.js"
+
+// import * as zip from "./jsprintmanager-deps/zip"
+// import "./jsprintmanager-deps/zip-ext"
+// import "./jsprintmanager-deps/deflate"
+
+import cptables from "./jsprintmanager-deps/cptable"
+import cputils from "./jsprintmanager-deps/cputils"
+
+// window.zip = zip
+
+window.cptables = cptables
+window.cputils = cputils
+
 consumer.subscriptions.create(
   { channel: "Papyrus::PrintChannel" },
   {
@@ -35,20 +50,18 @@ consumer.subscriptions.create(
       this.perform("printers_list", { printersList: data })
     },
 
-    received(data) {
+    received(job) {
+      console.log(job)
       const self = this
       if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Open) {
         var cpj = new JSPM.ClientPrintJob()
-        cpj.clientPrinter = new JSPM.DefaultPrinter()
+        cpj.clientPrinter = new JSPM.InstalledPrinter(job.printer)
 
-        var my_file1 = new JSPM.PrintFilePDF("/files/LoremIpsum.pdf", JSPM.FileSourceType.URL, "MyFile.pdf", 1)
-        cpj.files.push(my_file1)
-
-        var my_file2 = new JSPM.PrintFileTXT("/files/LoremIpsum.txt", "MyFile.txt", 1, JSPM.FileSourceType.URL)
-        cpj.files.push(my_file2)
-
-        var my_file = new JSPM.PrintFile("/images/penguins300dpi.jpg", JSPM.FileSourceType.URL, "MyFile.jpg", 1)
-        cpj.files.push(my_file)
+        if (job.kind == "raw") {
+          cpj.printerCommands = "RAW PRINTER COMMANDS HERE"
+        } else {
+          cpj.files.push(new JSPM["PrintFile" + job.kind.toUpperCase()](job.url, JSPM.FileSourceType.URL, job.filename, job.copies))
+        }
 
         cpj.onUpdated = function (data) {
           console.info(data)
@@ -58,11 +71,6 @@ consumer.subscriptions.create(
           console.info(data)
         }
 
-        cpj.sendToClient()
-
-        var cpj = new JSPM.ClientPrintJob()
-        cpj.clientPrinter = new JSPM.DefaultPrinter()
-        cpj.printerCommands = "RAW PRINTER COMMANDS HERE"
         cpj.sendToClient()
       }
     },

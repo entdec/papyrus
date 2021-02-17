@@ -25,9 +25,12 @@ module Papyrus
 
       context = @object.to_papyrus if @object.respond_to?(:to_papyrus)
       context ||= @object.as_json({ root: false }.merge(@options[:payload_options] || {}))
+      context = context.reject do |h|
+        h == 'pdf'
+      end
 
       templates.map do |template|
-        paper, data = template.generate(context.reject { |h| h == 'pdf' }, locale: context[:locale], object: @object)
+        paper, = template.generate(context, locale: context[:locale], object: @object, owner: @options[:owner])
         paper.print!
       end
     end
@@ -40,11 +43,11 @@ module Papyrus
     end
 
     class << self
-      def create(object, event, context = {})
+      def create(object, event, options = {})
         generator_class = generator_for_class(object.class)
         raise(Papyrus::Error, "There is no generator for #{object.class}") if generator_class.nil?
 
-        generator_class.new(object, event, context)
+        generator_class.new(object, event, options)
       end
 
       def handles?(object, event)

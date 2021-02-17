@@ -16,12 +16,6 @@ module Papyrus
       Papyrus::UpdatePrintersJob.perform_later(current_user, data)
     end
 
-    def close(data)
-      # signal = Papyrus::Signal.find_by_id(data['signal_id'])
-
-      # return unless signal
-
-      # signal.close!
-    end
+    def printed(data); end
   end
 end
