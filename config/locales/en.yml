@@ -3,3 +3,5 @@ en:
     printers:
       no_printers_yet: You don't seem to have any printers yet. Is the print-client installed?
       please_indicate_printer_use: Please indicate for each printer how you intend to use it. When more than one printer has the same use, only the first printer will actually be used to print.
+    print_jobs_table:
+      resend: Resend

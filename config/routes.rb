@@ -9,6 +9,13 @@ Papyrus::Engine.routes.draw do
     end
     resources :locales
   end
+
+  resources :print_jobs do
+    member do
+      post 'resend'
+    end
+  end
+
   resources :templates do
     member do
       get 'paper'
