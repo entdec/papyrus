@@ -2665,6 +2665,11 @@ exports-loader@^0.6.3:
     loader-utils "^1.0.2"
     source-map "0.5.x"
 
+expose-loader@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/expose-loader/-/expose-loader-2.0.0.tgz#1c323577db3d16f7817e4652024f2c545b3f6a70"
+  integrity sha512-WBpSGlNkn7YwbU2us7O+h0XsoFrB43Y/VCNSpRV4OZFXXKgw8W800BgNxLV0S97N3+KGnFYSCAJi1AV86NO22w==
+
 extend-shallow@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/extend-shallow/-/extend-shallow-2.0.1.tgz#51af7d614ad9a9f610ea1bafbb989d6b1c56890f"

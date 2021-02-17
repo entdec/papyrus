@@ -31,6 +31,15 @@ module.exports = {
         },
       },
       {
+        test: path.resolve("./src/javascript/vendor/zip.js"),
+        use: {
+          loader: "expose-loader",
+          options: {
+            exposes: ["zip"],
+          },
+        },
+      },
+      {
         test: /\.(png|jp(e*)g|svg)$/,
         use: [
           {
