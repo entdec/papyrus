@@ -22,22 +22,20 @@ consumer.subscriptions.create(
   {
     connected() {
       const self = this
-      console.log("connected to print channel")
       // Called when the subscription is ready for use on the server
       JSPM.JSPrintManager.auto_reconnect = true
       JSPM.JSPrintManager.start()
       JSPM.JSPrintManager.WS.onStatusChanged = function () {
         if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Open) {
-          console.log("JSPM is running")
+          console.log("Print client application is running")
 
           JSPM.JSPrintManager.getPrintersInfo().then(function (printersList) {
-            console.log(printersList)
             self.printersList(printersList)
           })
         } else if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Closed) {
-          console.log("JSPM is not installed or not running!")
+          console.log("Print client application is not installed or not running!")
         } else if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Blocked) {
-          console.log("JSPM has blocked this website!")
+          console.log("Print client application has blocked this website!")
         }
       }
     },
