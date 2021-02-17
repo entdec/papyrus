@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_16_141147) do
+ActiveRecord::Schema.define(version: 2021_02_17_095746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -61,7 +61,6 @@ ActiveRecord::Schema.define(version: 2021_02_16_141147) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "papyrable_type"
     t.uuid "papyrable_id"
-    t.string "use"
     t.index ["template_id"], name: "index_papyrus_papers_on_template_id"
   end
 
@@ -83,6 +82,8 @@ ActiveRecord::Schema.define(version: 2021_02_16_141147) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "kind"
+    t.uuid "paper_id", null: false
+    t.index ["paper_id"], name: "index_papyrus_print_jobs_on_paper_id"
     t.index ["printer_id"], name: "index_papyrus_print_jobs_on_printer_id"
   end
 
@@ -113,6 +114,7 @@ ActiveRecord::Schema.define(version: 2021_02_16_141147) do
     t.string "kind"
     t.string "klass"
     t.string "event"
+    t.string "use"
   end
 
   create_table "transaction_log_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -144,5 +146,6 @@ ActiveRecord::Schema.define(version: 2021_02_16_141147) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "papyrus_papers", "papyrus_templates", column: "template_id"
   add_foreign_key "papyrus_preferred_printers", "papyrus_printers", column: "printer_id"
+  add_foreign_key "papyrus_print_jobs", "papyrus_papers", column: "paper_id"
   add_foreign_key "papyrus_print_jobs", "papyrus_printers", column: "printer_id"
 end

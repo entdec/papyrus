@@ -5,9 +5,9 @@ one:
   name: MyString
   default: false
   papers: MyString
-  is_local: false
-  is_network: false
-  is_shared: false
+  local: false
+  network: false
+  shared: false
   connected: false
   port: MyString
   metadata:
@@ -17,9 +17,9 @@ two:
   name: MyString
   default: false
   papers: MyString
-  is_local: false
-  is_network: false
-  is_shared: false
+  local: false
+  network: false
+  shared: false
   connected: false
   port: MyString
   metadata:

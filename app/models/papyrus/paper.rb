@@ -6,5 +6,9 @@ module Papyrus
     belongs_to :papyrable, polymorphic: true, optional: true
 
     has_one_attached :attachment
+
+    def print!
+      # NO OP
+    end
   end
 end

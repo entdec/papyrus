@@ -1,6 +1,14 @@
 = clg.card do |card|
   - card.slot :title
-    = t('.papers')
-  - card.slot :footer
-  = clg.action_table(:papyrus_papers, options: { exportable: true })
+    | Papers
 
+  = clg.layout modifier: "card" do |layout|
+    - layout.row
+      - layout.cell basis: "100%"
+        = clg.tabbable_pane modifier: "small" do |pane|
+
+          - pane.slot :tab, id: :papers, title: t('.papers')
+            = clg.action_table(:papyrus_papers, options: { exportable: true })
+
+          - pane.slot :tab, id: :related_orders, title: t('.print_jobs')
+            = clg.action_table(:papyrus_print_jobs, options: { exportable: true })

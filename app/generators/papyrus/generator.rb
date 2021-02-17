@@ -27,9 +27,8 @@ module Papyrus
       context ||= @object.as_json({ root: false }.merge(@options[:payload_options] || {}))
 
       templates.map do |template|
-        template.generate(context.reject { |h| h == 'pdf' }, locale: context[:locale], object: @object)
-
-        # TODO: add auto-print here?
+        paper, data = template.generate(context.reject { |h| h == 'pdf' }, locale: context[:locale], object: @object)
+        paper.print!
       end
     end
 

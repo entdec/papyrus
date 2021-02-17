@@ -20,16 +20,20 @@
                   - lt.row
                     - lt.cell
                       = f.input :description
-                  - lt.row
-                    - lt.cell
-                      = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
 
-                  - lt.row html: { data: {controller: 'toggle'} }
+                    - lt.cell
+                      = f.input :use, collection: Papyrus::Printer::USES, selected: @template.use, include_blank: false
+
+                  - lt.row
                     - lt.cell
                       = f.input :klass, collection: Papyrus.config.papyrable_class_names.sort, selected: @template.klass, include_blank: true
 
                     - lt.cell
                       = f.input :event, collection: template.all_events, include_blank: false, input_html: { data: { controller: 'chained-input', 'chained-input-to': '#template_klass' } }
+
+                  - lt.row
+                    - lt.cell
+                      = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
 
               - pane.slot :tab, id: :media, title: 'Media'
                 = clg.layout do |lt|
