@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_16_093212) do
+ActiveRecord::Schema.define(version: 2021_02_16_141147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -61,28 +61,40 @@ ActiveRecord::Schema.define(version: 2021_02_16_093212) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "papyrable_type"
     t.uuid "papyrable_id"
+    t.string "use"
     t.index ["template_id"], name: "index_papyrus_papers_on_template_id"
   end
 
+  create_table "papyrus_preferred_printers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "use", null: false
+    t.string "owner_type", null: false
+    t.uuid "owner_id", null: false
+    t.uuid "printer_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["owner_type", "owner_id"], name: "index_papyrus_preferred_printers_on_owner_type_and_owner_id"
+    t.index ["printer_id"], name: "index_papyrus_preferred_printers_on_printer_id"
+  end
+
   create_table "papyrus_print_jobs", force: :cascade do |t|
-    t.bigint "papyrus_printer_id", null: false
+    t.uuid "printer_id", null: false
     t.string "url"
     t.text "data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "kind"
-    t.index ["papyrus_printer_id"], name: "index_papyrus_print_jobs_on_papyrus_printer_id"
+    t.index ["printer_id"], name: "index_papyrus_print_jobs_on_printer_id"
   end
 
-  create_table "papyrus_printers", force: :cascade do |t|
+  create_table "papyrus_printers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "owner_type", null: false
     t.uuid "owner_id", null: false
     t.string "name"
     t.boolean "default"
     t.string "papers"
-    t.boolean "is_local"
-    t.boolean "is_network"
-    t.boolean "is_shared"
+    t.boolean "local"
+    t.boolean "network"
+    t.boolean "shared"
     t.boolean "connected"
     t.string "port"
     t.jsonb "metadata"
@@ -131,5 +143,6 @@ ActiveRecord::Schema.define(version: 2021_02_16_093212) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "papyrus_papers", "papyrus_templates", column: "template_id"
-  add_foreign_key "papyrus_print_jobs", "papyrus_printers"
+  add_foreign_key "papyrus_preferred_printers", "papyrus_printers", column: "printer_id"
+  add_foreign_key "papyrus_print_jobs", "papyrus_printers", column: "printer_id"
 end

@@ -1,6 +1,6 @@
 class CreatePapyrusPrinters < ActiveRecord::Migration[6.0]
   def change
-    create_table :papyrus_printers do |t|
+    create_table :papyrus_printers, id: :uuid do |t|
       t.references :owner, polymorphic: true, optional: false, null: false, type: :uuid
 
       t.string :name

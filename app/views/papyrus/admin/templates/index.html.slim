@@ -1,4 +1,6 @@
-= ui_table :papyrus_templates
+= clg.card do |card|
+  - card.slot :title
+    = t('.templates')
+  - card.slot :footer
+  = clg.action_table(:papyrus_templates, options: { exportable: true })
 
-- content_for :context_menu do
-  =< link_to(t('papyrus.context_menu.add'), papyrus.new_admin_template_path, class: 'btn btn-primary')

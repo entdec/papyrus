@@ -1,0 +1,12 @@
+- if current_user.printers?
+  p = t('.please_indicate_printer_use')
+  = f.nested_form :preferred_printers, template_object: Papyrus::PreferredPrinter.new(owner: current_user) do |preferred_printer_form|
+    = clg.layout modifier: "compact" do |l|
+      - l.row html: { style: "margin-bottom: 24px" }
+        - l.col 2
+          = preferred_printer_form.input :use, collection: Papyrus::Printer::USES, include_blank: false
+        - l.col 2
+          = preferred_printer_form.association :printer, selected: preferred_printer_form.object&.printer&.id, collection: current_user.printers
+- else
+  = t('.no_printers_yet')
+

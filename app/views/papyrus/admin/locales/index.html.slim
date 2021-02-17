@@ -1,1 +1,6 @@
-= ui_table :papyrus_locales
+= clg.card do |card|
+  - card.slot :title
+    = t('.locales')
+  - card.slot :footer
+  = clg.action_table(:papyrus_locales, options: { exportable: true })
+

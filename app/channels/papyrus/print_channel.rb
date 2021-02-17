@@ -13,13 +13,7 @@ module Papyrus
     end
 
     def printers_list(data)
-      # binding.pry
-      Papyrus::UpdatePrintersJob.perform_later(user, data)
-      # signal = Papyrus::Signal.find_by_id(data['signal_id'])
-
-      # return unless signal
-
-      # signal.show!
+      Papyrus::UpdatePrintersJob.perform_later(current_user, data)
     end
 
     def close(data)
