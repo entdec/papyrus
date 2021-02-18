@@ -1,5 +1,3 @@
-import "../style/papyrus.scss"
-
 import { definitionsFromContext } from "stimulus/webpack-helpers"
 import { Application } from "stimulus"
 
