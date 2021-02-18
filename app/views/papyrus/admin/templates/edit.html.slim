@@ -21,7 +21,7 @@
                     - lt.cell
                       = f.input :description
                     - lt.cell
-                      = f.input :kind, collection: Papyrus::Template::KINDS, selected: @template.kind, include_blank: false, input_html: { data: { 'target-toggle' => 'input' } }
+                      = f.input :kind, collection: Papyrus::Template::KINDS, selected: @template.kind, include_blank: false, input_html: { data: { 'toggle-target' => 'input' } }
                     - lt.cell
                       = f.input :use, collection: Papyrus::Printer::USES, selected: @template.use, include_blank: false
                     - lt.cell
@@ -33,11 +33,11 @@
                     - lt.cell
                       = f.input :event, collection: template.all_events, include_blank: false, input_html: { data: { controller: 'chained-input', 'chained-input-to': '#template_klass' } }
                   - lt.row
-                    - lt.cell html: { data: { 'target-toggle' => 'insertion' } }
+                    - lt.cell html: { data: { 'schntoggle-target' => 'insertion' } }
                         = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
-                        template data-target-toggle="toggleable" data-toggle-value="pdf"
+                        template data-toggle-target="toggleable" data-toggle-value="pdf"
                           = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
-                        template data-target-toggle="toggleable" data-toggle-value="liquid"
+                        template data-toggle-target="toggleable" data-toggle-value="liquid"
                           = f.input :data, as: :editor, mode: 'text/plain', height: '600px'
 
               - pane.slot :tab, id: :media, title: 'Media'
