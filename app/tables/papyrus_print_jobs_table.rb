@@ -3,6 +3,7 @@
 class PapyrusPrintJobsTable < ActionTable::ActionTable
   model Papyrus::PrintJob
 
+  column(:state, &:state)
   column(:owner, sortable: false) { |row| row.printer.owner.name }
   column(:printer, sort_field: :printer_id) { |row| row.printer.name }
   column(:paper, sortable: false) { |row| row.paper.template.description }

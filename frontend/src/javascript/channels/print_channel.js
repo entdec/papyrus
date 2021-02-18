@@ -69,6 +69,8 @@ consumer.subscriptions.create(
 
     // Spool job to the printer
     spoolJob(cpj, job_id) {
+      const self = this
+
       cpj.onError = function (data) {
         self.perform("errored", { job_id: job_id })
       }
