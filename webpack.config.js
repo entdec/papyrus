@@ -21,23 +21,18 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["env"],
-            plugins: ["transform-class-properties"],
-          },
-        },
-      },
-      {
-        test: path.resolve("./src/javascript/vendor/zip.js"),
-        use: {
-          loader: "expose-loader",
-          options: {
-            exposes: ["zip"],
-          },
-        },
+        exclude: /(node_modules|bower_components|zip|zip-ext)/,
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: ["env"],
+              plugins: [
+                "transform-class-properties""
+              ]
+            }
+          }
+        ]
       },
       {
         test: /\.(png|jp(e*)g|svg)$/,

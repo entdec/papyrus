@@ -2,21 +2,8 @@ import consumer from "./consumer"
 
 import JSPM from "jsprintmanager"
 
-import zip from "../vendor/zip.js"
-// import * as zip from "@zip.js/zip.js/dist/zip.min.js"
-// import * as zip from "@zip.js/zip.js/dist/zip-fs-full.min.js"
-
-// import * as zip from "./jsprintmanager-deps/zip"
-// import "./jsprintmanager-deps/zip-ext"
-// import "./jsprintmanager-deps/deflate"
-
-// import cptables from "./jsprintmanager-deps/cptable"
-// import cputils from "./jsprintmanager-deps/cputils"
-
-// window.zip = zip
-
-// window.cptables = cptables
-// window.cputils = cputils
+import "imports-loader?wrapper=window!../vendor/zip.js"
+import "imports-loader?wrapper=window!../vendor/zip-ext.js"
 
 consumer.subscriptions.create(
   { channel: "Papyrus::PrintChannel" },
