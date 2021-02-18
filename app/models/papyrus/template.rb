@@ -12,24 +12,32 @@ module Papyrus
     def generate(context, object: nil, locale: I18n.locale, owner: nil)
       data = render(context.reject { |h| h == 'pdf' }, locale: locale)
       paper = Paper.create(template: self, data: context.reject { |h| h == 'pdf' }, papyrable: object, owner: owner)
-      paper.attachment.attach(io: data, filename: file_name, content_type: 'application/pdf')
+      paper.attachment.attach(io: data,
+                              filename: file_name,
+                              content_type: (kind == 'pdf' ? 'application/pdf' : 'application/octet-stream'),
+                              identify: false)
       data.rewind
 
       [paper, data]
     end
 
     def render(context, locale: I18n.locale)
-      template = Tilt::PrawnTemplate.new(file_name, (metadata || {}).deep_symbolize_keys) { |_t| data }
-
       result = I18n.with_locale(locale) do
-        template.render(Papyrus::Context.new(self), context)
+        if kind == 'pdf'
+          template = Tilt::PrawnTemplate.new(file_name, (metadata || {}).deep_symbolize_keys) { |_t| data }
+          template.render(Papyrus::Context.new(self), context)
+        else
+          ::Liquor.render(data,
+                          { assigns: context.merge('template' => self),
+                            registers: { 'template' => self } })
+        end
       end
 
       StringIO.new(result)
     end
 
     def file_name
-      "#{description.gsub(/[^a-zA-Z0-9]/, '_').downcase}.pdf"
+      "#{description.gsub(/[^a-zA-Z0-9]/, '_').downcase}.#{kind == 'pdf' ? 'pdf' : 'bin'}"
     end
 
     def translation_scope

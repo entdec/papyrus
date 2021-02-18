@@ -15,3 +15,49 @@ pdf_for_items:
     pdf.text name
   klass: Item
   event: create
+
+zpl:
+  kind: liquid
+  description: ZPL Label
+  use: label
+  data: |
+    ^XA
+    ^FO20,30^GB750,1100,4^FS
+    ^FO20,30^GB750,200,4^FS
+    ^FO20,30^GB750,400,4^FS
+    ^FO20,30^GB750,700,4^FS
+    ^FO20,226^GB325,204,4^FS
+    ^FO30,40^ADN,36,20^FDShip to:^FS
+    ^FO30,260^ADN,18,10^FDPart number # {{name}}^FS
+    ^FO360,260^ADN,18,10^FDDescription:^FS
+    ^FO30,750^ADN,36,20^FDFrom:^FS
+    ^FO150,125^ADN,36,20^FDAcme Printing^FS
+    ^FO60,330^ADN,36,20^FD14042^FS
+    ^FO400,330^ADN,36,20^FDScrew^FS
+    ^FO70,480^BY4^B3N,,200^FD12345678^FS
+    ^FO150,800^ADN,36,20^FDMacks Fabricating^FS
+    ^XZ
+
+zpl_for_item_update:
+  kind: liquid
+  description: ZPL Label
+  use: label
+  data: |
+    ^XA
+    ^FO20,30^GB750,1100,4^FS
+    ^FO20,30^GB750,200,4^FS
+    ^FO20,30^GB750,400,4^FS
+    ^FO20,30^GB750,700,4^FS
+    ^FO20,226^GB325,204,4^FS
+    ^FO30,40^ADN,36,20^FDShip to:^FS
+    ^FO30,260^ADN,18,10^FDPart number # {{name}}^FS
+    ^FO360,260^ADN,18,10^FDDescription:^FS
+    ^FO30,750^ADN,36,20^FDFrom:^FS
+    ^FO150,125^ADN,36,20^FDAcme Printing^FS
+    ^FO60,330^ADN,36,20^FD14042^FS
+    ^FO400,330^ADN,36,20^FDScrew^FS
+    ^FO70,480^BY4^B3N,,200^FD12345678^FS
+    ^FO150,800^ADN,36,20^FDMacks Fabricating^FS
+    ^XZ
+  klass: Item
+  event: update

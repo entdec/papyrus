@@ -16,6 +16,12 @@ Papyrus::Engine.routes.draw do
     end
   end
 
+  resources :papers do
+    member do
+      post 'print'
+    end
+  end
+
   resources :templates do
     member do
       get 'paper'

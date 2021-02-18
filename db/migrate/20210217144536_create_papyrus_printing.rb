@@ -17,7 +17,7 @@ class CreatePapyrusPrinting < ActiveRecord::Migration[6.0]
     end
 
     create_table :papyrus_print_jobs, id: :uuid do |t|
-      t.string :status
+      t.string :state, default: 'pending'
       t.references :paper, type: :uuid, null: false, foreign_key: { to_table: :papyrus_papers }
       t.references :printer, null: false, foreign_key: { to_table: :papyrus_printers }, type: :uuid
       t.timestamps

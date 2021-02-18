@@ -16,6 +16,28 @@ module Papyrus
       Papyrus::UpdatePrintersJob.perform_later(current_user, data)
     end
 
-    def printed(data); end
+    def printing(data)
+      print_job = Papyrus::PrintJob.find_by_id(data['print_job_id'])
+
+      return unless print_job
+
+      print_job.started!
+    end
+
+    def errored(data)
+      print_job = Papyrus::PrintJob.find_by_id(data['print_job_id'])
+
+      return unless print_job
+
+      print_job.errored!
+    end
+
+    def printed(data)
+      print_job = Papyrus::PrintJob.find_by_id(data['print_job_id'])
+
+      return unless print_job
+
+      print_job.finished!
+    end
   end
 end

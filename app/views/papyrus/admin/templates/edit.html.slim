@@ -12,7 +12,7 @@
 
       = clg.layout modifier: "compact" do |layout|
         - layout.row
-          - layout.cell
+          - layout.cell html: { data: { controller: "toggle" } }
 
             = clg.tabbable_pane do |pane|
               - pane.slot :tab, id: :basics, title: 'Basics'
@@ -20,27 +20,36 @@
                   - lt.row
                     - lt.cell
                       = f.input :description
-
+                    - lt.cell
+                      = f.input :kind, collection: Papyrus::Template::KINDS, selected: @template.kind, include_blank: false, input_html: { data: { 'target-toggle' => 'input' } }
                     - lt.cell
                       = f.input :use, collection: Papyrus::Printer::USES, selected: @template.use, include_blank: false
+                    - lt.cell
+                      = f.input :copies
 
                   - lt.row
                     - lt.cell
                       = f.input :klass, collection: Papyrus.config.papyrable_class_names.sort, selected: @template.klass, include_blank: true
-
                     - lt.cell
                       = f.input :event, collection: template.all_events, include_blank: false, input_html: { data: { controller: 'chained-input', 'chained-input-to': '#template_klass' } }
-
                   - lt.row
-                    - lt.cell
-                      = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
+                    - lt.cell html: { data: { 'target-toggle' => 'insertion' } }
+                        = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
+                        template data-target-toggle="toggleable" data-toggle-value="pdf"
+                          = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
+                        template data-target-toggle="toggleable" data-toggle-value="liquid"
+                          = f.input :data, as: :editor, mode: 'text/plain', height: '600px'
 
               - pane.slot :tab, id: :media, title: 'Media'
                 = clg.layout do |lt|
                   - lt.row
                     - lt.cell
-                      = render partial: 'papyrus/admin/templates/attachments/index', locals: { attachments: @template.attachments, upload_url: admin_template_attachments_path(@template) }
-                      .warning WARNING: Large images( >1000px wide) or SVG's will cause a SIGNIFICANT slowdown (seconds)
+                      - if @template.persisted?
+                        = render partial: 'papyrus/admin/templates/attachments/index', locals: { attachments: @template.attachments, upload_url: admin_template_attachments_path(@template) }
+                        .warning WARNING: Large images( >1000px wide) or SVG's will cause a SIGNIFICANT slowdown (seconds)
+                      - else
+                        .warning You can add media once the template is saved
+
               - pane.slot :tab, id: :example_data, title: 'Example data'
                 = clg.layout do |lt|
                   - lt.row

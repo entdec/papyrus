@@ -21,18 +21,16 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /(node_modules|bower_components|zip|zip-ext)/,
+        exclude: /(node_modules|bower_components|zip|zip-ext|deflate)/,
         use: [
           {
             loader: "babel-loader",
             options: {
               presets: ["env"],
-              plugins: [
-                "transform-class-properties"
-              ]
-            }
-          }
-        ]
+              plugins: ["transform-class-properties"],
+            },
+          },
+        ],
       },
       {
         test: /\.(png|jp(e*)g|svg)$/,

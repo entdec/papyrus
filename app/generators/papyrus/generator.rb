@@ -4,7 +4,10 @@ module Papyrus
   class Generator
     delegate :class_names_for, to: :class
 
-    def initialize(object, event, options = {})
+    include ActiveSupport::Callbacks
+    define_callbacks :action, terminator: ->(_target, result_lambda) { result_lambda.call == false }
+
+    def initialize(object, event, options = {}, context = nil)
       if self.class.generator_for_class(object.class) != self.class
         raise(Papyrus::Error, "This generator does not handle #{object.class} objects")
       end
@@ -16,21 +19,28 @@ module Papyrus
       @object  = object
       @event   = event
       @options = options
+      @context = context
     end
 
     def call
       return if templates.count.zero?
 
-      public_send(@event, @object, @options)
-
-      context = @object.to_papyrus if @object.respond_to?(:to_papyrus)
-      context ||= @object.as_json({ root: false }.merge(@options[:payload_options] || {}))
-      context = context.reject do |h|
+      @context = @object.to_papyrus if @object.respond_to?(:to_papyrus)
+      @context ||= @object.as_json({ root: false }.merge(@options[:payload_options] || {}))
+      @context = @context.reject do |h|
         h == 'pdf'
       end
 
+      run_callbacks(:action) do
+        public_send(@event.to_sym, @object, @options, @context)
+      end
+
+      Papyrus::GenerateJob.perform_later(@object, @event.to_s, @options, @context)
+    end
+
+    def generate
       templates.map do |template|
-        paper, = template.generate(context, locale: context[:locale], object: @object, owner: @options[:owner])
+        paper, = template.generate(@context, locale: @context[:locale], object: @object, owner: @options[:owner])
         paper.print!
       end
     end
@@ -43,11 +53,11 @@ module Papyrus
     end
 
     class << self
-      def create(object, event, options = {})
+      def create(object, event, options = {}, context = nil)
         generator_class = generator_for_class(object.class)
         raise(Papyrus::Error, "There is no generator for #{object.class}") if generator_class.nil?
 
-        generator_class.new(object, event, options)
+        generator_class.new(object, event, options, context)
       end
 
       def handles?(object, event)

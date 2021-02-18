@@ -4,6 +4,7 @@ import JSPM from "jsprintmanager"
 
 import "imports-loader?wrapper=window!../vendor/zip.js"
 import "imports-loader?wrapper=window!../vendor/zip-ext.js"
+import "imports-loader?wrapper=window!../vendor/deflate.js"
 
 consumer.subscriptions.create(
   { channel: "Papyrus::PrintChannel" },
@@ -37,28 +38,52 @@ consumer.subscriptions.create(
     },
 
     received(job) {
-      console.log(job)
       const self = this
       if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Open) {
         var cpj = new JSPM.ClientPrintJob()
         cpj.clientPrinter = new JSPM.InstalledPrinter(job.printer)
 
         if (job.kind == "raw") {
-          cpj.printerCommands = "RAW PRINTER COMMANDS HERE"
+          fetch(job.url, { redirect: "follow" })
+            .then(self.handleErrors)
+            .then((response) => {
+              response.text().then(function (data) {
+                cpj.printerCommands = data
+                cpj.printerCommandsCopies = job.copies
+                self.spoolJob(cpj, job.id)
+              })
+            })
+            .catch((error) => {
+              console.log(error)
+            })
         } else {
           cpj.files.push(new JSPM["PrintFile" + job.kind.toUpperCase()](job.url, JSPM.FileSourceType.URL, job.filename, job.copies))
+          self.spoolJob(cpj, job.id)
         }
-
-        cpj.onUpdated = function (data) {
-          console.info(data)
-        }
-
-        cpj.onFinished = function (data) {
-          console.info(data)
-        }
-
-        cpj.sendToClient()
       }
+    },
+
+    // Handle errors with regards to getting the raw data
+    handleErrors(response) {
+      if (!response.ok) throw new Error(response.status)
+      return response
+    },
+
+    // Spool job to the printer
+    spoolJob(cpj, job_id) {
+      const self = this
+
+      cpj.onError = function (data) {
+        self.perform("errored", { print_job_id: job_id })
+      }
+
+      cpj.onFinished = function (data) {
+        self.perform("printed", { print_job_id: job_id })
+      }
+
+      cpj.sendToClient().then((data) => {
+        self.perform("printing", { print_job_id: job_id })
+      })
     },
   }
 )
