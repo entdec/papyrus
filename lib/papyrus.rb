@@ -52,7 +52,7 @@ module Papyrus
     def generate(event)
       return unless event
 
-      Papyrus::GenerateJob.perform_later(@obj, event.to_s, @options)
+      Papyrus::Generator.create(@obj, event.to_s, @options).call
     end
 
     def with(obj, options = {})

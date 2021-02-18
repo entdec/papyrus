@@ -21,7 +21,7 @@ module Papyrus
       add_to_config
       orchestrator = Evento::Orchestrator.new(klass)
       orchestrator.define_event_methods_on(generator,
-                                           state_machine: options[:use_state_machine], life_cycle: options[:life_cycle]) do |object, params = {}|
+                                           state_machine: options[:use_state_machine], life_cycle: options[:life_cycle]) do |object, options = {}, context = nil|
       end
 
       if options[:use_state_machine]
@@ -34,7 +34,6 @@ module Papyrus
       orchestrator.after_transaction_log_commit(:papyrus) do |transaction_log_entry|
         record  = transaction_log_entry.transaction_loggable
         event   = transaction_log_entry.event
-        binding.pry
         Papyrus.with(record).generate(event.to_s) if record.papyrable? && event.present?
         Papyrus.with(record).generate('save') if %w[create update].include?(event) && record.papyrable?
       end

@@ -7,15 +7,15 @@ module Papyrus
       state :printed
       state :error
 
-      event :start do
-        transition %i[pending error printed] => :printing
+      event :started do
+        transition any => :printing
       end
 
       event :errored do
         transition %i[pending printing] => :error
       end
 
-      event :finish do
+      event :finished do
         transition %i[pending error printing] => :printed
       end
     end
@@ -25,7 +25,6 @@ module Papyrus
     has_one :template, through: :paper, class_name: 'Papyrus::Template'
 
     def spool!
-      start!
       Papyrus::PrintChannel.broadcast_to(printer.owner, payload)
     end
 

@@ -45,11 +45,15 @@ consumer.subscriptions.create(
         cpj.clientPrinter = new JSPM.InstalledPrinter(job.printer)
 
         if (job.kind == "raw") {
-          fetch(job.url)
+          fetch(job.url, { redirect: "follow" })
             .then(self.handleErrors)
             .then((response) => {
-              cpj.printerCommands = response
-              self.spoolJob(cpj, job.id)
+              response.text().then(function (data) {
+                console.log(data)
+                cpj.printerCommands = data
+                cpj.printerCommandsCopies = job.copies
+                self.spoolJob(cpj, job.id)
+              })
             })
             .catch((error) => {
               console.log(error)
@@ -72,18 +76,23 @@ consumer.subscriptions.create(
       const self = this
 
       cpj.onError = function (data) {
+        console.log("errored!!")
         self.perform("errored", { job_id: job_id })
       }
 
       cpj.onUpdated = function (data) {
+        console.log("updated!!")
         self.perform("printing", { job_id: job_id })
       }
 
       cpj.onFinished = function (data) {
+        console.log("finised!!")
         self.perform("printed", { job_id: job_id })
       }
 
-      cpj.sendToClient()
+      cpj.sendToClient().then((data) => {
+        self.perform("printing", { job_id: job_id })
+      })
     },
   }
 )

@@ -21,7 +21,7 @@ module Papyrus
 
       return unless print_job
 
-      print_job.start!
+      print_job.started!
     end
 
     def errored(data)
@@ -37,7 +37,7 @@ module Papyrus
 
       return unless print_job
 
-      print_job.finish!
+      print_job.finished!
     end
   end
 end

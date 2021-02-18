@@ -4,7 +4,22 @@ Paper generation based on templates. Web-based printing using print-client.
 
 ## Usage
 
-How to use my plugin.
+The context of the templates will be a serialized version of your record, papyrus will call `to_papyrus` on your objects. If that doesn't exist, it will call as_json.
+In case you want web-printing, the options needs an owner, so you could make your `ApplicationGenerator` something like this:
+
+```ruby
+# frozen_string_literal: true
+
+class ApplicationGenerator < Papyrus::Generator
+  set_callback :action, :before, :set_current_objects
+
+  private
+
+  def set_current_objects
+    @options.merge!(owner: Current.user, locale: I18n.locale)
+  end
+end
+```
 
 ## Installation
 

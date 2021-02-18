@@ -12,7 +12,10 @@ module Papyrus
     def generate(context, object: nil, locale: I18n.locale, owner: nil)
       data = render(context.reject { |h| h == 'pdf' }, locale: locale)
       paper = Paper.create(template: self, data: context.reject { |h| h == 'pdf' }, papyrable: object, owner: owner)
-      paper.attachment.attach(io: data, filename: file_name, content_type: 'application/pdf')
+      paper.attachment.attach(io: data,
+                              filename: file_name,
+                              content_type: (kind == 'pdf' ? 'application/pdf' : 'application/octet-stream'),
+                              identify: false)
       data.rewind
 
       [paper, data]
@@ -34,7 +37,7 @@ module Papyrus
     end
 
     def file_name
-      "#{description.gsub(/[^a-zA-Z0-9]/, '_').downcase}.pdf"
+      "#{description.gsub(/[^a-zA-Z0-9]/, '_').downcase}.#{kind == 'pdf' ? 'pdf' : 'bin'}"
     end
 
     def translation_scope

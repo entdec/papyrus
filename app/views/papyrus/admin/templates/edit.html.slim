@@ -24,6 +24,8 @@
                       = f.input :kind, collection: Papyrus::Template::KINDS, selected: @template.kind, include_blank: false, input_html: { data: { 'target-toggle' => 'input' } }
                     - lt.cell
                       = f.input :use, collection: Papyrus::Printer::USES, selected: @template.use, include_blank: false
+                    - lt.cell
+                      = f.input :copies
 
                   - lt.row
                     - lt.cell
