@@ -1,16 +1,20 @@
 import { definitionsFromContext } from "stimulus/webpack-helpers"
 import { Application } from "stimulus"
+import { log } from "./utils"
 
-import "./channels"
 export class Papyrus {
   static start(application) {
     if (!application) {
       application = Application.start()
     }
 
-    console.log("Papyrus")
+    log("Started");
+
     this.application = application
     const context = require.context("./controllers", true, /\.js$/)
-    this.application.load(definitionsFromContext(context))
+    this.application.load(definitionsFromContext(context));
+
+    log("Instantiating channels");
+    import("./channels");
   }
 }
