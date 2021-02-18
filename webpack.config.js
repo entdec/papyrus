@@ -21,7 +21,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /(node_modules|bower_components|zip|zip-ext)/,
+        exclude: /(node_modules|bower_components|zip|zip-ext|deflate)/,
         use: [
           {
             loader: "babel-loader",

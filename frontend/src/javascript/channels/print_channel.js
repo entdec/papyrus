@@ -4,6 +4,7 @@ import JSPM from "jsprintmanager"
 
 import "imports-loader?wrapper=window!../vendor/zip.js"
 import "imports-loader?wrapper=window!../vendor/zip-ext.js"
+import "imports-loader?wrapper=window!../vendor/deflate.js"
 
 consumer.subscriptions.create(
   { channel: "Papyrus::PrintChannel" },
@@ -44,21 +45,43 @@ consumer.subscriptions.create(
         cpj.clientPrinter = new JSPM.InstalledPrinter(job.printer)
 
         if (job.kind == "raw") {
-          cpj.printerCommands = "RAW PRINTER COMMANDS HERE"
+          fetch(job.url)
+            .then(self.handleErrors)
+            .then((response) => {
+              cpj.printerCommands = response
+              self.spoolJob(cpj, job.id)
+            })
+            .catch((error) => {
+              console.log(error)
+            })
         } else {
           cpj.files.push(new JSPM["PrintFile" + job.kind.toUpperCase()](job.url, JSPM.FileSourceType.URL, job.filename, job.copies))
+          self.spoolJob(cpj, job.id)
         }
-
-        cpj.onUpdated = function (data) {
-          console.info(data)
-        }
-
-        cpj.onFinished = function (data) {
-          console.info(data)
-        }
-
-        cpj.sendToClient()
       }
+    },
+
+    // Handle errors with regards to getting the raw data
+    handleErrors(response) {
+      if (!response.ok) throw new Error(response.status)
+      return response
+    },
+
+    // Spool job to the printer
+    spoolJob(cpj, job_id) {
+      cpj.onError = function (data) {
+        self.perform("errored", { job_id: job_id })
+      }
+
+      cpj.onUpdated = function (data) {
+        self.perform("printing", { job_id: job_id })
+      }
+
+      cpj.onFinished = function (data) {
+        self.perform("printed", { job_id: job_id })
+      }
+
+      cpj.sendToClient()
     },
   }
 )

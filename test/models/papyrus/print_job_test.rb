@@ -14,5 +14,19 @@ module Papyrus
       assert_equal @printer1, subject.printer
       assert_equal paper, subject.paper
     end
+
+    test 'states' do
+      template = papyrus_templates(:pdf)
+      paper, = template.generate({ name: 'Joe' }, owner: @user)
+
+      subject = Papyrus::PrintJob.create(printer: @printer1, paper: paper)
+      assert_equal 'pending', subject.state
+      subject.start!
+      assert_equal 'printing', subject.state
+      subject.errored!
+      assert_equal 'error', subject.state
+      subject.finish!
+      assert_equal 'printed', subject.state
+    end
   end
 end

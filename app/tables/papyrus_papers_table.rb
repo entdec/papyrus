@@ -15,6 +15,13 @@ class PapyrusPapersTable < ActionTable::ActionTable
   end
   column(:created_at) { |paper| ln(paper.created_at) }
 
+  column :actions, sortable: false do |row|
+    content_tag(:span) do
+      concat link_to(content_tag(:i, nil, class: 'fal fa-print'), papyrus.print_paper_path(row.id),
+                     title: t('papyrus.paper_table.print'), method: :post)
+    end
+  end
+
   initial_order :created_at, :desc
 
   row_link { |paper| papyrus.edit_admin_template_path(paper.template) }

@@ -13,7 +13,7 @@ module Papyrus
       return unless printer
 
       print_job = printer.print_jobs.create!(paper: self)
-      print_job.send!
+      print_job.spool!
       print_job
     end
 
@@ -26,6 +26,11 @@ module Papyrus
       else
         'file'
       end
+    end
+
+    def attachment_path
+      Rails.application.routes.url_helpers.rails_blob_path(attachment, disposition: 'attachment',
+                                                                       only_path: true)
     end
 
     private

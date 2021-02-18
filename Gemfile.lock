@@ -68,7 +68,7 @@ PATH
       rails (~> 6.0, >= 6.0.2.1)
       rqrcode (~> 0.10)
       servitium (~> 1.1)
-      state_machines-activemodel
+      state_machines-activemodel (~> 0.8)
       tilt (~> 2.0)
       transactio
 
@@ -326,6 +326,7 @@ DEPENDENCIES
   servitium (~> 1.1)!
   sidekiq
   solargraph
+  state_machines-activemodel (~> 0.8)
   transactio (~> 0.1)!
 
 BUNDLED WITH

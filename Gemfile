@@ -20,6 +20,7 @@ gem 'decoro', '~> 0.1', entdec: 'components/decoro'
 gem 'evento', entdec: 'components/evento', tag: '0.1.6'
 gem 'liquor', entdec: 'components/liquor'
 gem 'servitium', '~> 1.1', entdec: 'components/servitium'
+gem 'state_machines-activemodel', '~> 0.8'
 gem 'transactio', '~> 0.1', entdec: 'components/transactio'
 
 gem 'pry'
