@@ -38,7 +38,6 @@ consumer.subscriptions.create(
     },
 
     received(job) {
-      console.log(job)
       const self = this
       if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Open) {
         var cpj = new JSPM.ClientPrintJob()
@@ -49,7 +48,6 @@ consumer.subscriptions.create(
             .then(self.handleErrors)
             .then((response) => {
               response.text().then(function (data) {
-                console.log(data)
                 cpj.printerCommands = data
                 cpj.printerCommandsCopies = job.copies
                 self.spoolJob(cpj, job.id)
@@ -76,22 +74,15 @@ consumer.subscriptions.create(
       const self = this
 
       cpj.onError = function (data) {
-        console.log("errored!!")
-        self.perform("errored", { job_id: job_id })
-      }
-
-      cpj.onUpdated = function (data) {
-        console.log("updated!!")
-        self.perform("printing", { job_id: job_id })
+        self.perform("errored", { print_job_id: job_id })
       }
 
       cpj.onFinished = function (data) {
-        console.log("finised!!")
-        self.perform("printed", { job_id: job_id })
+        self.perform("printed", { print_job_id: job_id })
       }
 
       cpj.sendToClient().then((data) => {
-        self.perform("printing", { job_id: job_id })
+        self.perform("printing", { print_job_id: job_id })
       })
     },
   }

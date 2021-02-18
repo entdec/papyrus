@@ -32,6 +32,7 @@ module Papyrus
 
     def payload
       {
+        id: id,
         printer: printer.name,
         url: paper.attachment_path,
         kind: paper.kind,
