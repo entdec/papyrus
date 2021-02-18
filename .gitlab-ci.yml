@@ -1,0 +1,24 @@
+stages:
+  - prepare
+  - publish
+
+default:
+  image: code.entropydecelerator.com:4567/components/devops
+  before_script:
+    - |
+      {
+        echo "@${CI_PROJECT_ROOT_NAMESPACE}:registry=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/npm/"
+        echo "${CI_API_V4_URL#https?}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}"
+      } | tee -a .npmrc
+    - cat .npmrc 
+
+create-frontend-release:
+  stage: publish
+  script:
+    - |
+      {
+        cp package.json frontend/src
+        BUILD_VERSION=$(git describe --tags)
+        yarn publish --new-version $BUILD_VERSION --no-git-tag-version frontend/src
+      }
+    
