@@ -1,0 +1,24 @@
+default:
+  image: node:12.20.2-alpine3.10
+  before_script:
+    - |
+      {
+        echo "@${CI_PROJECT_ROOT_NAMESPACE}:registry=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/npm/"
+        echo "${CI_API_V4_URL#https?}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=\${CI_JOB_TOKEN}"
+      } | tee -a .npmrc
+    - cat .npmrc 
+
+create-frontend-release:
+  script:
+    - |
+      {
+        if [ -z "$CI_COMMIT_TAG" ]
+        then
+          VERSION=$CI_COMMIT_SHORT_SHA
+        else
+          VERSION=$CI_COMMIT_TAG
+        fi
+
+        yarn publish --new-version $VERSION
+      }
+    
