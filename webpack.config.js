@@ -27,12 +27,10 @@ module.exports = {
             loader: "babel-loader",
             options: {
               presets: ["env"],
-              plugins: [
-                "transform-class-properties""
-              ]
-            }
-          }
-        ]
+              plugins: ["transform-class-properties"],
+            },
+          },
+        ],
       },
       {
         test: /\.(png|jp(e*)g|svg)$/,
