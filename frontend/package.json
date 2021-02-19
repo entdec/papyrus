@@ -5,7 +5,7 @@
   "author": "Tom de Grunt <tom@degrunt.nl>",
   "license": "MIT",
   "exports": {
-    "./": "./frontend/src"
+    "./": "./"
   },
   "scripts": {
     "copy": "cp frontend/dist/papyrus.css ~/Development/soverin/dashboard/vendor/assets/stylesheets; cp frontend/dist/papyrus.js ~/Development/soverin/dashboard/vendor/assets/javascripts",

@@ -8,13 +8,17 @@ export class Papyrus {
       application = Application.start()
     }
 
-    log("Started");
+    // This needs papyrus mounted in /papers
+    JSPM.JSPrintManager.license_url = `${location.protocol}//${location.host}/papers/print_client_license`
+    JSPM.JSPrintManager.auto_reconnect = true
+    JSPM.JSPrintManager.start()
+
+    log("Papyrus")
 
     this.application = application
     const context = require.context("./controllers", true, /\.js$/)
-    this.application.load(definitionsFromContext(context));
+    this.application.load(definitionsFromContext(context))
 
-    log("Instantiating channels");
-    import("./channels");
+    import("./channels")
   }
 }

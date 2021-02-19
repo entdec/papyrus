@@ -11,9 +11,7 @@ consumer.subscriptions.create(
   {
     connected() {
       const self = this
-      // Called when the subscription is ready for use on the server
-      JSPM.JSPrintManager.auto_reconnect = true
-      JSPM.JSPrintManager.start()
+
       JSPM.JSPrintManager.WS.onStatusChanged = function () {
         if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Open) {
           console.log("Print client application is running")
