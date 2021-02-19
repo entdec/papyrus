@@ -2,8 +2,8 @@
 
 module Papyrus
   class Configuration
-    attr_accessor :admin_authentication_module, :base_controller, :visible_scope, :add_metadata,
-                  :metadata_fields # , :allow_custom_events,
+    attr_accessor :admin_authentication_module, :base_controller, :visible_scope, :add_metadata, :metadata_fields,
+                  :print_client_license_owner, :print_client_license_key
     attr_writer :logger, :host, :metadata_humanize
 
     def initialize

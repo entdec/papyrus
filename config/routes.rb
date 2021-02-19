@@ -10,6 +10,8 @@ Papyrus::Engine.routes.draw do
     resources :locales
   end
 
+  resource :print_client_license
+
   resources :print_jobs do
     member do
       post 'resend'

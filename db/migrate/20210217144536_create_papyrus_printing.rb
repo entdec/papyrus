@@ -40,5 +40,6 @@ class CreatePapyrusPrinting < ActiveRecord::Migration[6.0]
     add_column :papyrus_templates, :copies, :integer, default: 1
     add_column :papyrus_templates, :klass, :string
     add_column :papyrus_templates, :event, :string
+    add_column :papyrus_templates, :use, :string
   end
 end
