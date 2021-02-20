@@ -21,6 +21,8 @@ class ApplicationGenerator < Papyrus::Generator
 end
 ```
 
+Install the Print Client app: https://www.neodynamic.com/downloads/jspm/
+
 ## Installation
 
 Add this line to your application's Gemfile:
