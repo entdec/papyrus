@@ -6,6 +6,9 @@ class PapyrusTemplatesTable < ActionTable::ActionTable
   column(:kind)
   column(:use)
   column(:description)
+  column(:klass)
+  column(:event)
+  column(:copies)
   column(:metadata) { |template| Papyrus.config.metadata_humanize(template.metadata) }
   column(:created_at) { |paper| ln(paper.created_at) }
 

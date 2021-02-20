@@ -2,6 +2,7 @@ import consumer from "./consumer"
 
 import JSPM from "jsprintmanager"
 import * as zip from "@zip.js/zip.js/dist/zip-full.min.js"
+
 window.zip = zip
 
 consumer.subscriptions.create(
