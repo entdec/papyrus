@@ -1,10 +1,8 @@
 import consumer from "./consumer"
 
 import JSPM from "jsprintmanager"
-
-import "imports-loader?wrapper=window!../vendor/zip.js"
-import "imports-loader?wrapper=window!../vendor/zip-ext.js"
-import "imports-loader?wrapper=window!../vendor/deflate.js"
+import * as zip from "@zip.js/zip.js/dist/zip-full.min.js"
+window.zip = zip
 
 consumer.subscriptions.create(
   { channel: "Papyrus::PrintChannel" },

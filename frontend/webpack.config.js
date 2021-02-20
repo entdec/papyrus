@@ -1,12 +1,11 @@
 const path = require("path")
-// const CleanWebpackPlugin = require('clean-webpack-plugin')
-const ExtractTextPlugin = require("extract-text-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {
-  entry: "./frontend/src/javascript/papyrus.js",
+  mode: "production",
+  entry: "./index.js",
   output: {
-    path: __dirname + "/frontend/dist",
+    path: __dirname + "/dist",
     filename: "papyrus.js",
     library: "papyrus",
     libraryTarget: "umd",
@@ -21,12 +20,12 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /(node_modules|bower_components|zip|zip-ext|deflate)/,
+        exclude: /(node_modules|bower_components)/,
         use: [
           {
             loader: "babel-loader",
             options: {
-              presets: ["env"],
+              presets: ["@babel/preset-env"],
               plugins: ["transform-class-properties"],
             },
           },
@@ -57,7 +56,7 @@ module.exports = {
     ],
   },
   resolve: {
-    modules: [path.resolve("./node_modules"), path.resolve("./src")],
+    modules: [path.resolve("./node_modules"), path.resolve("./")],
     extensions: [".json", ".js"],
   },
 }
