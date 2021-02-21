@@ -70,12 +70,15 @@ consumer.subscriptions.create(
     spoolJob(cpj, job_id) {
       const self = this
 
-      cpj.onError = function (data) {
-        self.perform("errored", { print_job_id: job_id })
-      }
-
-      cpj.onFinished = function (data) {
-        self.perform("printed", { print_job_id: job_id })
+      // There is also onError and onFinished, but these are not reliably called.
+      // The state-description is 'Completed', still need to know about other states.
+      cpj.onUpdated = function (data) {
+        console.log("Print Job Update: ", data)
+        if (data["state-description"] === "Completed") {
+          self.perform("printed", { print_job_id: job_id })
+        } else if (data["state-description"] === "Error") {
+          self.perform("errored", { print_job_id: job_id })
+        }
       }
 
       cpj.sendToClient().then((data) => {
