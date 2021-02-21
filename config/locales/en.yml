@@ -1,7 +1,7 @@
 en:
   papyrus:
     printers:
-      no_printers_yet: You don't seem to have any printers yet. Is the print-client installed?
+      no_printers_yet: "You don't seem to have any printers yet. Is the print-client installed? You can download it from here: <a href='https://www.neodynamic.com/downloads/jspm/'>https://www.neodynamic.com/downloads/jspm/</a>"
       please_indicate_printer_use: Please indicate for each printer how you intend to use it. When more than one printer has the same use, only the first printer will actually be used to print.
     print_jobs_table:
       resend: Resend
