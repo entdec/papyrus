@@ -26,6 +26,7 @@
     "@zip.js/zip.js": "^2.2.16",
     "element-closest": "^3.0.1",
     "jsprintmanager": "^3.0.7",
+    "semver": "^7.3.4",
     "stimulus": "^2"
   },
   "devDependencies": {
