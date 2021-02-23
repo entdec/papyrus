@@ -48,7 +48,9 @@ module Papyrus
     def templates
       return @templates if @templates
 
-      @templates = Papyrus::Template.where(klass: class_names_for(@object), event: @event)
+      @templates = Papyrus::Template.where(klass: class_names_for(@object), event: @event).enabled
+      template_scope = self.class.template_scope
+      @templates = templates.instance_exec(@object, &template_scope) if template_scope
       @templates
     end
 
@@ -67,9 +69,9 @@ module Papyrus
         generator_class.public_instance_methods(false).include?(event.to_sym)
       end
 
-      def flow_scope(flow_scope = nil)
-        @flow_scope = flow_scope if flow_scope
-        @flow_scope
+      def template_scope(template_scope = nil)
+        @template_scope = template_scope if template_scope
+        @template_scope
       end
 
       def generator_name_for_class(klass)

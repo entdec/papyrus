@@ -3,11 +3,12 @@
 class PapyrusTemplatesTable < ActionTable::ActionTable
   model Papyrus::Template
 
-  column(:kind)
-  column(:use)
   column(:description)
+  column(:enabled, as: :boolean)
   column(:klass)
   column(:event)
+  column(:kind)
+  column(:use)
   column(:copies)
   column(:metadata) { |template| Papyrus.config.metadata_humanize(template.metadata) }
   column(:created_at) { |paper| ln(paper.created_at) }

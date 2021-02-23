@@ -17,6 +17,21 @@
             = clg.tabbable_pane do |pane|
               - pane.slot :tab, id: :basics, title: 'Basics'
                 = clg.layout do |lt|
+
+                  - lt.row
+                    - lt.cell
+                      = f.input :enabled
+
+                  - Papyrus.metadata_definitions.each do |field, definition|
+                    = f.simple_fields_for :metadata, OpenStruct.new(@template.metadata) do |fff|
+                      - lt.row
+                        - lt.cell
+                            - if definition[:collection]
+                              = fff.input field, as: :select, label: definition[:name], collection: definition[:collection].call, include_blank: true, required: false
+                            - else
+                              =  fff.input field, label: definition[:name], required: false
+
+
                   - lt.row
                     - lt.cell
                       = f.input :description

@@ -7,6 +7,8 @@ module Papyrus
     has_many :papers
     has_many_attached :attachments
 
+    scope :enabled, -> { where(enabled: true) }
+
     include Papyrus::Concerns::MetadataScoped
 
     def generate(context, object: nil, locale: I18n.locale, owner: nil)

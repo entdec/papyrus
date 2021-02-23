@@ -61,6 +61,14 @@ module Papyrus
 
       self
     end
+
+    def metadata_definition(field)
+      config.metadata_fields[field]
+    end
+
+    def metadata_definitions
+      config.metadata_fields
+    end
   end
 
   # Include helpers
