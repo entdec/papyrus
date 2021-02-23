@@ -31,14 +31,15 @@
                     - lt.cell
                       = f.input :klass, collection: Papyrus.config.papyrable_class_names.sort, selected: @template.klass, include_blank: true
                     - lt.cell
-                      = f.input :event, collection: template.all_events, include_blank: false, input_html: { data: { controller: 'chained-input', 'chained-input-to': '#template_klass' } }
+                      = f.input :event, collection: template.all_events, include_blank: false, chain_to: "#{f.object_name}[klass]"
                   - lt.row
-                    - lt.cell html: { data: { 'schntoggle-target' => 'insertion' } }
+                    - lt.cell 
+                      div data-toggle-target="insertion"
                         = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
-                        template data-toggle-target="toggleable" data-toggle-value="pdf"
-                          = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
-                        template data-toggle-target="toggleable" data-toggle-value="liquid"
-                          = f.input :data, as: :editor, mode: 'text/plain', height: '600px'
+                      template data-toggle-target="toggleable" data-toggle-value="pdf"
+                        = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
+                      template data-toggle-target="toggleable" data-toggle-value="liquid"
+                        = f.input :data, as: :editor, mode: 'text/plain', height: '600px'
 
               - pane.slot :tab, id: :media, title: 'Media'
                 = clg.layout do |lt|
