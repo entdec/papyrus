@@ -15,10 +15,4 @@ class PapyrusLocalesTable < ActionTable::ActionTable
   def scope
     @scope = Papyrus::Locale.visible
   end
-
-  def filtered_scope
-    @filtered_scope = scope
-
-    @filtered_scope
-  end
 end

@@ -22,10 +22,4 @@ class PapyrusTemplatesTable < ActionTable::ActionTable
   def scope
     @scope = Papyrus::Template.visible
   end
-
-  def filtered_scope
-    @filtered_scope = scope
-
-    @filtered_scope
-  end
 end

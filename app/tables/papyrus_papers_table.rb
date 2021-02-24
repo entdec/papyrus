@@ -33,10 +33,4 @@ class PapyrusPapersTable < ActionTable::ActionTable
   def scope
     @scope = Papyrus::Paper.all
   end
-
-  def filtered_scope
-    @filtered_scope = scope
-
-    @filtered_scope
-  end
 end
