@@ -56,10 +56,11 @@ GIT
 PATH
   remote: .
   specs:
-    papyrus (1.0.5)
+    papyrus (1.0.6)
       barby (~> 0.6)
       decoro (~> 0.1)
       evento (~> 0.1)
+      img2zpl
       liquor
       pg
       prawn (~> 2.2)
@@ -163,6 +164,8 @@ GEM
     hashery (2.1.2)
     i18n (1.8.7)
       concurrent-ruby (~> 1.0)
+    img2zpl (1.0.1)
+      mini_magick (~> 4.9)
     jaro_winkler (1.5.4)
     kramdown (2.3.0)
       rexml
@@ -178,6 +181,7 @@ GEM
       mimemagic (~> 0.3.2)
     method_source (1.0.0)
     mimemagic (0.3.5)
+    mini_magick (4.11.0)
     mini_mime (1.0.2)
     mini_portile2 (2.5.0)
     minitest (5.14.3)
@@ -330,4 +334,4 @@ DEPENDENCIES
   transactio (~> 0.1)!
 
 BUNDLED WITH
-   2.2.3
+   2.2.11
