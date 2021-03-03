@@ -21,11 +21,11 @@ module Papyrus
 
       subject = Papyrus::PrintJob.create(printer: @printer1, paper: paper)
       assert_equal 'pending', subject.state
-      subject.start!
+      subject.started!
       assert_equal 'printing', subject.state
       subject.errored!
       assert_equal 'error', subject.state
-      subject.finish!
+      subject.finished!
       assert_equal 'printed', subject.state
     end
   end

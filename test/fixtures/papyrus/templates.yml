@@ -1,4 +1,5 @@
 pdf:
+  enabled: true
   kind: pdf
   description: Invoice
   use: document
@@ -7,6 +8,7 @@ pdf:
     pdf.text name
 
 pdf_for_items:
+  enabled: true
   kind: pdf
   description: PDF Label
   use: document
@@ -17,6 +19,7 @@ pdf_for_items:
   event: create
 
 zpl:
+  enabled: true
   kind: liquid
   description: ZPL Label
   use: label
@@ -39,6 +42,7 @@ zpl:
     ^XZ
 
 zpl_for_item_update:
+  enabled: true
   kind: liquid
   description: ZPL Label
   use: label
