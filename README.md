@@ -10,7 +10,7 @@ In case you want web-printing, the options needs an owner, so you could make you
 ```ruby
 # frozen_string_literal: true
 
-class ApplicationGenerator < Papyrus::Generator
+class ApplicationGenerator < Papyrus::BaseGenerator
   set_callback :action, :before, :set_current_objects
 
   private

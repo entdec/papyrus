@@ -5,7 +5,7 @@ pdf:
   use: document
   data: |
     pdf.text 'Commercial Invoice', size: 24
-    pdf.text name
+    pdf.text item.name
 
 pdf_for_items:
   enabled: true
@@ -14,7 +14,7 @@ pdf_for_items:
   use: document
   data: |
     pdf.text 'Label', size: 24
-    pdf.text name
+    pdf.text item.name
   klass: Item
   event: create
 
@@ -31,7 +31,7 @@ zpl:
     ^FO20,30^GB750,700,4^FS
     ^FO20,226^GB325,204,4^FS
     ^FO30,40^ADN,36,20^FDShip to:^FS
-    ^FO30,260^ADN,18,10^FDPart number # {{name}}^FS
+    ^FO30,260^ADN,18,10^FDPart number # {{item.name}}^FS
     ^FO360,260^ADN,18,10^FDDescription:^FS
     ^FO30,750^ADN,36,20^FDFrom:^FS
     ^FO150,125^ADN,36,20^FDAcme Printing^FS
@@ -54,7 +54,7 @@ zpl_for_item_update:
     ^FO20,30^GB750,700,4^FS
     ^FO20,226^GB325,204,4^FS
     ^FO30,40^ADN,36,20^FDShip to:^FS
-    ^FO30,260^ADN,18,10^FDPart number # {{name}}^FS
+    ^FO30,260^ADN,18,10^FDPart number # {{item.name}}^FS
     ^FO360,260^ADN,18,10^FDDescription:^FS
     ^FO30,750^ADN,36,20^FDFrom:^FS
     ^FO150,125^ADN,36,20^FDAcme Printing^FS

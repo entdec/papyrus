@@ -3,7 +3,7 @@
 module Papyrus
   class Configuration
     attr_accessor :admin_authentication_module, :base_controller, :visible_scope, :add_metadata, :metadata_fields,
-                  :print_client_license_owner, :print_client_license_key
+                  :print_client_license_owner, :print_client_license_key, :default_template_scope, :allow_custom_events
     attr_writer :logger, :host, :metadata_humanize
 
     def initialize
@@ -14,6 +14,9 @@ module Papyrus
       @add_metadata = -> {}
       @metadata_fields = {}
       @metadata_humanize = ->(data) { data.inspect }
+
+      @default_template_scope = ->(_object) { all }
+      @allow_custom_events = false
 
       # Disabled for now - not using it
       # @allow_custom_events = false

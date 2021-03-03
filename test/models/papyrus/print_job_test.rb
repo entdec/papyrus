@@ -9,7 +9,7 @@ module Papyrus
     end
     test 'generates a printjob' do
       template = papyrus_templates(:pdf)
-      paper, = template.generate({ name: 'Joe' }, owner: @user)
+      paper, = template.generate(nil, { item: { name: 'Joe' } }, owner: @user)
       subject = paper.print!
       assert_equal @printer1, subject.printer
       assert_equal paper, subject.paper
@@ -17,7 +17,7 @@ module Papyrus
 
     test 'states' do
       template = papyrus_templates(:pdf)
-      paper, = template.generate({ name: 'Joe' }, owner: @user)
+      paper, = template.generate(nil, { item: { name: 'Joe' } }, owner: @user)
 
       subject = Papyrus::PrintJob.create(printer: @printer1, paper: paper)
       assert_equal 'pending', subject.state

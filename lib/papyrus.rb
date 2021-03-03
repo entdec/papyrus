@@ -33,6 +33,7 @@ require 'papyrus/context'
 require 'papyrus/engine'
 require 'papyrus/i18n_store'
 require 'papyrus/prawn_extensions'
+require 'papyrus/shash'
 
 module Papyrus
   class Error < StandardError; end
@@ -52,12 +53,12 @@ module Papyrus
     def generate(event)
       return unless event
 
-      Papyrus::Generator.create(@obj, event.to_s, @options).call
+      Papyrus::GenerateJob.perform_later(@obj, event.to_s, @params)
     end
 
-    def with(obj, options = {})
+    def with(obj, params = {})
       @obj = obj
-      @options = options
+      @params = params
 
       self
     end

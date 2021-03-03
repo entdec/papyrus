@@ -15,7 +15,7 @@ module Papyrus
 
     def perform
       unless generator
-        raise "Papyrus Generator missing for class #{name}, please create a #{Papyrus::Generator.generator_name_for_class(name)}"
+        raise "Papyrus Generator missing for class #{name}, please create a #{Papyrus::BaseGenerator.generator_name_for_class(name)}"
       end
 
       add_to_config
@@ -46,7 +46,7 @@ module Papyrus
     end
 
     def generator
-      Papyrus::Generator.generator_for_class(name)
+      Papyrus::BaseGenerator.generator_for_class(name)
     end
   end
 end

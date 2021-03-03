@@ -11,7 +11,10 @@ module Papyrus
 
     include Papyrus::Concerns::MetadataScoped
 
-    def generate(context, object: nil, locale: I18n.locale, owner: nil)
+    def generate(object, context, params)
+      locale = params[:locale] || I18n.locale
+      owner = params[:owner]
+
       data = render(context.reject { |h| h == 'pdf' }, locale: locale)
       paper = Paper.create(template: self, data: context.reject { |h| h == 'pdf' }, papyrable: object, owner: owner)
       paper.attachment.attach(io: data,
@@ -27,7 +30,7 @@ module Papyrus
       result = I18n.with_locale(locale) do
         if kind == 'pdf'
           template = Tilt::PrawnTemplate.new(file_name, (metadata || {}).deep_symbolize_keys) { |_t| data }
-          template.render(Papyrus::Context.new(self), context)
+          template.render(Papyrus::Context.new(self), Shash.new(context))
         else
           ::Liquor.render(data,
                           { assigns: context.merge('template' => self),

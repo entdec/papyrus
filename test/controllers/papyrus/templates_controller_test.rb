@@ -22,7 +22,9 @@ module Papyrus
       hash = {
         locale: 'en',
         context: {
-          name: 'TEST'
+          item: {
+            name: 'TEST'
+          }
         }
       }
 
