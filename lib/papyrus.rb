@@ -58,7 +58,7 @@ module Papyrus
 
     def with(obj, params = {})
       @obj = obj
-      @params = params
+      @params = params.merge(Papyrus.config.default_params)
 
       self
     end

@@ -3,8 +3,13 @@
     = clg.card do |card|
       - card.slot :title
         | Template
-      - card.slot :action
-        = f.button(:button, t('.update'), name: 'commit', value: 'save', class: clg.bem("button").block(:primary), data: { disable_with: t('.updating') })
+      - if @template.persisted?
+        - card.slot :action
+          = f.button(:button, t('.save'), name: 'commit', value: 'save', class: clg.bem("button").block(:primary), data: { disable_with: t('.saving...') })
+      - else
+        - card.slot :action
+          = f.button(:button, t('.create'), name: 'commit', value: 'save', class: clg.bem("button").block(:primary), data: { disable_with: t('.creating...') })
+
 
       - if @template.previewable?
         - card.slot :action
@@ -42,11 +47,15 @@
                     - lt.cell
                       = f.input :copies
 
-                  - lt.row
+                  - lt.row html: { data: { controller: 'toggle' }}
                     - lt.cell
-                      = f.input :klass, collection: Papyrus.config.papyrable_class_names.sort, selected: @template.klass, include_blank: true
+                      = f.input :klass, collection: Papyrus.config.papyrable_class_names.sort, selected: @template.klass, include_blank: false, input_html: { data: { 'toggle-target' => 'input' } }
                     - lt.cell
-                      = f.input :event, collection: template.all_events, include_blank: false, chain_to: "#{f.object_name}[klass]"
+                      div data-toggle-target='insertion'
+                      template data-toggle-target='toggleable' data-toggle-not-value='Custom'
+                        = f.input :event, collection: template.all_events, include_blank: false, chain_to: "#{f.object_name}[klass]"
+                      template data-toggle-target='toggleable' data-toggle-value='Custom'
+                        = f.input :event, input_html: { placeholder: 'scope#event'}
                   - lt.row
                     - lt.cell
                       div data-toggle-target="insertion"

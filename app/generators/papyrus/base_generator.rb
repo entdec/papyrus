@@ -29,9 +29,9 @@ module Papyrus
       end
     end
 
-    # Turns the templates in messages, and dispatches the messages to transports
+    # Turns the templates in papers, and generates the papers
     def dispatch(filtered_templates)
-      filtered_templates.each do |template|
+      filtered_templates.map do |template|
         template.generate(@object, liquid_context, params)
       end
     end

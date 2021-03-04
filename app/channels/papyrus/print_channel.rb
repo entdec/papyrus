@@ -13,6 +13,7 @@ module Papyrus
     end
 
     def printers_list(data)
+      # FIXME: Only do this once every 5min?
       Papyrus::UpdatePrintersJob.perform_later(current_user, data)
     end
 

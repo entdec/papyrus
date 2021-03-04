@@ -4,7 +4,7 @@ module Papyrus
   class Configuration
     attr_accessor :admin_authentication_module, :base_controller, :visible_scope, :add_metadata, :metadata_fields,
                   :print_client_license_owner, :print_client_license_key, :default_template_scope, :allow_custom_events
-    attr_writer :logger, :host, :metadata_humanize
+    attr_writer :logger, :host, :metadata_humanize, :default_params
 
     def initialize
       @logger = Logger.new(STDOUT)
@@ -18,8 +18,8 @@ module Papyrus
       @default_template_scope = ->(_object) { all }
       @allow_custom_events = false
 
-      # Disabled for now - not using it
-      # @allow_custom_events = false
+      @default_params = {}
+
       @papyrable_classes = []
       @papyrable_class_names = []
     end
@@ -45,11 +45,15 @@ module Papyrus
       compile_papyrable_class_names!
     end
 
+    def default_params
+      @default_params.is_a?(Proc) ? instance_exec(&@default_params) : @default_params
+    end
+
     private
 
     def compile_papyrable_class_names
       names = []
-      # names << 'Custom' if allow_custom_events
+      names << 'Custom' if allow_custom_events
 
       @papyrable_classes.each do |klass_name|
         klass = klass_name.constantize

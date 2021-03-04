@@ -16,7 +16,10 @@ module Papyrus
       owner = params[:owner]
 
       data = render(context.reject { |h| h == 'pdf' }, locale: locale)
-      paper = Paper.create(template: self, data: context.reject { |h| h == 'pdf' }, papyrable: object, owner: owner)
+      paper = Paper.create(template: self, data: context.reject do |h|
+                                                   h == 'pdf'
+                                                 end, papyrable: object.is_a?(Hash) ? nil : object, owner: owner)
+
       paper.attachment.attach(io: data,
                               filename: file_name,
                               content_type: (kind == 'pdf' ? 'application/pdf' : 'application/octet-stream'),

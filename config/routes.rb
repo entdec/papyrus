@@ -10,6 +10,10 @@ Papyrus::Engine.routes.draw do
     resources :locales
   end
 
+  namespace :api do
+    resources :events
+  end
+
   resource :print_client_license
 
   resources :print_jobs do
