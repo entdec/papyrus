@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'img2zpl'
 require 'prawn'
 require 'prawn-svg'
 require 'prawn/table'
