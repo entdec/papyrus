@@ -151,7 +151,7 @@ module Papyrus
         assigns[i.to_s[1..-1]] = instance_variable_get(i)
       end
 
-      context = { liquid_variable_name_for(@object) => (@object.is_a?(Hash) ? @object[@object.keys.first].deep_stringify_keys : @object) }
+      context = { liquid_variable_name_for(@object) => (@object.is_a?(Hash) ? @object[@object.keys.first].deep_stringify_keys : @object.to_liquid) }
       assigns.merge(context)
     end
   end

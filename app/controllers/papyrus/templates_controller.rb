@@ -17,7 +17,7 @@ module Papyrus
         locale = params[:locale]
       end
 
-      _paper, data = template.generate(nil, ctx.permit!.reject { |h| h == 'pdf' }, locale: locale)
+      _paper, data = template.generate(nil, ctx.reject { |h| h == 'pdf' }, locale: locale)
 
       send_data data.read, type: 'application/pdf', disposition: 'inline', filename: template.file_name
     end

@@ -8,6 +8,12 @@ module Papyrus
       class AttachmentsController < ApplicationAdminController
         before_action :set_objects
 
+        def show
+          attachment = @template.attachments.find_by(id: params[:id])
+          send_data attachment.blob.download, type: attachment.content_type, disposition: 'attachment',
+                                              filename: attachment.blob.filename.to_s
+        end
+
         def index; end
 
         def create

@@ -23,6 +23,14 @@ end
 
 Install the Print Client app: https://www.neodynamic.com/downloads/jspm/
 
+## PDF Generation
+
+This is done using Prawn. See here for more info:
+
+- [Prawn](https://prawnpdf.org/manual.pdf)
+- [Prawn Tables](http://prawnpdf.org/prawn-table-manual.pdf)
+- Barcodes are generated using barby: https://github.com/toretore/barby/wiki/Symbologies
+
 ## Installation
 
 Add this line to your application's Gemfile:

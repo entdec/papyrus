@@ -7,6 +7,9 @@
     = attachment.filename
     = link_to admin_template_attachment_path(@template, attachment.id), data: { controller: 'attachment-delete', 'action': 'attachment-delete#delete' } do
       i.fal.fa-times
+    = link_to admin_template_attachment_path(@template, attachment.id), data: { turbolinks: false } do
+      i.fal.fa-download
+  br
 
 span.attachment-upload data-controller="attachment-upload" data-attachment-upload-url="#{upload_url}" data-attachment-upload-param-name="attachments[]" data-attachment-upload-extra-data='{}'
   span.icon.upload
