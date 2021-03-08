@@ -52,7 +52,7 @@ module Papyrus
     end
     alias t translate
 
-    def localize(input, locale = 'en', format = nil)
+    def localize(input, format: nil, locale: 'en')
       I18n.l(input, format: format, locale: locale)
     end
     alias l localize
