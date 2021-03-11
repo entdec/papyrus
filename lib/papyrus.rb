@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'img2zpl'
+require 'labelary'
 require 'prawn'
 require 'prawn-svg'
 require 'prawn/table'

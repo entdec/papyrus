@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'decoro', '~> 0.1'
   spec.add_dependency 'evento', '~> 0.1' # This is our own gem, you must add it to your project's Gemfile for this to work
   spec.add_dependency 'img2zpl'
+  spec.add_dependency 'labelary'
   spec.add_dependency 'liquor'
   spec.add_dependency 'pg'
   spec.add_dependency 'prawn', '~> 2.2'
