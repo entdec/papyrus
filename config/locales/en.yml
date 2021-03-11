@@ -4,7 +4,7 @@ en:
       error: There were problems saving the %{model}
       notice: The %{model} was saved successfully
     printers:
-      no_printers_yet: "You don't seem to have any printers yet. Is the print-client installed? You can download it from here: <a href='https://www.neodynamic.com/downloads/jspm/'>https://www.neodynamic.com/downloads/jspm/</a>"
+      no_printers_yet_html: "You don't seem to have any printers yet. Is the print-client installed? You can download it from here: <a href='https://www.neodynamic.com/downloads/jspm/'>https://www.neodynamic.com/downloads/jspm/</a>"
       please_indicate_printer_use: Please indicate for each printer how you intend to use it. When more than one printer has the same use, only the first printer will actually be used to print.
     print_jobs_table:
       resend: Resend

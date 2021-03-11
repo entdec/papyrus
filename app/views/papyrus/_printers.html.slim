@@ -8,5 +8,5 @@
         - l.col 2
           = preferred_printer_form.association :printer, selected: preferred_printer_form.object&.printer&.id, collection: current_user.printers
 - else
-  = t('.no_printers_yet')
+  = t('.no_printers_yet_html')
 

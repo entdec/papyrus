@@ -35,7 +35,7 @@ module Papyrus
     end
 
     def add_papyrable_class(klass)
-      @papyrable_class_names = []
+      @papyrable_class_names ||= []
       @papyrable_classes << klass.to_s unless @papyrable_classes.include?(klass.to_s)
     end
 
