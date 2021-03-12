@@ -34,8 +34,11 @@ module Papyrus
       orchestrator.after_transaction_log_commit(:papyrus) do |transaction_log_entry|
         record  = transaction_log_entry.transaction_loggable
         event   = transaction_log_entry.event
-        Papyrus.with(record).generate(event.to_s) if record.papyrable? && event.present?
-        Papyrus.with(record).generate('save') if %w[create update].include?(event) && record.papyrable?
+
+        params = Papyrus.config.default_params(transaction_log_entry)
+
+        Papyrus.with(record, params).generate(event.to_s) if record.papyrable? && event.present?
+        Papyrus.with(record, params).generate('save') if %w[create update].include?(event) && record.papyrable?
       end
     end
 

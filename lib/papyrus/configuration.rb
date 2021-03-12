@@ -45,8 +45,8 @@ module Papyrus
       compile_papyrable_class_names!
     end
 
-    def default_params
-      @default_params.is_a?(Proc) ? instance_exec(&@default_params) : @default_params
+    def default_params(transaction_log_entry)
+      @default_params.is_a?(Proc) ? instance_exec(transaction_log_entry, &@default_params) : @default_params
     end
 
     private
