@@ -17,11 +17,10 @@ module Papyrus
 
       data = render(context.reject { |h| h == 'pdf' }, locale: locale)
 
-      # FIXME: Will we no longer store the data? We don't for nuntius.
-      # paper = Paper.create(template: self, data: context.reject do |h|
-      #                                              h == 'pdf'
-      #                                            end.to_h, papyrable: object.is_a?(Hash) ? nil : object, owner: owner)
-      paper = Paper.create(template: self, data: nil, papyrable: object.is_a?(Hash) ? nil : object, owner: owner)
+      paper = Paper.create(template: self,
+                           kind: paper_kind,
+                           papyrable: object.is_a?(Hash) ? nil : object,
+                           owner: owner)
 
       paper.attachment.attach(io: data,
                               filename: file_name,
@@ -59,6 +58,19 @@ module Papyrus
 
     def previewable?
       persisted? && example_data.present?
+    end
+
+    private
+
+    def paper_kind
+      case kind
+      when 'pdf'
+        'pdf'
+      when 'liquid'
+        'raw'
+      else
+        'file'
+      end
     end
   end
 end

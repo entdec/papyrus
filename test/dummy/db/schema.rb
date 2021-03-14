@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_23_183635) do
+ActiveRecord::Schema.define(version: 2021_03_14_164330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -55,7 +55,6 @@ ActiveRecord::Schema.define(version: 2021_02_23_183635) do
   end
 
   create_table "papyrus_papers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.jsonb "data"
     t.uuid "template_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -63,6 +62,7 @@ ActiveRecord::Schema.define(version: 2021_02_23_183635) do
     t.uuid "owner_id"
     t.string "papyrable_type"
     t.uuid "papyrable_id"
+    t.string "kind"
     t.index ["owner_type", "owner_id"], name: "index_papyrus_papers_on_owner_type_and_owner_id"
     t.index ["template_id"], name: "index_papyrus_papers_on_template_id"
   end

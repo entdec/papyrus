@@ -17,17 +17,6 @@ module Papyrus
       print_job
     end
 
-    def kind
-      case template.kind
-      when 'pdf'
-        'pdf'
-      when 'liquid'
-        'raw'
-      else
-        'file'
-      end
-    end
-
     def attachment_path
       Rails.application.routes.url_helpers.rails_blob_path(attachment, disposition: 'attachment',
                                                                        only_path: true)

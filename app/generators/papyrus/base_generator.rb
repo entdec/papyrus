@@ -87,9 +87,11 @@ module Papyrus
       end
 
       def generator_for_class(name)
+        return unless name
+
         klass = generator_name_for_class(name).safe_constantize
-        klass ||= generator_for_class(name.constantize.superclass)
-        klass ||= generator_for_class(name.constantize.superclass.superclass)
+        klass ||= generator_for_class(name.safe_constantize&.superclass&.name)
+        klass ||= generator_for_class(name.safe_constantize&.superclass&.superclass&.name)
         klass
       end
 
