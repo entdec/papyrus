@@ -13,10 +13,10 @@ GIT
 
 GIT
   remote: git@code.entropydecelerator.com:components/evento.git
-  revision: b94c862509a2f4821b419f8a199fd3f46c7a937e
-  tag: 0.1.6
+  revision: 9c4587cce35b31792361a50d582f56806c3cbc68
+  tag: 0.1.7
   specs:
-    evento (0.1.6)
+    evento (0.1.7)
 
 GIT
   remote: git@code.entropydecelerator.com:components/liquor.git
