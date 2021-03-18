@@ -21,7 +21,14 @@ module Papyrus
     end
 
     def print
-      @paper.print!
+      if @paper.owner == Current.user
+        @paper.print!
+      else
+        paper = @paper.dup
+        paper.update(owner: Current.user)
+        paper.attachment.attach @paper.attachment.blob
+        paper.save!
+      end
     end
 
     private
