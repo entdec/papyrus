@@ -8,6 +8,8 @@ module Papyrus
 
     has_one_attached :attachment
 
+    after_commit :print!
+
     def print!
       return if owner.blank?
       return unless printer

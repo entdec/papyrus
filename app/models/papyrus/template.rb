@@ -17,15 +17,17 @@ module Papyrus
 
       data = render(context.reject { |h| h == 'pdf' }, locale: locale)
 
-      paper = Paper.create(template: self,
-                           kind: paper_kind,
-                           papyrable: object.is_a?(Hash) ? nil : object,
-                           owner: owner)
+      paper = Paper.new(template: self,
+                        kind: paper_kind,
+                        papyrable: object.is_a?(Hash) ? nil : object,
+                        owner: owner)
 
       paper.attachment.attach(io: data,
                               filename: file_name,
                               content_type: (kind == 'pdf' ? 'application/pdf' : 'application/octet-stream'),
                               identify: false)
+
+      paper.save!
       data.rewind
 
       [paper, data]
