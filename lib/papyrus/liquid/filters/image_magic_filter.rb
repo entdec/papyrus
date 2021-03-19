@@ -8,6 +8,7 @@ module ImageMagic
               @context.registers['image_magic'][input]
             else
               attachment = @context.registers['template'].attachments.detect { |a| a.blob.filename == input }
+              attachment = input if input.is_a? ActiveStorageAttachedOneDrop
               @context.registers['image_magic'][input] = Img2Zpl::Image.read(attachment.download)
             end
 
