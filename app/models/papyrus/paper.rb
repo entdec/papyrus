@@ -27,7 +27,7 @@ module Papyrus
     private
 
     def printer
-      owner.preferred_printers.for_use(template.use).first&.printer
+      owner.preferred_printers.for_use(use).first&.printer
     end
   end
 end

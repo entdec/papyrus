@@ -20,7 +20,8 @@ module Papyrus
       paper = Paper.new(template: self,
                         kind: paper_kind,
                         papyrable: object.is_a?(Hash) ? nil : object,
-                        owner: owner)
+                        owner: owner,
+                        use: use)
 
       paper.attachment.attach(io: data,
                               filename: file_name,
