@@ -38,7 +38,7 @@ module Papyrus
         kind: paper.kind,
         filename: paper.attachment.blob.filename.to_s,
         content_type: paper.attachment.blob.content_type,
-        copies: template.copies
+        copies: template&.copies || 1
       }
     end
   end
