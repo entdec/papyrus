@@ -8,7 +8,7 @@ module Papyrus
     before_action :set_objects
 
     def show
-      if @paper.template.kind == 'pdf'
+      if @paper.kind == 'pdf'
         redirect_to main_app.rails_blob_path(@paper.attachment, disposition: 'inline')
       else
         pdf = Labelary::Label.render(zpl: @paper.attachment.download, content_type: 'application/pdf', dpmm: 8,
