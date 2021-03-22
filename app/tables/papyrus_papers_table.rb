@@ -5,7 +5,7 @@ class PapyrusPapersTable < ActionTable::ActionTable
 
   column(:owner, sort_field: :owner_id) { |row| row.owner ? "#{row.owner&.name} (#{row.owner_type})" : '-' }
   column(:template, sort_field: :template_id) do |paper|
-    link_to(paper.template.description, papyrus.edit_admin_template_path(paper.template))
+    paper.template ? link_to(paper.template.description, papyrus.edit_admin_template_path(paper.template)) : ''
   end
   column(:attachment) do |paper|
     begin
