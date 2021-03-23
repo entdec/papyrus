@@ -1,26 +1,9 @@
 {
   "name": "@components/papyrus",
-  "version": "1.0.15",
+  "version": "1.0.20",
   "repository": "git@code.entropydecelerator.com:components/papyrus.git",
   "author": "Tom de Grunt <tom@degrunt.nl>",
   "license": "MIT",
-  "scripts": {
-    "build": "webpack --config webpack.config.js --color",
-    "watch": "webpack -w --config webpack.config.js --color"
-  },
-  "standard.options": {
-    "globals": [
-      "$",
-      "jQuery",
-      "fetch"
-    ],
-    "ignore": [
-      "node_modules/**"
-    ],
-    "plugins": [],
-    "parser": "babel-eslint"
-  },
-  "browserslist": "> 1%",
   "dependencies": {
     "@rails/actioncable": "^6.1.2-1",
     "@zip.js/zip.js": "^2.2.16",
@@ -28,32 +11,5 @@
     "jsprintmanager": "^3.0.7",
     "semver": "^7.3.4",
     "stimulus": "^2"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.12.9",
-    "@babel/preset-env": "7.1.0",
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^10.0.3",
-    "babel-loader": "^8.2.2",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-syntax-dynamic-import": "^6.18.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-es2015": "^6.24.1",
-    "clean-webpack-plugin": "^0.1.19",
-    "copy-webpack-plugin": "^4.6.0",
-    "css-loader": "^0.28.9",
-    "file-loader": "^2.0.0",
-    "imports-loader": "^1.0",
-    "mini-css-extract-plugin": "^0.8.0",
-    "node-sass": "^4.12.0",
-    "postcss-custom-properties": "^8.0.9",
-    "sass-loader": "^7.3.1",
-    "standard": "^14.3.1",
-    "style-loader": "^1.0.0",
-    "url-loader": "^2.1.0",
-    "webpack": "^5.23.0",
-    "webpack-cli": "^4.5.0"
   }
 }
