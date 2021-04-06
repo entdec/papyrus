@@ -13,7 +13,7 @@ module Papyrus
         ctx = example_data[:context]
         locale = example_data[:locale]
       else
-        ctx = params[:context]
+        ctx = params[:context].permit!
         locale = params[:locale]
       end
 
