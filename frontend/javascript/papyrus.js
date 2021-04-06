@@ -3,6 +3,7 @@ import { Application } from "stimulus"
 
 // https://www.neodynamic.com/Products/Help/JSPrintManager3.0/apiref/modules/jspm.html
 import JSPM from "jsprintmanager"
+window.JSPM = JSPM
 
 export class Papyrus {
   static start(application) {
