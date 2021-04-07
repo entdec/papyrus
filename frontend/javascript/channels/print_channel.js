@@ -1,5 +1,9 @@
 import consumer from "./consumer"
-require("@zip.js/zip.js/dist/zip")
+require("@zip.js/zip.js/dist/zip-full")
+
+zip.configure({
+  useWebWorkers: false,
+})
 
 consumer.subscriptions.create(
   { channel: "Papyrus::PrintChannel" },
@@ -69,7 +73,7 @@ consumer.subscriptions.create(
       // There is also onError and onFinished, but these are not reliably called.
       // The state-description is 'Completed', still need to know about other states.
       cpj.onUpdated = function (data) {
-        console.log("Print Job Update: ", data)
+        // console.log("Print Job Update: ", data)
         if (data["state-description"] === "Completed") {
           self.perform("printed", { print_job_id: job_id })
         } else if (data["state-description"] === "Error") {

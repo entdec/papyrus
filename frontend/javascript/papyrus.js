@@ -17,7 +17,6 @@ export class Papyrus {
     JSPM.JSPrintManager.start()
 
     console.log("Papyrus")
-    console.log("License URL", JSPM.JSPrintManager.license_url)
 
     this.application = application
     const context = require.context("./controllers", true, /\.js$/)
