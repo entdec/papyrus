@@ -1,9 +1,5 @@
 import consumer from "./consumer"
-require("@zip.js/zip.js/dist/zip-full")
-
-zip.configure({
-  useWebWorkers: false,
-})
+window.zip = require("!!!@zip.js/zip.js/dist/zip-full")
 
 consumer.subscriptions.create(
   { channel: "Papyrus::PrintChannel" },
