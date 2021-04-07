@@ -31,10 +31,10 @@
   resolved "https://registry.yarnpkg.com/@stimulus/webpack-helpers/-/webpack-helpers-2.0.0.tgz#54296d2a2dffd4f962d2e802d99a3fdd84b8845f"
   integrity sha512-D6tJWsAC024MwGEIKlUVYU8Ln87mlrmiwHvYAjipg+s8H4eLxUMQ3PZkWyPevfipH+oR3leuHsjYsK1gN5ViQA==
 
-"@zip.js/zip.js@2.2.16":
-  version "2.2.16"
-  resolved "https://registry.yarnpkg.com/@zip.js/zip.js/-/zip.js-2.2.16.tgz#11c726afe79c6ff0c5b604fe1e7fcb92cebd0da1"
-  integrity sha512-YdvBLvk28xtulF2UgbfbrC4tDdv8D/XlOO7VF3XsQ8ZjzIU6wlE43tg40mLx2pHRgUis+3017OnnSOPJxQMrNg==
+"@zip.js/zip.js@2.2.26":
+  version "2.2.26"
+  resolved "https://registry.yarnpkg.com/@zip.js/zip.js/-/zip.js-2.2.26.tgz#1e8c13d38bb8a212d1a610474c15bf4fcf2d1e13"
+  integrity sha512-ZhZ8s0fVTkISOEqH2CEL5LF/kmyE4fp3AeuX8o9iCOYvPyCdFzqlsCOctNWjRjCC34gKnHSnwmEzG+kVB27HqQ==
 
 element-closest@^3.0.1:
   version "3.0.2"
