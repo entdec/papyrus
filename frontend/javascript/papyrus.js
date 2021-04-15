@@ -6,15 +6,10 @@ import JSPM from "jsprintmanager"
 window.JSPM = JSPM
 
 export class Papyrus {
-  static start(application) {
+  static start(application, startPrintManager = false, autoReconnect = false) {
     if (!application) {
       application = Application.start()
     }
-
-    // FIXME: This needs papyrus mounted in /papers
-    JSPM.JSPrintManager.license_url = `${location.protocol}//${location.host}/papers/print_client_license`
-    JSPM.JSPrintManager.auto_reconnect = true
-    JSPM.JSPrintManager.start()
 
     console.log("Papyrus")
 
@@ -22,6 +17,12 @@ export class Papyrus {
     const context = require.context("./controllers", true, /\.js$/)
     this.application.load(definitionsFromContext(context))
 
-    import("./channels")
+    if (startPrintManager) {
+      // FIXME: This needs papyrus mounted in /papers
+      JSPM.JSPrintManager.license_url = `${location.protocol}//${location.host}/papers/print_client_license`
+      JSPM.JSPrintManager.auto_reconnect = autoReconnect
+      JSPM.JSPrintManager.start()
+      import("./channels")
+    }
   }
 }
