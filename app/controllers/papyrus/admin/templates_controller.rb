@@ -16,7 +16,8 @@ module Papyrus
 
       def create
         @template = Papyrus::Template.new(template_params)
-        respond @template.save
+        @template.save
+        respond_with :admin, @template
       end
 
       def edit
@@ -29,13 +30,14 @@ module Papyrus
 
       def update
         @template = Papyrus::Template.visible.find(params[:id])
-        respond @template.update(template_params), action: :edit
+        @template.update(template_params)
+        respond_with :admin, @template
       end
 
       def destroy
         @template = Papyrus::Template.visible.find(params[:id])
-        respond @template.destroy, notice: 'The template was deleted',
-                                   error: 'There were problems deleting the template'
+        @template.destroy
+        respond_with :admin, @template
       end
 
       def purge_attachment

@@ -16,7 +16,8 @@ module Papyrus
 
       def create
         @locale = Papyrus::Locale.new(locale_params)
-        respond @locale.save
+        @locale.save
+        respond_with :admin, @locale
       end
 
       def show
@@ -29,7 +30,8 @@ module Papyrus
 
       def update
         @locale = Papyrus::Locale.visible.find(params[:id])
-        respond @locale.update(locale_params), action: :edit
+        @locale.update(locale_params)
+        respond_with :admin, @locale
       end
 
       private

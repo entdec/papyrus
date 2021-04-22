@@ -1,9 +1,12 @@
 GIT
   remote: git@code.entropydecelerator.com:components/auxilium.git
-  revision: 90a6531ca2ebdf62df3921b6ec3b0bba07b38989
+  revision: fe8552d94550ff7d26532a11914a10d88bce0178
   specs:
-    auxilium (0.2.0)
+    auxilium (3.0.3)
       activesupport (> 5.1)
+      pundit (> 2)
+      responders (> 3)
+      rolify (> 5)
 
 GIT
   remote: git@code.entropydecelerator.com:components/decoro.git
@@ -57,7 +60,7 @@ GIT
 PATH
   remote: .
   specs:
-    papyrus (1.0.28)
+    papyrus (1.0.29)
       barby (~> 0.6)
       decoro (~> 0.1)
       evento (~> 0.1)
@@ -235,6 +238,8 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (4.0.6)
+    pundit (2.1.0)
+      activesupport (>= 3.0.0)
     racc (1.5.2)
     rack (2.2.3)
     rack-test (1.1.0)
@@ -269,9 +274,13 @@ GEM
     rake (13.0.3)
     redis (4.2.5)
     regexp_parser (2.1.1)
+    responders (3.0.1)
+      actionpack (>= 5.0)
+      railties (>= 5.0)
     reverse_markdown (2.0.0)
       nokogiri
     rexml (3.2.4)
+    rolify (5.3.0)
     rqrcode (0.10.1)
       chunky_png (~> 1.0)
     rubocop (0.93.1)
@@ -343,7 +352,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  auxilium (~> 0.2)!
+  auxilium (~> 3)!
   decoro (~> 0.1)!
   evento!
   liquor!

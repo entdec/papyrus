@@ -15,7 +15,7 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
-gem 'auxilium', '~> 0.2', entdec: 'components/auxilium'
+gem 'auxilium', '~> 3', entdec: 'components/auxilium'
 gem 'decoro', '~> 0.1', entdec: 'components/decoro'
 gem 'evento', entdec: 'components/evento', tag: '0.1.7'
 gem 'liquor', entdec: 'components/liquor'
