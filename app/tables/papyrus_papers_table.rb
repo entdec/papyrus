@@ -8,21 +8,19 @@ class PapyrusPapersTable < ActionTable::ActionTable
     paper.template ? link_to(paper.template.description, papyrus.edit_admin_template_path(paper.template)) : ''
   end
   column(:attachment) do |paper|
-    begin
-      link_to(paper.attachment.filename, main_app.rails_blob_path(paper.attachment, disposition: 'attachment'),
-              title: paper.attachment.filename)
-    rescue StandardError
-      $!.message
-    end
+    link_to(paper.attachment.filename, main_app.rails_blob_path(paper.attachment, disposition: 'attachment'),
+            title: paper.attachment.filename)
+  rescue StandardError
+    $!.message
   end
   column(:created_at) { |paper| ln(paper.created_at) }
 
   column :actions, sortable: false do |row|
     content_tag(:span) do
-      concat link_to(content_tag(:i, nil, class: 'fal fa-eye'), papyrus.paper_path(row),
+      concat link_to(content_tag(:i, nil, class: 'fal clg-fa-eye'), papyrus.paper_path(row),
                      title: t('papyrus.paper_table.preview'), target: '_blank')
       if row.owner
-        concat link_to(content_tag(:i, nil, class: 'fal fa-print'), papyrus.print_paper_path(row.id),
+        concat link_to(content_tag(:i, nil, class: 'fal clg-fa-print'), papyrus.print_paper_path(row.id),
                        title: t('papyrus.paper_table.print'), method: :post)
       end
     end
