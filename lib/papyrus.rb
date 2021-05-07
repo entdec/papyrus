@@ -70,7 +70,7 @@ module Papyrus
 
     def event(event, obj, params = {})
       return unless event
-      return unless resource.papyrable?
+      return unless obj.papyrable?
 
       Papyrus::GenerateJob.perform_later(obj, event.to_s, params)
     end
