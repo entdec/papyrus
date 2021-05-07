@@ -32,6 +32,7 @@ require 'papyrus/attachments_helpers'
 require 'papyrus/attachment_helpers'
 require 'papyrus/configuration'
 require 'papyrus/context'
+require 'papyrus/deprecator'
 require 'papyrus/engine'
 require 'papyrus/i18n_store'
 require 'papyrus/prawn_extensions'
@@ -57,12 +58,20 @@ module Papyrus
 
       Papyrus::GenerateJob.perform_later(@obj, event.to_s, @params)
     end
+    deprecate generate: 'please use event instead', deprecator: Papyrus::Deprecator.new
 
     def with(obj, params = {})
       @obj = obj
       @params = params
 
       self
+    end
+    deprecate with: 'please use event instead', deprecator: Papyrus::Deprecator.new
+
+    def event(event, obj, params = {})
+      return unless event
+
+      Papyrus::GenerateJob.perform_later(obj, event.to_s, params)
     end
 
     def metadata_definition(field)
