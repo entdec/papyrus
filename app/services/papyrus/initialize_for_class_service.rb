@@ -27,7 +27,7 @@ module Papyrus
       if options[:use_state_machine]
         orchestrator.after_audit_trail_commit(:papyrus) do |resource_state_transition|
           resource = resource_state_transition.resource
-          Papyrus.with(resource).generate(event.to_s) if resource.papyrable?
+          Papyrus.event(event, resource)
         end
       end
 
@@ -37,8 +37,8 @@ module Papyrus
 
         params = Papyrus.config.default_params(transaction_log_entry)
 
-        Papyrus.with(record, params).generate(event.to_s) if record.papyrable? && event.present?
-        Papyrus.with(record, params).generate('save') if %w[create update].include?(event) && record.papyrable?
+        Papyrus.event(event, record, params)
+        Papyrus.event('save', record, params) if %w[create update].include?(event)
       end
     end
 
