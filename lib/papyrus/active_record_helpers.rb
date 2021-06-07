@@ -1,8 +1,20 @@
 # frozen_string_literal: true
 
+require_relative 'papyrable'
+require_relative 'state_machine'
+require_relative 'transactio'
+
 module Papyrus
   module ActiveRecordHelpers
     extend ActiveSupport::Concern
+
+    included do
+      delegate :papyrable?, to: :class
+
+      def printers?
+        printers.count.positive?
+      end
+    end
 
     class_methods do
       def printing
@@ -15,23 +27,14 @@ module Papyrus
       end
 
       def papyrable(options = {})
-        has_many :papers, as: :papyrable, class_name: 'Papyrus::Paper'
-        Papyrus::InitializeForClassService.perform!(self, options)
-        class_variable_set(:@@_is_papyrable, true)
+        @_papyrus_papyrable_options = options
+        include Papyrus::Papyrable
+        include Papyrus::StateMachine if options[:state_machine]
+        include Papyrus::Transactio
       end
 
       def papyrable?
-        return false unless class_variable_defined?(:@@_is_papyrable)
-
-        class_variable_get(:@@_is_papyrable)
-      end
-    end
-
-    included do
-      delegate :papyrable?, to: :class
-
-      def printers?
-        printers.count.positive?
+        included_modules.include?(Papyrus::Papyrable)
       end
     end
   end
