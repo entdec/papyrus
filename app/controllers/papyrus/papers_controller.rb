@@ -14,9 +14,9 @@ module Papyrus
 
         pdf = Labelary::Label.render(zpl: @paper.attachment.download,
                                      content_type: 'application/pdf',
-                                     dpmm: @paper.template.metadata&.dig(:dpmm) || 8,
-                                     width: @paper.template.metadata&.dig(:width) || 4,
-                                     height: @paper.template.metadata&.dig(:height) || 6)
+                                     dpmm: @paper.template.metadata&.dig('dpmm') || 8,
+                                     width: @paper.template.metadata&.dig('width') || 4,
+                                     height: @paper.template.metadata&.dig('height') || 6)
 
         send_data pdf,
                   type: 'application/pdf',
