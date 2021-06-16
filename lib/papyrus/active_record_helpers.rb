@@ -29,7 +29,7 @@ module Papyrus
       def papyrable(options = {})
         @_papyrus_papyrable_options = options
         include Papyrus::Papyrable
-        include Papyrus::StateMachine if options[:state_machine]
+        include Papyrus::StateMachine if options[:use_state_machine]
         include Papyrus::Transactio
       end
 
