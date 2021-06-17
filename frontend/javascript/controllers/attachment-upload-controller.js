@@ -7,12 +7,12 @@ import { Controller } from "stimulus"
  */
 export default class extends Controller {
   connect() {
-    console.log("hi")
     const self = this
 
     const input = document.createElement("input")
     input.setAttribute("name", self.data.get("param-name"))
     input.setAttribute("type", "file")
+    input.setAttribute("multiple", "multiple")
     input.style.display = "none"
     self.element.appendChild(input)
 
@@ -22,6 +22,10 @@ export default class extends Controller {
 
     self.element.addEventListener("click", function (evt) {
       input.click()
+    })
+
+    input.addEventListener("change", function (evt) {
+      self.upload(input.files)
     })
 
     self.element.addEventListener("dragover", function (evt) {
@@ -48,41 +52,47 @@ export default class extends Controller {
       evt.preventDefault()
       evt.cancelBubble = true
 
-      let formData = new FormData()
-      if (self.data.has("extra-data")) {
-        for (let [key, value] of Object.entries(JSON.parse(self.data.get("extra-data")))) {
-          formData.append(key, value)
-        }
-      }
-
-      for (let i = 0; i < evt.dataTransfer.files.length; i++) {
-        formData.append(self.data.get("param-name"), evt.dataTransfer.files[i])
-      }
-
-      self.element.classList.add("uploading")
-
-      fetch(self.data.get("url"), {
-        method: "POST",
-        headers: {
-          "X-CSRF-Token": document.querySelector("meta[name=csrf-token]").content,
-        },
-        body: formData,
-      })
-        .then(self.handleErrors)
-        .then((response) => {
-          response.json().then(function (data) {
-            self.element.classList.remove("uploading")
-            let node = document.querySelector(data.selector)
-            if (node) {
-              node.innerHTML = data.html
-            }
-          })
-        })
-        .catch((error) => {
-          console.log(error)
-          self.element.classList.remove("uploading")
-        })
+      self.upload(evt.dataTransfer.files)
     })
+  }
+
+  upload(files) {
+    const self = this
+
+    let formData = new FormData()
+    if (self.data.has("extra-data")) {
+      for (let [key, value] of Object.entries(JSON.parse(self.data.get("extra-data")))) {
+        formData.append(key, value)
+      }
+    }
+
+    for (let i = 0; i < files.length; i++) {
+      formData.append(self.data.get("param-name"), files[i])
+    }
+
+    self.element.classList.add("uploading")
+
+    fetch(self.data.get("url"), {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": document.querySelector("meta[name=csrf-token]").content,
+      },
+      body: formData,
+    })
+      .then(self.handleErrors)
+      .then((response) => {
+        response.json().then(function (data) {
+          self.element.classList.remove("uploading")
+          let node = document.querySelector(data.selector)
+          if (node) {
+            node.innerHTML = data.html
+          }
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+        self.element.classList.remove("uploading")
+      })
   }
 
   handleErrors(response) {
