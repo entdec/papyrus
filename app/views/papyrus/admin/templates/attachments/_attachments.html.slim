@@ -1,5 +1,5 @@
 - attachments.each do |attachment|
-  span.attachment
+  div.attachment
     - if attachment.previewable?
       = image_tag attachment.blob.preview(resize_to_limit: [100, 100]).processed.url
     - elsif attachment.image?
@@ -13,7 +13,7 @@
 
 span.attachment-upload data-controller="attachment-upload" data-attachment-upload-url="#{upload_url}" data-attachment-upload-param-name="attachments[]" data-attachment-upload-extra-data='{}'
   span.icon.upload
-    i.fal.fa-upload.fa-2x
+    i.fal.clg-fa-upload
   span.icon.uploading
-    i.fal.fa-circle-notch.fa-2x.fa-spin
-
+    i.fal.clg-fa-circle-notch.clg-fa-spin
+  | Drag or click to attach files
