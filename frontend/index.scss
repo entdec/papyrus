@@ -27,6 +27,10 @@
       display: none;
     }
 
+    &.dragging {
+      border-style: dotted;
+    }
+
     &.uploading {
       .icon.upload {
         display: none;

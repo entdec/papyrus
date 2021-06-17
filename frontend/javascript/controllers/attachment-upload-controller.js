@@ -7,10 +7,22 @@ import { Controller } from "stimulus"
  */
 export default class extends Controller {
   connect() {
+    console.log("hi")
     const self = this
+
+    const input = document.createElement("input")
+    input.setAttribute("name", self.data.get("param-name"))
+    input.setAttribute("type", "file")
+    input.style.display = "none"
+    self.element.appendChild(input)
+
     if (!self.data.has("param-name")) {
       console.warn(this.element, "has no data-upload-param attribute, uploads may not work")
     }
+
+    self.element.addEventListener("click", function (evt) {
+      input.click()
+    })
 
     self.element.addEventListener("dragover", function (evt) {
       self.element.classList.add("dragging")
