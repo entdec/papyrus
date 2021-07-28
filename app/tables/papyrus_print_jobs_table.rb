@@ -11,7 +11,7 @@ class PapyrusPrintJobsTable < ActionTable::ActionTable
 
   column :actions, sortable: false do |row|
     content_tag(:span) do
-      concat link_to(content_tag(:i, nil, class: 'fal fa--retweet'), papyrus.resend_print_job_path(row.id),
+      concat link_to(content_tag(:i, nil, class: 'fal fa-repeat'), papyrus.resend_print_job_path(row.id),
                      title: t('papyrus.print_jobs_table.resend'), method: :post)
     end
   end

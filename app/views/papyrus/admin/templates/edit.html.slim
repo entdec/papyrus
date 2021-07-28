@@ -35,13 +35,13 @@
             .col-span-12 data-controller="toggle"
               .grid.grid-cols-12.gap-4
 
-              .col-span-6
-                = f.input :klass, collection: Papyrus.config.papyrable_class_names.sort, selected: @template.klass, include_blank: false, input_html: { data: { 'toggle-target' => 'input' } }
-              .col-span-6 data-toggle-target='insertion'
-              template data-toggle-target='toggleable' data-toggle-not-value='Custom'
-                = f.input :event, collection: template.all_events, include_blank: false, chain_to: "#{f.object_name}[klass]"
-              template data-toggle-target='toggleable' data-toggle-value='Custom'
-                = f.input :event, input_html: { placeholder: 'scope#event'}
+                .col-span-6
+                  = f.input :klass, collection: Papyrus.config.papyrable_class_names.sort, selected: @template.klass, include_blank: false, input_html: { data: { 'toggle-target' => 'input' } }
+                .col-span-6 data-toggle-target='insertion'
+                template data-toggle-target='toggleable' data-toggle-not-value='Custom'
+                  = f.input :event, collection: template.all_events, include_blank: false, chain_to: "#{f.object_name}[klass]"
+                template data-toggle-target='toggleable' data-toggle-value='Custom'
+                  = f.input :event, input_html: { placeholder: 'scope#event'}
 
             .col-span-12 data-toggle-target="insertion"
             template data-toggle-target="toggleable" data-toggle-value="pdf"
