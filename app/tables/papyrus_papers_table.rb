@@ -17,10 +17,10 @@ class PapyrusPapersTable < ActionTable::ActionTable
 
   column :actions, sortable: false do |row|
     content_tag(:span) do
-      concat link_to(content_tag(:i, nil, class: 'fal clg-fa-eye'), papyrus.paper_path(row),
+      concat link_to(content_tag(:i, nil, class: 'fal fa--eye'), papyrus.paper_path(row),
                      title: t('papyrus.paper_table.preview'), target: '_blank')
       if row.owner
-        concat link_to(content_tag(:i, nil, class: 'fal clg-fa-print'), papyrus.print_paper_path(row.id),
+        concat link_to(content_tag(:i, nil, class: 'fal fa--print'), papyrus.print_paper_path(row.id),
                        title: t('papyrus.paper_table.print'), method: :post)
       end
     end

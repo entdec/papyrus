@@ -39,10 +39,7 @@ module Papyrus
       def set_objects; end
 
       def locale_params
-        params.require(:locale).permit(:key, :data, :metadata).tap do |w|
-          w[:data] = YAML.safe_load(params[:locale][:data])
-          w[:metadata] = YAML.safe_load(params[:locale][:metadata])
-        end
+        params.require(:locale).permit(:key, :data_yaml, :metadata_yaml)
       end
     end
   end

@@ -1,6 +1,2 @@
-= clg.card(menu: templates_context_menu) do |card|
-  - card.slot :title
-    = t('.templates')
-  - card.slot :footer
-  = clg.action_table(:papyrus_templates, options: { exportable: true })
-
+= sts.card title: t('.template'), icon: 'fad fa-file-spreadsheet', content_padding: false, menu: templates_menu do |card|
+  = sts.table :papyrus_templates
