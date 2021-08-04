@@ -71,6 +71,7 @@ module Papyrus
     def event(event, obj, params = {})
       return unless event
       return unless obj.papyrable?
+      return unless papers?(obj, event)
 
       Papyrus::GenerateJob.perform_later(obj, event.to_s, params)
     end
@@ -81,6 +82,13 @@ module Papyrus
 
     def metadata_definitions
       config.metadata_fields
+    end
+
+    def papers?(obj, event)
+      Papyrus::Template.where(klass: Papyrus::BaseGenerator.class_names_for(obj),
+                              event: Papyrus::BaseGenerator.event_name_for(
+                                obj, event
+                              )).where(enabled: true).count.positive?
     end
   end
 
