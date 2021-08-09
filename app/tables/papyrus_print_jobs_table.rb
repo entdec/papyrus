@@ -6,7 +6,7 @@ class PapyrusPrintJobsTable < ActionTable::ActionTable
   column(:state, &:state)
   column(:owner, sortable: false) { |row| row.printer.owner.name }
   column(:printer, sort_field: :printer_id) { |row| row.printer.name }
-  column(:paper, sortable: false) { |row| row.paper.template.description }
+  column(:paper, sortable: false) { |row| row.paper.template&.description }
   column(:created_at) { |paper| ln(paper.created_at) }
 
   column :actions, sortable: false do |row|
