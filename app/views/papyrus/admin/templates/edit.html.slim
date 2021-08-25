@@ -4,7 +4,7 @@
       - card.action
         = f.submit
       - if @template.previewable?
-        - card.slot :action
+        - card.action
           =  link_to "Preview", paper_template_url(@template), class: 'button', "target": "blank", 'data-turbo' => false
 
 
@@ -68,4 +68,3 @@
           .grid.grid-cols-12.gap-4
             .col-span-12
               = f.input :metadata, as: :editor, input_html: { value: YAML.dump(f.object.metadata) }, mode: 'application/yaml'
-
