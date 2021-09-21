@@ -41,10 +41,10 @@ element-closest@^3.0.1:
   resolved "https://registry.yarnpkg.com/element-closest/-/element-closest-3.0.2.tgz#3814a69a84f30e48e63eaf57341f4dbf4227d2aa"
   integrity sha512-JxKQiJKX0Zr5Q2/bCaTx8P+UbfyMET1OQd61qu5xQFeWr1km3fGaxelSJtnfT27XQ5Uoztn2yIyeamAc/VX13g==
 
-jsprintmanager@^3.0.7:
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/jsprintmanager/-/jsprintmanager-3.0.7.tgz#e15ce278a9c675e6468813d45e4d8277071d7503"
-  integrity sha512-+W1ALwoEB1yFOsTxWL1iR1FClZ/4ga3n3usRThRFDwIqZNXCPEXWvEMYOEDvzDAFRCzZTUnf3c1KvJxKEHyyxg==
+jsprintmanager@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/jsprintmanager/-/jsprintmanager-4.0.1.tgz#c1818631f0e4977fe85f32386f9662a0742948d7"
+  integrity sha512-iwo4ktpvHMJ/9uCHFKrk7VXhfM99EmhqBISZ5gyMfNZ/O5Zu+s2FljI6hLtXORhqiTeXbJnk/+1B/i0WaO4dQQ==
 
 lru-cache@^6.0.0:
   version "6.0.0"
