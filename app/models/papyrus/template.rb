@@ -21,7 +21,8 @@ module Papyrus
                         kind: paper_kind,
                         papyrable: object.is_a?(Hash) ? nil : object,
                         owner: owner,
-                        use: use)
+                        use: use,
+                        purpose: purpose)
 
       paper.attachment.attach(io: data,
                               filename: file_name,

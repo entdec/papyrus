@@ -17,6 +17,7 @@ pdf_for_items:
     pdf.text item.name
   klass: Item
   event: create
+  purpose: invoice
 
 zpl:
   enabled: true
@@ -65,3 +66,4 @@ zpl_for_item_update:
     ^XZ
   klass: Item
   event: update
+  purpose: inventory_label

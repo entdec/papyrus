@@ -23,13 +23,15 @@
                       - else
                         =  fff.input field, label: definition[:name], required: false
 
-            .col-span-3
+            .col-span-6
               = f.input :description
-            .col-span-3
+            .col-span-6
+              = f.input :purpose
+            .col-span-4
               = f.input :kind, collection: Papyrus::Template::KINDS, include_blank: false, input_html: { data: { 'toggle-target' => 'input' } }
-            .col-span-3
+            .col-span-4
               = f.input :use, collection: Papyrus::Printer::USES, include_blank: false
-            .col-span-3
+            .col-span-4
               = f.input :copies
 
             .col-span-12 data-controller="toggle"

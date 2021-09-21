@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_22_093957) do
+ActiveRecord::Schema.define(version: 2021_09_21_101620) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 2021_03_22_093957) do
     t.uuid "papyrable_id"
     t.string "kind"
     t.string "use"
+    t.string "purpose"
     t.index ["owner_type", "owner_id"], name: "index_papyrus_papers_on_owner_type_and_owner_id"
     t.index ["template_id"], name: "index_papyrus_papers_on_template_id"
   end
@@ -126,6 +127,7 @@ ActiveRecord::Schema.define(version: 2021_03_22_093957) do
     t.string "event"
     t.string "use"
     t.boolean "enabled"
+    t.string "purpose"
   end
 
   create_table "transaction_log_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
