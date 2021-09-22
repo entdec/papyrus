@@ -2,6 +2,8 @@
   = sts.form_for([:admin, @template]) do |f|
     = sts.card title: t('.template'), icon: 'fad fa-file-spreadsheet' do |card|
       - card.action
+        = f.continue
+      - card.action
         = f.submit
       - if @template.previewable?
         - card.action
