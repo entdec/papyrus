@@ -68,12 +68,16 @@ module Papyrus
     end
     deprecate with: 'please use event instead', deprecator: Papyrus::Deprecator.new
 
-    def event(event, obj, params = {})
+    def event(event, obj, params = {}, options: {})
       return unless event
       return unless obj.papyrable?
       return unless papers?(obj, event)
 
-      Papyrus::GenerateJob.perform_later(obj, event.to_s, params)
+      if options[:perform_now] == true
+        Papyrus::GenerateJob.perform_now(obj, event.to_s, params)
+      else
+        Papyrus::GenerateJob.perform_later(obj, event.to_s, params)
+      end
     end
 
     def metadata_definition(field)
