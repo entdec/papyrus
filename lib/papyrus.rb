@@ -78,7 +78,9 @@ module Papyrus
       if options[:perform_now] == true
         Papyrus::GenerateJob.perform_now(obj, event.to_s, params)
       else
-        Papyrus::GenerateJob.perform_later(obj, event.to_s, params)
+        job = Papyrus::GenerateJob
+        job.set(wait: options[:wait]) if options[:wait]
+        job.perform_later(obj, event.to_s, params)
       end
     end
 
