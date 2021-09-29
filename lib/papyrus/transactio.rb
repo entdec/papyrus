@@ -18,7 +18,7 @@ module Papyrus
         resource = transaction_log_entry.transaction_loggable
         event = transaction_log_entry.event
 
-        if event.present? && resource.papyrable?
+        if resource.present? && event.present? && resource.papyrable?
           params = Papyrus.config.default_params(transaction_log_entry)
 
           Papyrus.event(event, resource, params)
