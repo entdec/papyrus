@@ -73,7 +73,13 @@ module Papyrus
       return unless obj.papyrable?
       return unless papers?(obj, event)
 
-      Papyrus::GenerateJob.perform_later(obj, event.to_s, params)
+      options = params[:options] || {}
+
+      if options[:perform_now] == true
+        Papyrus::GenerateJob.perform_now(obj, event.to_s, params)
+      else
+        Papyrus::GenerateJob.perform_later(obj, event.to_s, params)
+      end
     end
 
     def metadata_definition(field)
