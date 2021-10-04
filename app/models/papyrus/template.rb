@@ -15,7 +15,15 @@ module Papyrus
       locale = params[:locale] || I18n.locale
       owner = params[:owner]
 
-      data = render(context.reject { |h| h == 'pdf' }, locale: locale)
+      begin
+        data = render(context.reject { |h| h == 'pdf' }, locale: locale)
+      rescue StandardError => e
+        data = if paper_kind == 'pdf'
+                 StringIO.new render({}, data_override: "pdf.text #{e.message}")
+               else
+                 StringIO.new e.message
+               end
+      end
 
       paper = Paper.new(template: self,
                         kind: paper_kind,
@@ -35,10 +43,10 @@ module Papyrus
       [paper, data]
     end
 
-    def render(context, locale: I18n.locale)
+    def render(context, locale: I18n.locale, data_override: data)
       result = I18n.with_locale(locale) do
         if kind == 'pdf'
-          template = Tilt::PrawnTemplate.new(file_name, (metadata || {}).deep_symbolize_keys) { |_t| data }
+          template = Tilt::PrawnTemplate.new(file_name, (metadata || {}).deep_symbolize_keys) { |_t| data_override }
           template.render(Papyrus::Context.new(self), Shash.new(context))
         else
           ::Liquor.render(data,
