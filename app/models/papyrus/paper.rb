@@ -13,6 +13,7 @@ module Papyrus
     def print!
       return if owner.blank?
       return unless printer
+      return if Rails.env.test?
 
       print_job = printer.print_jobs.create!(paper: self)
       print_job.spool!
