@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Papyrus
   class Template < ApplicationRecord
     KINDS = [%w[PDF pdf], %w[Liquid liquid]].freeze
@@ -19,9 +17,9 @@ module Papyrus
         data = render(context.reject { |h| h == 'pdf' }, locale: locale)
       rescue StandardError => e
         data = if paper_kind == 'pdf'
-                 StringIO.new render({}, data_override: "pdf.text #{e.message}")
+                 StringIO.new render({}, locale: locale, data_override: "pdf.text #{e.message.dup}")
                else
-                 StringIO.new e.message
+                 StringIO.new e.message.dup
                end
       end
 
@@ -47,10 +45,10 @@ module Papyrus
       result = I18n.with_locale(locale) do
         if kind == 'pdf'
           template = Tilt::PrawnTemplate.new(file_name, (metadata || {}).deep_symbolize_keys) { |_t| data_override }
-          template.render(Papyrus::Context.new(self), Shash.new(context))
+          template.render(Papyrus::Context.new(self), Shash.new(context.merge(locale: locale)))
         else
           ::Liquor.render(data,
-                          { assigns: context.merge('template' => self),
+                          { assigns: context.merge('template' => self, locale: locale),
                             registers: { 'template' => self } })
         end
       end
