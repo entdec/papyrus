@@ -6,6 +6,8 @@ consumer.subscriptions.create(
   {
     connected() {
       const self = this
+      this.update()
+      this.install()
 
       JSPM.JSPrintManager.WS.onStatusChanged = function () {
         if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Open) {
@@ -23,7 +25,36 @@ consumer.subscriptions.create(
     },
 
     disconnected() {
-      // Called when the subscription has been terminated by the server
+      this.uninstall()
+    },
+
+    // Called when the subscription is rejected by the server.
+    rejected() {
+      this.uninstall()
+    },
+
+    update() {
+      if (!document.hidden && document.hasFocus()) {
+        this.active = true
+      } else {
+        this.active = false
+      }
+    },
+
+    install() {
+      window.addEventListener("focus", this.update)
+      document.addEventListener("blur", this.update)
+      document.addEventListener("turbo:load", this.update)
+
+      document.addEventListener("visibilitychange", this.update)
+    },
+
+    uninstall() {
+      window.removeEventListener("focus", this.update)
+      document.removeEventListener("blur", this.update)
+      document.removeEventListener("turbo:load", this.update)
+
+      document.removeEventListener("visibilitychange", this.update)
     },
 
     printersList(data) {
@@ -32,6 +63,11 @@ consumer.subscriptions.create(
 
     received(job) {
       const self = this
+
+      if (!this.active) {
+        return
+      }
+
       if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Open) {
         var cpj = new JSPM.ClientPrintJob()
         cpj.clientPrinter = new JSPM.InstalledPrinter(job.printer)
