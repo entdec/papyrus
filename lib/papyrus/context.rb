@@ -16,18 +16,23 @@ module Papyrus
 
     # Open one of the named attachments on a template
     def open(filename)
-      @files ||= {}
-      if @files[filename]
-        @files[filename].rewind
+      if filename.is_a? String
+        @files ||= {}
+        if @files[filename]
+          @files[filename].rewind
 
-        return @files[filename]
+          return @files[filename]
+        end
+
+        attachment = template.attachments.detect { |a| a.blob.filename == filename }
+        return unless attachment
+
+        # Not ideal
+        @files[filename] = StringIO.new(attachment.blob.download)
+
+      elsif filename.is_a? ActiveStorage::Attached::One
+        StringIO.new(filename.download)
       end
-
-      attachment = template.attachments.detect { |a| a.blob.filename == filename }
-      return unless attachment
-
-      # Not ideal
-      @files[filename] = StringIO.new(attachment.blob.download)
     end
 
     def translate(input, options = {})
