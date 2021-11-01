@@ -62,7 +62,7 @@ GIT
 PATH
   remote: .
   specs:
-    papyrus (1.1.24)
+    papyrus (1.1.29)
       barby (~> 0.6)
       decoro (~> 0.1)
       evento (~> 0.1)
@@ -188,7 +188,7 @@ GEM
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
-    faraday_middleware (1.1.0)
+    faraday_middleware (1.2.0)
       faraday (~> 1.0)
     ffi (1.15.0)
     globalid (0.4.2)
@@ -383,4 +383,4 @@ DEPENDENCIES
   transactio (~> 0.1)!
 
 BUNDLED WITH
-   2.2.14
+   2.2.28

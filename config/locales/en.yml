@@ -11,3 +11,4 @@ en:
     paper_table:
       preview: Preview
       print: (Re)Print
+      regenerate: Regenerate

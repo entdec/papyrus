@@ -35,6 +35,13 @@ module Papyrus
       end
     end
 
+    def regenerate
+      if @paper.template && @paper.papyrable && @paper.template.event
+        Papyrus.event(@paper.template.event, @paper.papyrable,
+                      options: { template_id: @paper.template_id })
+      end
+    end
+
     private
 
     def set_objects

@@ -23,6 +23,11 @@ class PapyrusPapersTable < ActionTable::ActionTable
         concat link_to(content_tag(:i, nil, class: 'fal fa-print'), papyrus.print_paper_path(row.id),
                        title: t('papyrus.paper_table.print'), method: :post)
       end
+
+      if row.template&.event.present?
+        concat link_to(content_tag(:i, nil, class: 'fal fa-rotate-right'), papyrus.regenerate_paper_path(row),
+                      title: t('papyrus.paper_table.regenerate'), method: 'post')
+      end
     end
   end
 

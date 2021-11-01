@@ -25,6 +25,7 @@ Papyrus::Engine.routes.draw do
   resources :papers do
     member do
       post 'print'
+      post 'regenerate'
     end
   end
 
