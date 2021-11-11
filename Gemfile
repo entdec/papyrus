@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
-git_source(:entdec) { |repo_name| "git@code.entropydecelerator.com:#{repo_name}.git" }
+git_source(:entdec) { |repo_name| "git@github.com:entdec/#{repo_name}.git" }
 
 # Declare your gem's dependencies in papyrus.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
@@ -15,13 +15,13 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
-gem 'auxilium', '~> 3', entdec: 'components/auxilium'
-gem 'decoro', '~> 0.1', entdec: 'components/decoro'
-gem 'evento', entdec: 'components/evento', tag: '0.1.7'
-gem 'liquor', entdec: 'components/liquor'
-gem 'servitium', '~> 1.1', entdec: 'components/servitium'
+gem 'auxilium', '~> 3', entdec: 'auxilium'
+gem 'decoro', '~> 0.1', entdec: 'decoro'
+gem 'evento', entdec: 'evento', tag: '0.1.7'
+gem 'liquor', entdec: 'liquor'
+gem 'servitium', '~> 1.1', entdec: 'servitium'
 gem 'state_machines-activemodel', '~> 0.8'
-gem 'transactio', '~> 0.1', entdec: 'components/transactio'
+gem 'transactio', '~> 0.1', entdec: 'transactio'
 
 gem 'pry'
 gem 'sidekiq'

@@ -1,7 +1,7 @@
 {
-  "name": "@components/papyrus",
+  "name": "@entdec/papyrus",
   "version": "1.1.30",
-  "repository": "git@code.entropydecelerator.com:components/papyrus.git",
+  "repository": "git@github.com:entdec/papyrus.git",
   "author": "Tom de Grunt <tom@degrunt.nl>",
   "license": "MIT",
   "files": [
