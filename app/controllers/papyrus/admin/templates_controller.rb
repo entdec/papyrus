@@ -51,7 +51,7 @@ module Papyrus
       def set_objects; end
 
       def template_params
-        params.require(:template).permit(:enabled, :description, :metadata, :data, :example_data, :use, :purpose, :kind, :copies, :klass, :event,
+        params.require(:template).permit(:enabled, :description, :metadata, :data, :condition, :example_data, :use, :purpose, :kind, :copies, :klass, :event,
                                          attachments: []).tap do |w|
           w[:metadata] = YAML.safe_load(params[:template][:metadata])
           w[:example_data] = ::JSON.parse(params[:template][:example_data])

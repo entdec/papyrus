@@ -47,12 +47,17 @@
                 template data-toggle-target='toggleable' data-toggle-value='Custom'
                   = f.input :event, input_html: { placeholder: 'scope#event'}
 
+            .col-span-12
+              = f.input :condition, as: :editor, mode: 'text/plain', height: '100px'
+              small.form-text.text-muted When condition returns '"false", "FALSE", "f" , "F", "0", "off" or "OFF"' (without quotes), the template will not be considered.
+              br
+              small.form-text.text-muted When condition is blank or returns any other value will result in the template being considered. Liquid can be used in condition.
+
             .col-span-12 data-toggle-target="insertion"
             template data-toggle-target="toggleable" data-toggle-value="pdf"
               = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
             template data-toggle-target="toggleable" data-toggle-value="liquid"
               = f.input :data, as: :editor, mode: 'text/plain', height: '600px'
-
 
 
         - t.tab :media
