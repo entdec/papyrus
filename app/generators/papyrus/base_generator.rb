@@ -15,10 +15,6 @@ module Papyrus
       @object = object
       @event = event
       @params = params
-      # @attachments = []
-
-      # Allow attachments to be passed directly
-      # params.fetch(:attachments, []).each { |att| attach(att) }
     end
 
     # Calls the event method on the generator
@@ -48,11 +44,11 @@ module Papyrus
         return obj.keys.first.to_s if obj.is_a?(Hash)
 
         plural = obj.is_a?(Array) || obj.is_a?(ActiveRecord::Relation)
-        list   = plural ? obj : [obj]
-        klass  = list.first.class
-        klass  = klass.base_class if klass.respond_to?(:base_class)
-        name   = klass.name.demodulize
-        name   = name.pluralize if plural
+        list = plural ? obj : [obj]
+        klass = list.first.class
+        klass = klass.base_class if klass.respond_to?(:base_class)
+        name = klass.name.demodulize
+        name = name.pluralize if plural
         name.underscore
       end
 
@@ -137,6 +133,12 @@ module Papyrus
       @templates = Template.unscoped.where(klass: class_names_for(@object),
                                            event: event_name_for(@object, @event)).where(enabled: true)
       @templates = @templates.instance_exec(@object, &Papyrus.config.default_template_scope)
+
+      # Filter applicable templates
+      @templates = @templates.select { |t| t.applicable?(@object, liquid_context, params) }
+
+      # Filter templates by id, for reprocess
+      @templates = @templates.select { |t| t.id == @params.dig(:options, :template_id) } if @params.dig(:options, :template_id).present?
 
       # See if we need to do something additional
       template_scope_proc = self.class.template_scope

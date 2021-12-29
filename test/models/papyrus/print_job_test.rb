@@ -10,9 +10,11 @@ module Papyrus
     test 'generates a printjob' do
       template = papyrus_templates(:pdf)
       paper, = template.generate(nil, { item: { name: 'Joe' } }, owner: @user)
-      subject = paper.print!
-      assert_equal @printer1, subject.printer
-      assert_equal paper, subject.paper
+      Rails.stub :env, ActiveSupport::StringInquirer.new('production') do
+        subject = paper.print!
+        assert_equal @printer1, subject.printer
+        assert_equal paper, subject.paper
+      end
     end
 
     test 'states' do

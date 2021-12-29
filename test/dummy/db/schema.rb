@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_21_101620) do
+ActiveRecord::Schema.define(version: 2021_12_28_085943) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -128,6 +128,7 @@ ActiveRecord::Schema.define(version: 2021_09_21_101620) do
     t.string "use"
     t.boolean "enabled"
     t.string "purpose"
+    t.text "condition"
   end
 
   create_table "transaction_log_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

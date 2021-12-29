@@ -63,7 +63,7 @@ GIT
 PATH
   remote: .
   specs:
-    papyrus (1.1.30)
+    papyrus (1.1.31)
       barby (~> 0.6)
       decoro (~> 0.1)
       evento (~> 0.1)
@@ -165,7 +165,7 @@ GEM
     concurrent-ruby (1.1.9)
     connection_pool (2.2.3)
     crass (1.0.6)
-    css_parser (1.10.0)
+    css_parser (1.11.0)
       addressable
     e2mmap (0.1.0)
     erubi (1.10.0)

@@ -19,6 +19,20 @@ pdf_for_items:
   event: create
   purpose: invoice
 
+pdf_for_item_allocate:
+  enabled: true
+  kind: pdf
+  description: PDF Label with condition
+  use: document
+  data: |
+    pdf.text 'Label', size: 24
+    pdf.text item.name
+  klass: Item
+  event: allocate
+  purpose: invoice
+  condition: |
+    {%if item.name == 'Yes'%}T{%else%}F{%endif%}
+
 zpl:
   enabled: true
   kind: liquid

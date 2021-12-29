@@ -36,5 +36,24 @@ module Papyrus
       assert_equal 1, item.papers.count
       assert_equal 'inventory_label', item.papers.first.purpose
     end
+
+    test 'does not renders a liquid template with non-matching condition when an item is allocated' do
+      item = Item.create(name: 'Test', state: 'available', description: 'Smurrefluts')
+      assert_performed_jobs 1, only: [Papyrus::GenerateJob] do
+        item.allocate
+      end
+      assert_equal 0, item.papers.count
+    end
+
+    test 'renders a liquid template with matching condition when an item is allocated' do
+      item = Item.create(name: 'Yes', state: 'available', description: 'Test')
+      assert_performed_jobs 1, only: [Papyrus::GenerateJob] do
+        item.allocate!
+      end
+      assert_equal 1, item.papers.count
+      assert_equal 'invoice', item.papers.first.purpose
+      assert_equal 'PDF Label with condition', item.papers.first.template.description
+    end
+
   end
 end

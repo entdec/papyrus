@@ -56,6 +56,20 @@ module Papyrus
       StringIO.new(result)
     end
 
+    def applicable?(object, context, params)
+      return true if condition.blank?
+
+      result = ::Liquor.render(condition,
+                               {
+                                 assigns: context.reject { |h| h == 'pdf' }.merge('template' => self),
+                                 registers: { 'template' => self }
+                               })
+
+      return true if result.chomp.blank?
+
+      !ActiveModel::Type::Boolean::FALSE_VALUES.include? result.chomp
+    end
+
     def file_name
       "#{description.gsub(/[^a-zA-Z0-9]/, '_').downcase}.#{kind == 'pdf' ? 'pdf' : 'bin'}"
     end
