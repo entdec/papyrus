@@ -135,10 +135,16 @@ module Papyrus
       @templates = @templates.instance_exec(@object, &Papyrus.config.default_template_scope)
 
       # Filter applicable templates
-      @templates = @templates.select { |t| t.applicable?(@object, liquid_context, params) }
+      @templates = @templates.where(id: @templates.select do |t|
+                                          t.applicable?(@object, liquid_context, params)
+                                        end.map(&:id))
 
       # Filter templates by id, for reprocess
-      @templates = @templates.select { |t| t.id == @params.dig(:options, :template_id) } if @params.dig(:options, :template_id).present?
+      if @params.dig(:options, :template_id).present?
+        @templates = @templates.select do |t|
+          t.id == @params.dig(:options, :template_id)
+        end
+      end
 
       # See if we need to do something additional
       template_scope_proc = self.class.template_scope
