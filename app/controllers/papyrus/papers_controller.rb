@@ -16,7 +16,7 @@ module Papyrus
                                      content_type: 'application/pdf',
                                      dpmm: @paper.template&.metadata&.dig('dpmm') || 8,
                                      width: @paper.template&.metadata&.dig('width') || 4,
-                                     height: @paper.template&.metadata&.dig('height') || 6)
+                                     height: @paper.template&.metadata&.dig('height') || 8)
 
         send_data pdf,
                   type: 'application/pdf',
