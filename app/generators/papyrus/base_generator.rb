@@ -139,16 +139,16 @@ module Papyrus
                                           t.applicable?(@object, liquid_context, params)
                                         end.map(&:id))
 
+      # See if we need to do something additional
+      template_scope_proc = self.class.template_scope
+      @templates = @templates.instance_exec(@object, &template_scope_proc) if template_scope_proc
+
       # Filter templates by id, for reprocess
       if @params.dig(:options, :template_id).present?
         @templates = @templates.select do |t|
           t.id == @params.dig(:options, :template_id)
         end
       end
-
-      # See if we need to do something additional
-      template_scope_proc = self.class.template_scope
-      @templates = @templates.instance_exec(@object, &template_scope_proc) if template_scope_proc
 
       @templates
     end
