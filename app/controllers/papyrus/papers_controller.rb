@@ -11,12 +11,13 @@ module Papyrus
       if @paper.kind == 'pdf'
         redirect_to main_app.rails_blob_path(@paper.attachment, disposition: 'inline')
       else
+        metadata = @paper.metadata.present? ? @paper.metadata : @paper.template&.metadata
 
         pdf = Labelary::Label.render(zpl: @paper.attachment.download,
                                      content_type: 'application/pdf',
-                                     dpmm: @paper.template&.metadata&.dig('dpmm') || 8,
-                                     width: @paper.template&.metadata&.dig('width') || 4,
-                                     height: @paper.template&.metadata&.dig('height') || 8)
+                                     dpmm: metadata&.dig('dpmm') || 8,
+                                     width: metadata&.dig('width') || 4,
+                                     height: metadata&.dig('height') || 8)
 
         send_data pdf,
                   type: 'application/pdf',

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_28_085943) do
+ActiveRecord::Schema.define(version: 2022_03_28_050257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 2021_12_28_085943) do
     t.string "kind"
     t.string "use"
     t.string "purpose"
+    t.jsonb "metadata"
     t.index ["owner_type", "owner_id"], name: "index_papyrus_papers_on_owner_type_and_owner_id"
     t.index ["template_id"], name: "index_papyrus_papers_on_template_id"
   end
