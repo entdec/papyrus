@@ -63,7 +63,7 @@ GIT
 PATH
   remote: .
   specs:
-    papyrus (1.1.36)
+    papyrus (1.1.37)
       barby (~> 0.6)
       decoro (~> 0.1)
       evento (~> 0.1)
@@ -74,7 +74,7 @@ PATH
       prawn (~> 2.2)
       prawn-svg (~> 0.29)
       prawn-table (~> 0.2)
-      rails (~> 6.0, >= 6.0.2.1)
+      rails (>= 6.0.2.1)
       rqrcode (~> 0.10)
       servitium (~> 1.1)
       state_machines-activemodel (~> 0.8)
@@ -208,7 +208,7 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    labelary (0.3.0)
+    labelary (0.4.0)
       faraday (>= 0.9, < 2)
       faraday_middleware (>= 0.10, < 2)
     liquid (5.1.0)
@@ -388,4 +388,4 @@ DEPENDENCIES
   transactio (~> 0.1)!
 
 BUNDLED WITH
-   2.2.32
+   2.3.13
