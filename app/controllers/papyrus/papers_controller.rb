@@ -39,7 +39,7 @@ module Papyrus
     def regenerate
       if @paper.template && @paper.papyrable && @paper.template.event
         Papyrus.event(@paper.template.event, @paper.papyrable,
-                      options: { template_id: @paper.template_id })
+                      options: { template_id: @paper.template_id, owner: Current.user })
       end
     end
 

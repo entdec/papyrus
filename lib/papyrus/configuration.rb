@@ -2,9 +2,9 @@
 
 module Papyrus
   class Configuration
-    attr_accessor :admin_authentication_module, :base_controller, :visible_scope, :add_metadata, :metadata_fields,
-                  :print_client_license_owner, :print_client_license_key, :default_template_scope, :allow_custom_events
-    attr_writer :logger, :host, :metadata_humanize, :default_params
+    attr_accessor :admin_authentication_module, :base_controller, :add_metadata, :metadata_fields,
+                  :print_client_api_key, :default_template_scope, :allow_custom_events, :visible_scope
+    attr_writer :logger, :host, :metadata_humanize, :default_params, :current_computer
 
     def initialize
       @logger = Logger.new(STDOUT)
@@ -22,6 +22,8 @@ module Papyrus
 
       @papyrable_classes = []
       @papyrable_class_names = []
+
+      @current_computer = -> {}
     end
 
     # logger [Object].
@@ -47,6 +49,10 @@ module Papyrus
 
     def default_params(transaction_log_entry)
       @default_params.is_a?(Proc) ? instance_exec(transaction_log_entry, &@default_params) : @default_params
+    end
+
+    def current_computer
+      @current_computer.is_a?(Proc) ? instance_exec(&@current_computer) : @current_computer
     end
 
     private

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_28_050257) do
+ActiveRecord::Schema.define(version: 2022_06_10_143059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -53,6 +53,16 @@ ActiveRecord::Schema.define(version: 2022_03_28_050257) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "papyrus_computers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "client_id"
+    t.string "name"
+    t.string "hostname"
+    t.string "state"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["client_id"], name: "index_papyrus_computers_on_client_id"
+  end
+
   create_table "papyrus_locales", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "key"
     t.jsonb "data"
@@ -84,6 +94,8 @@ ActiveRecord::Schema.define(version: 2022_03_28_050257) do
     t.uuid "printer_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.uuid "computer_id", null: false
+    t.index ["computer_id"], name: "index_papyrus_preferred_printers_on_computer_id"
     t.index ["owner_type", "owner_id"], name: "index_papyrus_preferred_printers_on_owner_type_and_owner_id"
     t.index ["printer_id"], name: "index_papyrus_preferred_printers_on_printer_id"
   end
@@ -99,20 +111,13 @@ ActiveRecord::Schema.define(version: 2022_03_28_050257) do
   end
 
   create_table "papyrus_printers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "owner_type", null: false
-    t.uuid "owner_id", null: false
     t.string "name"
-    t.boolean "default"
-    t.string "papers"
-    t.boolean "local"
-    t.boolean "network"
-    t.boolean "shared"
-    t.boolean "connected"
-    t.string "port"
-    t.jsonb "metadata"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["owner_type", "owner_id"], name: "index_papyrus_printers_on_owner_type_and_owner_id"
+    t.uuid "computer_id", null: false
+    t.integer "client_id", null: false
+    t.string "state"
+    t.index ["computer_id"], name: "index_papyrus_printers_on_computer_id"
   end
 
   create_table "papyrus_templates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -161,7 +166,9 @@ ActiveRecord::Schema.define(version: 2022_03_28_050257) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "papyrus_papers", "papyrus_templates", column: "template_id"
+  add_foreign_key "papyrus_preferred_printers", "papyrus_computers", column: "computer_id"
   add_foreign_key "papyrus_preferred_printers", "papyrus_printers", column: "printer_id"
   add_foreign_key "papyrus_print_jobs", "papyrus_papers", column: "paper_id"
   add_foreign_key "papyrus_print_jobs", "papyrus_printers", column: "printer_id"
+  add_foreign_key "papyrus_printers", "papyrus_computers", column: "computer_id"
 end

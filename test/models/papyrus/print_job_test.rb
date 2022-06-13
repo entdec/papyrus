@@ -4,8 +4,8 @@ module Papyrus
   class PrintJobTest < ApplicationTestCase
     setup do
       @user = User.create(name: 'Test')
-      @printer1 = @user.printers.create(name: 'Test printer')
-      @user.preferred_printers.create(printer: @printer1, use: 'document')
+      @printer1 = Papyrus::Printer.create!(name: 'Test printer', client_id: 1, computer: papyrus_computers(:one))
+      @user.preferred_printers.create!(printer: @printer1, use: 'document', computer: papyrus_computers(:one))
     end
     test 'generates a printjob' do
       template = papyrus_templates(:pdf)

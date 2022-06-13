@@ -2,12 +2,12 @@
 
 one:
   client_id: 1
-  computer: one
   name: MyString
-  state: connected
+  hostname: MyString
+  state: MyString
 
 two:
   client_id: 2
-  computer: two
   name: MyString
-  state: connected
+  hostname: MyString
+  state: MyString

@@ -25,21 +25,34 @@ module Papyrus
     has_one :template, through: :paper, class_name: 'Papyrus::Template'
 
     def spool!
-      Papyrus::PrintChannel.broadcast_to(printer.owner, payload)
+      return unless Papyrus.print_client
+
+      started!
+
+      job = Papyrus.print_client.create_printjob(
+        PrintNode::PrintJob.new(printer.client_id,
+                                template.description,
+                                printer_client_content_type,
+                                Base64.encode64(paper.attachment.download),
+                                'Papyrus'),
+        {
+          qty: template&.copies || 1
+        }
+      )
+      info = Papyrus.print_client.printjobs(job)
+
+      finished! if info.first.state == 'queued'
     end
 
     private
 
-    def payload
-      {
-        id: id,
-        printer: printer.name,
-        url: paper.attachment_path,
-        kind: paper.kind,
-        filename: paper.attachment.blob.filename.to_s,
-        content_type: paper.attachment.blob.content_type,
-        copies: template&.copies || 1
-      }
+    def printer_client_content_type
+      case paper.kind
+      when 'liquid'
+        'raw_base64'
+      when 'pdf'
+        'pdf_base64'
+      end
     end
   end
 end

@@ -56,7 +56,7 @@ module Papyrus
       StringIO.new(result)
     end
 
-    def applicable?(object, context, params)
+    def applicable?(_object, context, _params)
       return true if condition.blank?
 
       result = ::Liquor.render(condition,

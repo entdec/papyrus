@@ -1,11 +1,13 @@
-- if current_user.printers?
+- if Papyrus::Printer.all.present?
   p = t('.please_indicate_printer_use')
   = f.fields_for :preferred_printers, Papyrus::PreferredPrinter.new do |pf|
     .grid.grid-cols-12.gap-4
-      .col-span-6
+      .col-span-2
         = pf.input :use, collection: Papyrus::Printer::USES, include_blank: false, as: :dropdown, text_method: :first, value_method: :last
+      .col-span-4
+        = pf.association :computer, collection: Papyrus::Computer.all, as: :dropdown, text_method: :name, value_method: :id
       .col-span-6
-        = pf.input :printer_id, selected: pf.object&.printer&.id, collection: Current.user.printers, as: :dropdown
+        = pf.association :printer, collection: Papyrus::PrintersDecorator.new(Papyrus::Printer.all).options_for_select, as: :dropdown, chain_to: "#{pf.object_name}[computer_id]"
 
 - else
   = t('.no_printers_yet_html')

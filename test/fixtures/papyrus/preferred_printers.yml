@@ -2,10 +2,12 @@
 
 one:
   use: document
+  computer: one
   printer: one
   owner: one (User)
 
 two:
   use: document
+  computer: two
   printer: two
   owner: one (User)

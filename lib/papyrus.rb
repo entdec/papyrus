@@ -2,6 +2,7 @@
 
 require 'img2zpl'
 require 'labelary'
+require 'printnode'
 require 'prawn'
 require 'prawn-svg'
 require 'prawn/table'
@@ -51,6 +52,17 @@ module Papyrus
 
     def i18n_store
       @i18n_store ||= Papyrus::I18nStore.new
+    end
+
+    def refresh!
+      Papyrus::UpdatePrintNodeInformationJob.perform_later
+    end
+
+    def print_client
+      return if Papyrus.config.print_client_api_key.blank?
+
+      @auth ||= PrintNode::Auth.new(Papyrus.config.print_client_api_key)
+      @print_client ||= PrintNode::Client.new(@auth)
     end
 
     def generate(event)

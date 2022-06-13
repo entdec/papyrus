@@ -9,9 +9,7 @@
   ],
   "dependencies": {
     "@rails/actioncable": "^6.1.2-1",
-    "@zip.js/zip.js": "2.2.26",
     "element-closest": "^3.0.1",
-    "jsprintmanager": "^4.0.1",
     "semver": "^7.3.4",
     "stimulus": "^2"
   }

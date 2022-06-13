@@ -4,7 +4,8 @@ class PapyrusPrintJobsTable < ActionTable::ActionTable
   model Papyrus::PrintJob
 
   column(:state, &:state)
-  column(:owner, sortable: false) { |row| row.printer.owner.name }
+  column(:owner, sortable: false) { |row| row.paper.owner.name }
+  column(:computer, sort_field: :printer_id) { |row| row.printer.computer.name }
   column(:printer, sort_field: :printer_id) { |row| row.printer.name }
   column(:paper, sortable: false) { |row| row.paper.template&.description }
   column(:created_at) { |paper| ln(paper.created_at) }

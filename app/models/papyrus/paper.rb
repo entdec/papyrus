@@ -8,7 +8,9 @@ module Papyrus
 
     has_one_attached :attachment
 
-    after_commit :print!
+    has_many :print_jobs, class_name: 'PrintJob', dependent: :destroy
+
+    after_create_commit :print!
 
     def print!
       return if owner.blank?
@@ -16,7 +18,7 @@ module Papyrus
       return if Rails.env.test?
 
       print_job = printer.print_jobs.create!(paper: self)
-      print_job.spool!
+      Papyrus::SpoolPrintJob.perform_later(print_job)
       print_job
     end
 
@@ -28,7 +30,9 @@ module Papyrus
     private
 
     def printer
-      owner.preferred_printers.for_use(use).first&.printer
+      scope = owner.preferred_printers
+      scope = scope.where(computer: Papyrus.config.current_computer) if Papyrus.config.current_computer
+      scope.for_use(use).first&.printer
     end
   end
 end
