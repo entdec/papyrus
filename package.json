@@ -11,6 +11,7 @@
     "@rails/actioncable": "^6.1.2-1",
     "element-closest": "^3.0.1",
     "semver": "^7.3.4",
-    "stimulus": "^2"
+    "@hotwired/stimulus": ">2.0",
+    "@hotwired/stimulus-webpack-helpers": "^1.0.1"
   }
 }
