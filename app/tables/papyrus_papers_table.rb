@@ -21,12 +21,12 @@ class PapyrusPapersTable < ActionTable::ActionTable
                      title: t('papyrus.paper_table.preview'), target: '_blank')
       if row.owner
         concat link_to(content_tag(:i, nil, class: 'fal fa-print'), papyrus.print_paper_path(row.id),
-                       title: t('papyrus.paper_table.print'), method: :post)
+                       title: t('papyrus.paper_table.print'), data: { turbo_method: :post })
       end
 
       if row.template&.event.present?
         concat link_to(content_tag(:i, nil, class: 'fal fa-rotate-right'), papyrus.regenerate_paper_path(row),
-                      title: t('papyrus.paper_table.regenerate'), method: 'post')
+                      title: t('papyrus.paper_table.regenerate'), data: { turbo_: 'post' })
       end
     end
   end
