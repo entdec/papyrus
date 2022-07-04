@@ -26,7 +26,7 @@ class PapyrusPapersTable < ActionTable::ActionTable
 
       if row.template&.event.present?
         concat link_to(content_tag(:i, nil, class: 'fal fa-rotate-right'), papyrus.regenerate_paper_path(row),
-                      title: t('papyrus.paper_table.regenerate'), data: { turbo_: 'post' })
+                       title: t('papyrus.paper_table.regenerate'), data: { turbo_method: 'post' })
       end
     end
   end
