@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'prawn', '~> 2.2'
   spec.add_dependency 'prawn-svg', '~> 0.29'
   spec.add_dependency 'prawn-table', '~> 0.2'
-  spec.add_dependency 'rails', '~> 6.0', '>= 6.0.2.1'
+  spec.add_dependency 'rails', '> 6.0'
   spec.add_dependency 'rqrcode', '~> 0.10'
   spec.add_dependency 'servitium', '~> 1.1'
   spec.add_dependency 'state_machines-activemodel', '~> 0.8'
