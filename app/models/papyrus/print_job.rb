@@ -31,7 +31,7 @@ module Papyrus
 
       job = Papyrus.print_client.create_printjob(
         PrintNode::PrintJob.new(printer.client_id,
-                                template.description,
+                                template&.description || "Unknown",
                                 printer_client_content_type,
                                 Base64.encode64(paper.attachment.download),
                                 'Papyrus'),
