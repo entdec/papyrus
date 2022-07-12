@@ -208,7 +208,7 @@ GEM
     globalid (1.0.0)
       activesupport (>= 5.0)
     hashery (2.1.2)
-    i18n (1.10.0)
+    i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     img2zpl (1.0.1)
       mini_magick (~> 4.9)
@@ -394,6 +394,7 @@ DEPENDENCIES
   auxilium (~> 3)!
   decoro (~> 0.1)!
   evento!
+  i18n (< 1.9.0)
   liquor!
   papyrus!
   pdf-inspector (>= 1.2.1, < 2.0.a)
@@ -406,4 +407,4 @@ DEPENDENCIES
   transactio (~> 0.1)!
 
 BUNDLED WITH
-   2.3.16
+   2.3.17

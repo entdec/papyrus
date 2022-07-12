@@ -26,3 +26,4 @@ gem 'transactio', '~> 0.1', entdec: 'transactio'
 gem 'pry'
 gem 'sidekiq'
 gem 'solargraph'
+gem "i18n", "< 1.9.0"
