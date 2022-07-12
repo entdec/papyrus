@@ -48,7 +48,7 @@ module Papyrus
 
     def printer_client_content_type
       case paper.kind
-      when 'liquid'
+      when 'liquid', 'raw'
         'raw_base64'
       when 'pdf'
         'pdf_base64'
