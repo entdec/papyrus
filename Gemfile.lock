@@ -63,7 +63,7 @@ GIT
 PATH
   remote: .
   specs:
-    papyrus (1.2.0)
+    papyrus (1.2.2)
       barby (~> 0.6)
       decoro (~> 0.1)
       evento (~> 0.1)
