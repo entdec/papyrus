@@ -23,8 +23,8 @@ module Papyrus
       computers = Papyrus::Computer.where.not(client_id: Papyrus.print_client.computers.map(&:id))
       printers = Papyrus::Printer.where.not(client_id: Papyrus.print_client.printers.map(&:id))
 
-      Papyrus::PreferredPrinter.where(printer_id: printers.map(&id))
-                               .or(Papyrus::PreferredPrinter.where(computer_id: computers.map(&id))).destroy_all
+      Papyrus::PreferredPrinter.where(printer_id: printers.map(&:id))
+                               .or(Papyrus::PreferredPrinter.where(computer_id: computers.map(&:id))).destroy_all
 
       printers.destroy_all
       computers.destroy_all
