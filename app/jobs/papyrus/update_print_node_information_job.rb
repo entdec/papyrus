@@ -11,8 +11,6 @@ module Papyrus
         computer.save!
       end
 
-      Papyrus::Computer.where.not(client_id: Papyrus.print_client.computers.map(&:id)).destroy_all
-
       Papyrus.print_client.printers.each do |p|
         printer = Papyrus::Printer.find_or_initialize_by(client_id: p.id)
         printer.name = p.description
@@ -22,7 +20,14 @@ module Papyrus
         printer.save!
       end
 
-      Papyrus::Printer.where.not(client_id: Papyrus.print_client.printers.map(&:id)).destroy_all
+      computers = Papyrus::Computer.where.not(client_id: Papyrus.print_client.computers.map(&:id))
+      printers = Papyrus::Printer.where.not(client_id: Papyrus.print_client.printers.map(&:id))
+
+      Papyrus::PreferredPrinter.where(printer_id: printers.map(&id))
+                               .or(Papyrus::PreferredPrinter.where(computer_id: computers.map(&id))).destroy_all
+
+      printers.destroy_all
+      computers.destroy_all
     end
   end
 end
