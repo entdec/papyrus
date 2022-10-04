@@ -11,7 +11,7 @@ module Papyrus
 
     def generate(object, context, params)
       locale = params[:locale] || I18n.locale
-      owner = params[:owner] || params.dig(:options, :owner)
+      owner = params[:owner]
 
       begin
         data = render(context.reject { |h| h == 'pdf' }, locale: locale)
