@@ -47,7 +47,7 @@ module Papyrus
           template = Tilt::PrawnTemplate.new(file_name, (metadata || {}).deep_symbolize_keys) { |_t| data_override }
           template.render(Papyrus::Context.new(self), Shash.new(context.merge(locale: locale)))
         else
-          ::Liquor.render(data,
+          ::Liquidum.render(data,
                           { assigns: context.merge('template' => self, locale: locale),
                             registers: { 'template' => self } })
         end
@@ -59,7 +59,7 @@ module Papyrus
     def applicable?(_object, context, _params)
       return true if condition.blank?
 
-      result = ::Liquor.render(condition,
+      result = ::Liquidum.render(condition,
                                {
                                  assigns: context.reject { |h| h == 'pdf' }.merge('template' => self),
                                  registers: { 'template' => self }

@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'evento', '~> 0.1' # This is our own gem, you must add it to your project's Gemfile for this to work
   spec.add_dependency 'img2zpl'
   spec.add_dependency 'labelary'
-  spec.add_dependency 'liquor'
+  spec.add_dependency 'liquidum'
   spec.add_dependency 'pg'
   spec.add_dependency 'prawn', '~> 2.2'
   spec.add_dependency 'prawn-svg', '~> 0.29'
@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'tilt', '~> 2.0'
   spec.add_dependency 'transactio'
 
-  spec.add_development_dependency 'auxilium', '~> 0.2'
+  spec.add_development_dependency 'auxilium', '~> 3'
   spec.add_development_dependency('pdf-inspector', '>= 1.2.1', '< 2.0.a')
   spec.add_development_dependency 'pry', '~> 0.11'
   spec.add_development_dependency 'rubocop', '~> 0'

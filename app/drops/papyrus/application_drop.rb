@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
 module Papyrus
-  class ApplicationDrop < Liquor::Drop
+  class ApplicationDrop < Liquidum::Drop
   end
 end

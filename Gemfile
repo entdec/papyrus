@@ -15,11 +15,11 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
-gem 'auxilium', '~> 3', entdec: 'auxilium'
+# gem 'auxilium', '~> 3', entdec: 'auxilium'
 gem 'decoro', '~> 0.1', entdec: 'decoro'
 gem 'evento', entdec: 'evento', tag: '0.1.7'
-gem 'liquor', entdec: 'liquor'
-gem 'servitium', '~> 1.1', entdec: 'servitium'
+# gem 'liquidum', entdec: 'liquidum'
+# gem 'servitium', '~> 1.1', entdec: 'servitium'
 gem 'state_machines-activemodel', '~> 0.8'
 gem 'transactio', '~> 0.1', entdec: 'transactio'
 
