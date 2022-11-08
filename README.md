@@ -25,6 +25,8 @@ This is done using Prawn. See here for more info:
 
 ## Installation
 
+Papyrus depends on imagemagic for some operations
+
 Add this line to your application's Gemfile:
 
 ```ruby

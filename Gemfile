@@ -27,3 +27,4 @@ gem 'pry'
 gem 'sidekiq'
 gem 'solargraph'
 gem "i18n", "< 1.9.0"
+gem 'matrix'

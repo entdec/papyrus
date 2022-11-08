@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require 'auxilium'
 require 'img2zpl'
 require 'labelary'
+require 'liquidum'
 require 'printnode'
 require 'prawn'
 require 'prawn-svg'
