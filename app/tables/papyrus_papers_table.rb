@@ -7,7 +7,7 @@ class PapyrusPapersTable < ActionTable::ActionTable
   column(:template, sort_field: :template_id) do |paper|
     paper.template ? link_to(paper.template.description, papyrus.edit_admin_template_path(paper.template)) : ''
   end
-  column(:attachment) do |paper|
+  column(:attachment, sort_field: 'active_storage_blobs.filename ') do |paper|
     link_to(paper.attachment.filename, main_app.rails_blob_path(paper.attachment, disposition: 'attachment'),
             title: paper.attachment.filename)
   rescue StandardError
@@ -42,6 +42,7 @@ class PapyrusPapersTable < ActionTable::ActionTable
       @scope = @scope.where(papyrable_type: params[:papyrable_type],
                             papyrable_id: params[:papyrable_id])
     end
+    @scope = @scope.joins(attachment_attachment: :blob) if params[:order_field_name] = 'attachment'
     @scope
   end
 end
