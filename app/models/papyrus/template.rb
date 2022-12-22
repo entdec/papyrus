@@ -19,7 +19,7 @@ module Papyrus
         data = if paper_kind == 'pdf'
                  render({}, locale: locale, data_override: %(pdf.text "#{e.message.dup}"))
                else
-                 StringIO.new e.message.dup
+                 StringIO.new e.message.dup + "\n" + e.backtrace.join("\n")
                end
       end
 
@@ -48,8 +48,8 @@ module Papyrus
           template.render(Papyrus::Context.new(self), Shash.new(context.merge(locale: locale)))
         else
           ::Liquidum.render(data,
-                          { assigns: context.merge('template' => self, locale: locale),
-                            registers: { 'template' => self } })
+                            { assigns: context.merge('template' => self, locale: locale),
+                              registers: { 'template' => self } })
         end
       end
 
@@ -60,10 +60,10 @@ module Papyrus
       return true if condition.blank?
 
       result = ::Liquidum.render(condition,
-                               {
-                                 assigns: context.reject { |h| h == 'pdf' }.merge('template' => self),
-                                 registers: { 'template' => self }
-                               })
+                                 {
+                                   assigns: context.reject { |h| h == 'pdf' }.merge('template' => self),
+                                   registers: { 'template' => self }
+                                 })
 
       return true if result.chomp.blank?
 
