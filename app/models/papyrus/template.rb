@@ -17,7 +17,7 @@ module Papyrus
         data = render(context.reject { |h| h == 'pdf' }, locale: locale)
       rescue StandardError => e
         data = if paper_kind == 'pdf'
-                 render({}, locale: locale, data_override: %(pdf.text "#{e.message.dup}"))
+                 render({}, locale: locale, data_override: %(pdf.text "#{e.message.dup}\n#{e.backtrace.join("\n")}"))
                else
                  StringIO.new e.message.dup + "\n" + e.backtrace.join("\n")
                end
