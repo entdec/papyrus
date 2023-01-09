@@ -13,8 +13,6 @@ class PapyrusTemplatesTable < ActionTable::ActionTable
   column(:metadata) { |template| Papyrus.config.metadata_humanize(template.metadata) }
   column(:created_at) { |paper| ln(paper.created_at) }
 
-  table_views(to_s.underscore)
-
   initial_order :description, :asc
 
   row_link { |template| papyrus.edit_admin_template_path(template) }

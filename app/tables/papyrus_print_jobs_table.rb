@@ -17,8 +17,6 @@ class PapyrusPrintJobsTable < ActionTable::ActionTable
     end
   end
 
-  table_views(to_s.underscore)
-
   initial_order :created_at, :desc
 
   # row_link { |paper| papyrus.edit_admin_template_path(paper.template) }
