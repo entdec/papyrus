@@ -39,6 +39,10 @@ class PapyrusPapersTable < ActionTable::ActionTable
     @scope = Papyrus::Paper.all
 
     if params[:papyrable_id] && params[:papyrable_type]
+      ActiveSupport::Deprecation.warn(
+        'Calling papyrus papers table with papyrable_type and papyrable_id is deprecated. ' \
+        'Use papyrable instead.'
+      )
       @scope = @scope.where(papyrable_type: params[:papyrable_type],
                             papyrable_id: params[:papyrable_id])
     elsif params[:papyrable]
