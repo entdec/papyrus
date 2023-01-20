@@ -41,6 +41,8 @@ class PapyrusPapersTable < ActionTable::ActionTable
     if params[:papyrable_id] && params[:papyrable_type]
       @scope = @scope.where(papyrable_type: params[:papyrable_type],
                             papyrable_id: params[:papyrable_id])
+    elsif params[:papyrable]
+      @scope = @scope.where(papyrable: params[:papyrable])
     end
     @scope = @scope.joins(attachment_attachment: :blob) if params[:order_field_name] = 'attachment'
     @scope
