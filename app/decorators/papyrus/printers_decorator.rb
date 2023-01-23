@@ -3,7 +3,10 @@
 module Papyrus
   class PrintersDecorator < ApplicationDecorator
     def options_for_select
-      model.map { |p| [p.name, p.id, { "data-chain": p.computer.id }] }
+      model.map do |p|
+        name = p.description.present? && p.name.downcase != p.description.downcase ? "#{p.name} - #{p.description}" : p.name
+        [name, p.id, { "data-chain": p.computer.id }]
+      end
     end
   end
 end
