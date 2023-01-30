@@ -7,6 +7,7 @@ class PapyrusTemplatesTable < ActionTable::ActionTable
   column(:enabled, as: :boolean)
   column(:klass)
   column(:event)
+  column(:papers_count, sort_field: 'papers_count') { |template| link_to template.papers_count, papyrus.root_path(template_id: template.id) }
   column(:kind)
   column(:use)
   column(:copies)
@@ -21,5 +22,6 @@ class PapyrusTemplatesTable < ActionTable::ActionTable
 
   def scope
     @scope = Papyrus::Template.visible
+    @scope = @scope.select('papyrus_templates.*, (select count(id) from papyrus_papers where papyrus_papers.template_id = papyrus_templates.id) as papers_count')
   end
 end

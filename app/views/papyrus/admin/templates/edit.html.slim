@@ -77,3 +77,5 @@
           .grid.grid-cols-12.gap-4
             .col-span-12
               = f.input :metadata, as: :editor, input_html: { value: YAML.dump(f.object.metadata) }, mode: 'application/yaml'
+        - t.tab :papers, badge: @template.papers.size
+          = sts.table(:papyrus_papers, parameters: { template_id: @template.id })
