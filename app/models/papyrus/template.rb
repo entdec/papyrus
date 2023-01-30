@@ -65,9 +65,9 @@ module Papyrus
                                    registers: { 'template' => self }
                                  })
 
-      return true if result.chomp.blank?
+      return true if result.strip.blank?
 
-      !ActiveModel::Type::Boolean::FALSE_VALUES.include? result.chomp
+      !ActiveModel::Type::Boolean::FALSE_VALUES.include? result.strip
     end
 
     def file_name
