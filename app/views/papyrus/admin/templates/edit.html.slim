@@ -10,70 +10,71 @@
           =  link_to "Preview", paper_template_url(@template), class: 'button', "target": "blank", 'data-turbo' => false
 
 
-      = sts.tabs do |t|
-        - t.tab :basics
-          .grid.grid-cols-12.gap-4 data-controller="toggle"
-            .col-span-12
-              = f.input :enabled, as: :switch
-            .col-span-12
-              - Papyrus.metadata_definitions.each do |field, definition|
-                = f.fields_for :metadata, OpenStruct.new(@template.metadata) do |fff|
-                  .grid.grid-cols-12.gap-4
-                    .col-span-12
-                      - if definition[:collection]
-                        = fff.input field, as: :select, label: definition[:name], collection: definition[:collection].call, include_blank: true, required: false
-                      - else
-                        =  fff.input field, label: definition[:name], required: false
+      
+      - card.tab :basics, padding: true
+        .grid.grid-cols-12.gap-4 data-controller="toggle"
+          .col-span-12
+            = f.input :enabled, as: :switch
+          .col-span-12
+            - Papyrus.metadata_definitions.each do |field, definition|
+              = f.fields_for :metadata, OpenStruct.new(@template.metadata) do |fff|
+                .grid.grid-cols-12.gap-4
+                  .col-span-12
+                    - if definition[:collection]
+                      = fff.input field, as: :select, label: definition[:name], collection: definition[:collection].call, include_blank: true, required: false
+                    - else
+                      =  fff.input field, label: definition[:name], required: false
 
-            .col-span-6
-              = f.input :description
-            .col-span-6
-              = f.input :purpose
-            .col-span-4
-              = f.input :kind, collection: Papyrus::Template::KINDS, include_blank: false, input_html: { data: { 'toggle-target' => 'input' } }
-            .col-span-4
-              = f.input :use, collection: Papyrus::Printer::USES, include_blank: false
-            .col-span-4
-              = f.input :copies
+          .col-span-6
+            = f.input :description
+          .col-span-6
+            = f.input :purpose
+          .col-span-4
+            = f.input :kind, collection: Papyrus::Template::KINDS, include_blank: false, input_html: { data: { 'toggle-target' => 'input' } }
+          .col-span-4
+            = f.input :use, collection: Papyrus::Printer::USES, include_blank: false
+          .col-span-4
+            = f.input :copies
 
-            .col-span-12 data-controller="toggle"
-              .grid.grid-cols-12.gap-4
+          .col-span-12 data-controller="toggle"
+            .grid.grid-cols-12.gap-4
 
-                .col-span-6
-                  = f.input :klass, collection: Papyrus.config.papyrable_class_names.sort, selected: @template.klass, include_blank: false, input_html: { data: { 'toggle-target' => 'input' } }
-                .col-span-6 data-toggle-target='insertion'
-                template data-toggle-target='toggleable' data-toggle-not-value='Custom'
-                  = f.input :event, collection: template.all_events, include_blank: false, chain_to: "#{f.object_name}[klass]", as: :dropdown
-                template data-toggle-target='toggleable' data-toggle-value='Custom'
-                  = f.input :event, input_html: { placeholder: 'scope#event'}
+              .col-span-6
+                = f.input :klass, collection: Papyrus.config.papyrable_class_names.sort, selected: @template.klass, include_blank: false, input_html: { data: { 'toggle-target' => 'input' } }
+              .col-span-6 data-toggle-target='insertion'
+              template data-toggle-target='toggleable' data-toggle-not-value='Custom'
+                = f.input :event, collection: template.all_events, include_blank: false, chain_to: "#{f.object_name}[klass]", as: :dropdown
+              template data-toggle-target='toggleable' data-toggle-value='Custom'
+                = f.input :event, input_html: { placeholder: 'scope#event'}
 
-            .col-span-12
-              = f.input :condition, as: :editor, mode: 'text/plain', height: '100px'
-              small.form-text.text-muted When condition returns '"false", "FALSE", "f" , "F", "0", "off" or "OFF"' (without quotes), the template will not be considered.
-              br
-              small.form-text.text-muted When condition is blank or returns any other value will result in the template being considered. Liquid can be used in condition.
+          .col-span-12
+            = f.input :condition, as: :editor, mode: 'text/plain', height: '100px'
+            small.form-text.text-muted When condition returns '"false", "FALSE", "f" , "F", "0", "off" or "OFF"' (without quotes), the template will not be considered.
+            br
+            small.form-text.text-muted When condition is blank or returns any other value will result in the template being considered. Liquid can be used in condition.
 
-            .col-span-12 data-toggle-target="insertion"
-            template data-toggle-target="toggleable" data-toggle-value="pdf"
-              = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
-            template data-toggle-target="toggleable" data-toggle-value="liquid"
-              = f.input :data, as: :editor, mode: 'text/plain', height: '600px'
+          .col-span-12 data-toggle-target="insertion"
+          template data-toggle-target="toggleable" data-toggle-value="pdf"
+            = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
+          template data-toggle-target="toggleable" data-toggle-value="liquid"
+            = f.input :data, as: :editor, mode: 'text/plain', height: '600px'
 
 
-        - t.tab :media
-          .grid.grid-cols-12.gap-4
-            .col-span-12
-              - if @template.persisted?
-                = render partial: 'papyrus/admin/templates/attachments/index', locals: { attachments: @template.attachments, upload_url: admin_template_attachments_path(@template) }
-                .warning WARNING: Large images( >1000px wide) or SVG's will cause a SIGNIFICANT slowdown (seconds)
-              - else
-                .warning You can add media once the template is saved
+      - card.tab :media, padding: true
+        .grid.grid-cols-12.gap-4
+          .col-span-12
+            - if @template.persisted?
+              = render partial: 'papyrus/admin/templates/attachments/index', locals: { attachments: @template.attachments, upload_url: admin_template_attachments_path(@template) }
+              .warning WARNING: Large images( >1000px wide) or SVG's will cause a SIGNIFICANT slowdown (seconds)
+            - else
+              .warning You can add media once the template is saved
 
-        - t.tab :example_data
-          .grid.grid-cols-12.gap-4
-            .col-span-12
-              = f.input :example_data, as: :editor, input_html: { value: JSON.pretty_generate(f.object.example_data) }, mode: 'application/json', height: '600px'
-        - t.tab :metadata
-          .grid.grid-cols-12.gap-4
-            .col-span-12
-              = f.input :metadata, as: :editor, input_html: { value: YAML.dump(f.object.metadata) }, mode: 'application/yaml'
+      - card.tab :example_data, padding: true
+        .grid.grid-cols-12.gap-4
+          .col-span-12
+            = f.input :example_data, as: :editor, input_html: { value: JSON.pretty_generate(f.object.example_data) }, mode: 'application/json', height: '600px'
+      - card.tab :metadata, padding: true
+        .grid.grid-cols-12.gap-4
+          .col-span-12
+            = f.input :metadata, as: :editor, input_html: { value: YAML.dump(f.object.metadata) }, mode: 'application/yaml'
+      = card.table(:papyrus_papers, parameters: {template_id: @template.id}, custom_views: false, tab: :papers)
