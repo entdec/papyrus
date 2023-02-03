@@ -10,7 +10,7 @@ module Papyrus
         computer.state = c.state
         computer.save!
 
-        Papyrus.print_client.printers(p.computer.id, '').each do |p|
+        Papyrus.print_client.printers(c.id, '').each do |p|
           printer = Papyrus::Printer.find_or_initialize_by(client_id: p.id)
           printer.name = p.description
           printer.state = p.state
