@@ -9,15 +9,15 @@ module Papyrus
         computer.hostname = c.hostname
         computer.state = c.state
         computer.save!
-      end
 
-      Papyrus.print_client.printers.each do |p|
-        printer = Papyrus::Printer.find_or_initialize_by(client_id: p.id)
-        printer.name = p.description
-        printer.state = p.state
-        printer.computer = Papyrus::Computer.find_by(client_id: p.computer.id)
+        Papyrus.print_client.printers(p.computer.id, '').each do |p|
+          printer = Papyrus::Printer.find_or_initialize_by(client_id: p.id)
+          printer.name = p.description
+          printer.state = p.state
+          printer.computer = computer
 
-        printer.save!
+          printer.save!
+        end
       end
 
       computers = Papyrus::Computer.where.not(client_id: Papyrus.print_client.computers.map(&:id))
