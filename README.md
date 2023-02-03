@@ -13,7 +13,12 @@ config.default_params = lambda { |transaction_log_entry|
 }
 ```
 
-Install the Print Client app: https://www.neodynamic.com/downloads/jspm/
+Install the PrintNode app: https://www.printnode.com/en
+
+Print anything this way
+```ruby
+`Papyrus::Paper.new(kind: 'pdf', use: 'document', purpose: 'packlist', owner: User.first, papyrable: Shipment.first, attachment: {io: StringIO.new("test"), filename: 'test.pdf'}).print!`
+```
 
 ## PDF Generation
 
