@@ -3,12 +3,16 @@ module Papyrus
     def perform
       return unless Papyrus.print_client
 
+      computers = []
+      printers = []
       Papyrus.print_client.computers.each do |c|
         computer = Papyrus::Computer.find_or_initialize_by(client_id: c.id)
         computer.name = c.name
         computer.hostname = c.hostname
         computer.state = c.state
         computer.save!
+
+        computers << c.id
 
         Papyrus.print_client.printers(c.id, '').each do |p|
           printer = Papyrus::Printer.find_or_initialize_by(client_id: p.id)
@@ -17,11 +21,10 @@ module Papyrus
           printer.computer = computer
 
           printer.save!
+
+          printers << p.id
         end
       end
-
-      computers = Papyrus::Computer.where.not(client_id: Papyrus.print_client.computers.map(&:id))
-      printers = Papyrus::Printer.where.not(client_id: Papyrus.print_client.printers.map(&:id))
 
       Papyrus::PreferredPrinter.where(printer_id: printers.map(&:id))
                                .or(Papyrus::PreferredPrinter.where(computer_id: computers.map(&:id))).destroy_all
