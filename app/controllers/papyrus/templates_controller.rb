@@ -19,7 +19,7 @@ module Papyrus
 
       _paper, data = template.generate(nil, ctx.reject { |h| h == 'pdf' }, locale: locale)
 
-      send_data data.read, type: 'application/pdf', disposition: 'inline', filename: template.file_name
+      send_data data.read, type: 'application/pdf', disposition: 'inline', filename: template.file_name(ctx)
     end
   end
 end

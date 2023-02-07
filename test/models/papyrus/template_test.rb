@@ -55,5 +55,19 @@ module Papyrus
       assert_equal 'PDF Label with condition', item.papers.first.template.description
     end
 
+    test 'generates default file name if template is not present' do
+      template = papyrus_templates(:pdf)
+      file_name = template.file_name({ 'item' => { 'name' => 'shipment' } })
+
+      assert_equal file_name, 'invoice.pdf'
+    end
+
+    test 'generates file name from template if present' do
+      template = papyrus_templates(:pdf_for_file_name)
+      file_name = template.file_name({ 'item' => { 'name' => 'shipment' } })
+
+      assert_equal file_name, 'test_doc_shipment.pdf'
+    end
+
   end
 end
