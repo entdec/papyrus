@@ -31,7 +31,7 @@ module Papyrus
                         purpose: purpose)
 
       paper.attachment.attach(io: data,
-                              filename: file_name,
+                              filename: file_name(context),
                               content_type: (kind == 'pdf' ? 'application/pdf' : 'application/octet-stream'),
                               identify: false)
 
@@ -44,7 +44,7 @@ module Papyrus
     def render(context, locale: I18n.locale, data_override: data)
       result = I18n.with_locale(locale) do
         if kind == 'pdf'
-          template = Tilt::PrawnTemplate.new(file_name, (metadata || {}).deep_symbolize_keys) { |_t| data_override }
+          template = Tilt::PrawnTemplate.new(file_name(context), (metadata || {}).deep_symbolize_keys) { |_t| data_override }
           template.render(Papyrus::Context.new(self), Shash.new(context.merge(locale: locale)))
         else
           ::Liquidum.render(data,
@@ -70,8 +70,12 @@ module Papyrus
       !ActiveModel::Type::Boolean::FALSE_VALUES.include? result.strip
     end
 
-    def file_name
+    def file_name(context)
+      if file_name_template.present?
+        "#{Liquidum.render(file_name_template, assigns: context)}.#{kind == 'pdf' ? 'pdf' : 'bin'}"
+      else
       "#{description.gsub(/[^a-zA-Z0-9]/, '_').downcase}.#{kind == 'pdf' ? 'pdf' : 'bin'}"
+      end
     end
 
     def translation_scope

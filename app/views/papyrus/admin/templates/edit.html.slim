@@ -53,6 +53,9 @@
             br
             small.form-text.text-muted When condition is blank or returns any other value will result in the template being considered. Liquid can be used in condition.
 
+          .col-span-12
+            = f.input :file_name_template, as: :editor, mode: 'text/plain', height: '100px'
+
           .col-span-12 data-toggle-target="insertion"
           template data-toggle-target="toggleable" data-toggle-value="pdf"
             = f.input :data, as: :editor, mode: 'text/x-ruby', height: '600px'
