@@ -2,7 +2,5 @@
   .col-span-3.sm:col-span-3
 
     = sts.card title: "Papers", icon: 'fad fa-scroll' do |card|
-      - card.tab :papers
-        = sts.table(:papyrus_papers)
-      - card.tab :print_jobs
-        = sts.table(:papyrus_print_jobs)
+      = card.table(:papyrus_papers, custom_views: false, tab: :papers)
+      = card.table(:papyrus_print_jobs, custom_views: false, tab: :print_jobs)
