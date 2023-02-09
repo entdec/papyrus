@@ -25,7 +25,7 @@ module Papyrus
 
       # FIXME: This breaks at more than one template ...
       papers.each do |paper, data|
-        send_data data.read, type: 'application/pdf', disposition: 'inline', filename: paper.template.file_name
+        send_data data.read, type: 'application/pdf', disposition: 'inline', filename: paper.template.file_name(params[:context])
       end
     end
   end

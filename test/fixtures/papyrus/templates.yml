@@ -7,6 +7,16 @@ pdf:
     pdf.text 'Commercial Invoice', size: 24
     pdf.text item.name
 
+pdf_for_file_name:
+  enabled: true
+  kind: pdf
+  description: Invoice
+  use: document
+  file_name_template: test_doc_{{item.name}}
+  data: |
+    pdf.text 'Commercial Invoice', size: 24
+    pdf.text item.name
+
 pdf_for_items:
   enabled: true
   kind: pdf
