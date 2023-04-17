@@ -12,7 +12,7 @@ class PapyrusTemplatesTable < ActionTable::ActionTable
   column(:use)
   column(:copies)
   column(:metadata) { |template| Papyrus.config.metadata_humanize(template.metadata) }
-  column(:created_at) { |paper| ln(paper.created_at) }
+  column(:created_at, html_value: proc { |paper| ln(paper.created_at) })
 
   initial_order :description, :asc
 

@@ -8,7 +8,7 @@ class PapyrusPrintJobsTable < ActionTable::ActionTable
   column(:computer, sort_field: :printer_id) { |row| row.printer.computer.name }
   column(:printer, sort_field: :printer_id) { |row| row.printer.name }
   column(:paper, sortable: false) { |row| row.paper.template&.description }
-  column(:created_at) { |paper| ln(paper.created_at) }
+  column(:created_at)
 
   column :actions, sortable: false do |row|
     content_tag(:span) do
