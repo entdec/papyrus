@@ -48,7 +48,7 @@ class PapyrusPapersTable < ActionTable::ActionTable
     elsif params[:papyrable]
       @scope = @scope.where(papyrable: params[:papyrable])
     end
-    @scope = @scope.left_outer_joins(attachment_attachment: :blob)
+    @scope = @scope.left_outer_joins(attachment_attachment: :blob) if params[:order_field_name] == 'attachment'
     @scope = @scope.where(template_id: params[:template_id]) if params[:template_id].present?
     @scope
   end

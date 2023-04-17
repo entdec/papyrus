@@ -17,7 +17,13 @@ Install the PrintNode app: https://www.printnode.com/en
 
 Print anything this way
 ```ruby
-`Papyrus::Paper.new(kind: 'pdf', use: 'document', purpose: 'packlist', owner: User.first, papyrable: Shipment.first, attachment: {io: StringIO.new("test"), filename: 'test.pdf'}).print!`
+`Papyrus::Paper.new(kind: 'pdf', use: 'document', purpose: 'packlist', owner: User.first, attachment: {io: StringIO.new("test"), filename: 'test.pdf'}).print!`
+```
+
+or, for ZPL labels for example:
+
+```ruby
+Papyrus::Paper.new(kind: 'liquid', use: 'label', purpose: 'whatever', owner: User.first, attachment: {io: StringIO.new("^XA^BY5,2,270^FO100,50^BC^FD12345678^FS^XZ"), filename: 'test.zpl'}).print!
 ```
 
 ## PDF Generation
