@@ -86,7 +86,6 @@ module Papyrus
     deprecate with: 'please use event instead', deprecator: Papyrus::Deprecator.new
 
     def event(event, obj, params = {})
-      puts "EVENT: #{event} - #{Process.ppid} / #{Process.pid}"
       return unless event
       return unless obj.papyrable?
       return unless papers?(obj, event)
