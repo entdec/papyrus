@@ -29,17 +29,21 @@ module Papyrus
 
       started!
 
-      job = Papyrus.print_client.create_printjob(
-        PrintNode::PrintJob.new(printer.client_id,
-                                template&.description || "Unknown",
-                                printer_client_content_type,
-                                Base64.encode64(paper.attachment.download),
-                                'Papyrus'),
-        {
-          qty: template&.copies || 1
-        }
-      )
-      info = Papyrus.print_client.printjobs(job)
+      job = Papyrus::PrintNodeUtils.retry_on_rate_limit do
+        Papyrus.print_client.create_printjob(
+          PrintNode::PrintJob.new(printer.client_id,
+                                  template&.description || "Unknown",
+                                  printer_client_content_type,
+                                  Base64.encode64(paper.attachment.download),
+                                  'Papyrus'),
+          {
+            qty: template&.copies || 1
+          }
+        )
+      end
+      info = Papyrus::PrintNodeUtils.retry_on_rate_limit do
+        Papyrus.print_client.printjobs(job)
+      end
 
       finished! if info.first.state == 'queued'
     end

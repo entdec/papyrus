@@ -10,7 +10,7 @@ module Papyrus
 
     has_many :print_jobs, class_name: 'PrintJob', dependent: :destroy
 
-    after_create_commit :print!
+    after_create_commit :print!, if: -> { !consolidated? }
 
     def print!
       return if owner.blank?
@@ -25,6 +25,14 @@ module Papyrus
     def attachment_path
       Rails.application.routes.url_helpers.rails_blob_path(attachment, disposition: 'attachment',
                                                                        only_path: true)
+    end
+
+    def consolidated?
+      consolidation_id.present?
+    end
+
+    def printer_client_id
+      printer&.client_id
     end
 
     private

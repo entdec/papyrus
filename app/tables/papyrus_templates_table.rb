@@ -4,7 +4,7 @@ class PapyrusTemplatesTable < ActionTable::ActionTable
   model Papyrus::Template
 
   column(:description)
-  column(:enabled, as: :boolean)
+  column(:enabled)
   column(:klass)
   column(:event)
   column(:papers_count, sort_field: 'papers_count') { |template| link_to template.papers_count, papyrus.root_path(template_id: template.id) }
@@ -12,7 +12,7 @@ class PapyrusTemplatesTable < ActionTable::ActionTable
   column(:use)
   column(:copies)
   column(:metadata) { |template| Papyrus.config.metadata_humanize(template.metadata) }
-  column(:created_at, html_value: proc { |paper| ln(paper.created_at) })
+  column(:created_at)
 
   initial_order :description, :asc
 

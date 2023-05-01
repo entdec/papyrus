@@ -40,9 +40,12 @@ require 'papyrus/engine'
 require 'papyrus/i18n_store'
 require 'papyrus/prawn_extensions'
 require 'papyrus/shash'
+require 'papyrus/print_node_utils'
 
 module Papyrus
   class Error < StandardError; end
+
+  @@consolidation_id = nil
 
   class << self
     attr_reader :config
@@ -83,11 +86,16 @@ module Papyrus
     deprecate with: 'please use event instead', deprecator: Papyrus::Deprecator.new
 
     def event(event, obj, params = {})
+      puts "EVENT: #{event} - #{Process.ppid} / #{Process.pid}"
       return unless event
       return unless obj.papyrable?
       return unless papers?(obj, event)
 
       options = params[:options] || {}
+
+      if @@consolidation_id.present?
+        params[:consolidation_id] = @@consolidation_id
+      end
 
       if options[:perform_now] == true
         Papyrus::GenerateJob.perform_now(obj, event.to_s, params)
@@ -106,12 +114,54 @@ module Papyrus
       config.metadata_fields
     end
 
+    def start_consolidation(consolidation_id)
+      end_current_consolidation
+
+      consolidation_id = consolidation_id&.to_s || SecureRandom.uuid
+
+      if consolidation_id.blank?
+        consolidation_id = nil
+        Praesens.store.delete :papyrus_consolidation_id
+      else
+        Praesens.store[:papyrus_consolidation_id] = consolidation_id
+      end
+      puts "CONSOLIDATE: #{consolidation_id} - #{Process.ppid} / #{Process.pid}"
+
+      @@consolidation_id = consolidation_id
+    end
+
+    def end_consolidation
+      return if @@consolidation_id.nil?
+
+      end_current_consolidation if Praesens.store[:papyrus_consolidation_id] == @@consolidation_id
+
+      Praesens.store.delete :papyrus_consolidation_id
+    end
+
+
+    def consolidate(consolidation_id = nil, &block)
+      return if block.nil?
+
+      Papyrus::ConsolidationJob.perform_later(consolidation_id, block)
+    end
+
     def papers?(obj, event)
       Papyrus::Template.where(klass: Papyrus::BaseGenerator.class_names_for(obj),
                               event: Papyrus::BaseGenerator.event_name_for(
                                 obj, event
                               )).where(enabled: true).count.positive?
     end
+
+    private
+
+    def end_current_consolidation
+      return if @@consolidation_id.nil?
+
+      consolidation_id = @@consolidation_id
+      @@consolidation_id = nil
+      Papyrus::ConsolidationSpoolJob.perform_later(consolidation_id)
+    end
+
   end
 
   # Include helpers

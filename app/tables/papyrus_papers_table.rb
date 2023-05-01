@@ -13,7 +13,7 @@ class PapyrusPapersTable < ActionTable::ActionTable
   rescue StandardError
     $!.message
   end
-  column(:created_at, html_value: proc { |paper| ln(paper.created_at) })
+  column(:created_at)
 
   column :actions, sortable: false do |row|
     content_tag(:span) do
