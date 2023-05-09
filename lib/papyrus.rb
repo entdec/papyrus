@@ -45,8 +45,6 @@ require 'papyrus/print_node_utils'
 module Papyrus
   class Error < StandardError; end
 
-  @@consolidation_id = nil
-
   class << self
     attr_reader :config
 
@@ -92,8 +90,8 @@ module Papyrus
 
       options = params[:options] || {}
 
-      if @@consolidation_id.present?
-        params[:consolidation_id] = @@consolidation_id
+      if consolidation_id.present?
+        params[:consolidation_id] = consolidation_id
       end
 
       if options[:perform_now] == true
@@ -113,35 +111,18 @@ module Papyrus
       config.metadata_fields
     end
 
-    def start_consolidation(consolidation_id)
-      end_current_consolidation
+    def start_consolidation(consolidation_id = SecureRandom.uuid)
+      return if Thread.current[:papyrus_consolidation_id].present?
 
-      consolidation_id = consolidation_id&.to_s || SecureRandom.uuid
+      consolidation_id = SecureRandom.uuid if consolidation_id.blank?
 
-      if consolidation_id.blank?
-        consolidation_id = nil
-        Praesens.store.delete :papyrus_consolidation_id
-      else
-        Praesens.store[:papyrus_consolidation_id] = consolidation_id
-      end
-      puts "CONSOLIDATE: #{consolidation_id} - #{Process.ppid} / #{Process.pid}"
-
-      @@consolidation_id = consolidation_id
+      Thread.current[:papyrus_consolidation_id] = consolidation_id unless consolidation_id.blank?
     end
 
     def end_consolidation
-      return if @@consolidation_id.nil?
+      return if Thread.current[:papyrus_consolidation_id].blank?
 
-      end_current_consolidation if Praesens.store[:papyrus_consolidation_id] == @@consolidation_id
-
-      Praesens.store.delete :papyrus_consolidation_id
-    end
-
-
-    def consolidate(consolidation_id = nil, &block)
-      return if block.nil?
-
-      Papyrus::ConsolidationJob.perform_later(consolidation_id, block)
+      Papyrus::ConsolidationSpoolJob.perform_later(Thread.current[:papyrus_consolidation_id])
     end
 
     def papers?(obj, event)
@@ -151,16 +132,13 @@ module Papyrus
                               )).where(enabled: true).count.positive?
     end
 
-    private
-
-    def end_current_consolidation
-      return if @@consolidation_id.nil?
-
-      consolidation_id = @@consolidation_id
-      @@consolidation_id = nil
-      Papyrus::ConsolidationSpoolJob.perform_later(consolidation_id)
+    def consolidate?
+      Thread.current[:papyrus_consolidation_id].present?
     end
 
+    def consolidation_id
+      Thread.current[:papyrus_consolidation_id]
+    end
   end
 
   # Include helpers
