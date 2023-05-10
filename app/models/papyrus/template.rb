@@ -12,6 +12,7 @@ module Papyrus
     def generate(object, context, params)
       locale = params[:locale] || I18n.locale
       owner = params[:owner]
+      consolidation_id = params[:consolidation_id]
 
       begin
         data = render(context.reject { |h| h == 'pdf' }, locale: locale)
@@ -28,8 +29,8 @@ module Papyrus
                         papyrable: object.is_a?(Hash) ? nil : object,
                         owner: owner,
                         use: use,
-                        purpose: purpose)
-
+                        purpose: purpose,
+                        consolidation_id: consolidation_id)
       paper.attachment.attach(io: data,
                               filename: file_name(context),
                               content_type: (kind == 'pdf' ? 'application/pdf' : 'application/octet-stream'),

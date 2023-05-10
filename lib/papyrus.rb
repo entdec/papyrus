@@ -40,6 +40,7 @@ require 'papyrus/engine'
 require 'papyrus/i18n_store'
 require 'papyrus/prawn_extensions'
 require 'papyrus/shash'
+require 'papyrus/print_node_utils'
 
 module Papyrus
   class Error < StandardError; end
@@ -89,6 +90,10 @@ module Papyrus
 
       options = params[:options] || {}
 
+      if consolidation_id.present?
+        params[:consolidation_id] = consolidation_id
+      end
+
       if options[:perform_now] == true
         Papyrus::GenerateJob.perform_now(obj, event.to_s, params)
       else
@@ -106,11 +111,33 @@ module Papyrus
       config.metadata_fields
     end
 
+    def start_consolidation(consolidation_id = SecureRandom.uuid)
+      return if Thread.current[:papyrus_consolidation_id].present?
+
+      consolidation_id = SecureRandom.uuid if consolidation_id.blank?
+
+      Thread.current[:papyrus_consolidation_id] = consolidation_id unless consolidation_id.blank?
+    end
+
+    def end_consolidation
+      return if Thread.current[:papyrus_consolidation_id].blank?
+
+      Papyrus::ConsolidationSpoolJob.perform_later(Thread.current[:papyrus_consolidation_id])
+    end
+
     def papers?(obj, event)
       Papyrus::Template.where(klass: Papyrus::BaseGenerator.class_names_for(obj),
                               event: Papyrus::BaseGenerator.event_name_for(
                                 obj, event
                               )).where(enabled: true).count.positive?
+    end
+
+    def consolidate?
+      Thread.current[:papyrus_consolidation_id].present?
+    end
+
+    def consolidation_id
+      Thread.current[:papyrus_consolidation_id]
     end
   end
 
