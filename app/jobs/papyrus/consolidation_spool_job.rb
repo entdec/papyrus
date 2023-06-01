@@ -1,8 +1,12 @@
 module Papyrus
   class ConsolidationSpoolJob < ApplicationJob
 
+    # Max request size PrintNode accepts
     MAX_OUTPUT_SIZE = 50.megabytes
-    MAX_RAW_OUTPUT_SIZE = MAX_OUTPUT_SIZE * 0.75 - 2
+
+    # Content gets encoded to Base64 so we expect a maximum of 33% increase of size
+    # -1 mb just to make sure.
+    MAX_RAW_OUTPUT_SIZE = (MAX_OUTPUT_SIZE / 1.33) - 1.megabytes
 
     def perform(consolidation_id)
       return if consolidation_id.nil?
@@ -11,7 +15,7 @@ module Papyrus
       papers = papers.group_by(&:printer_client_id).transform_values { |g| g.group_by(&:kind) }
 
       papers.each do |printer_client_id, printer_papers|
-        # next if printer_client_id.nil?
+        next if printer_client_id.nil?
 
         printer_papers.each do |kind, kind_papers|
           case kind
@@ -146,8 +150,10 @@ module Papyrus
       yield combined_pdf.to_pdf
     end
 
+    # Copying PDF pages will not copy the content of the pages, but only
+    # references to the content.
     def estimate_copy_size(pdf)
-      # 128 bytes should be more then enough space to contain references
+      # 128 bytes should be enough space to contain references.
       pdf.pages.sum { |page| pdf.send(:object_to_pdf, page).bytesize + 128 }
     end
 

@@ -42,6 +42,7 @@ require 'papyrus/prawn_extensions'
 require 'papyrus/shash'
 require 'papyrus/print_node_utils'
 require 'papyrus/consolidation_callback'
+require 'papyrus/consolidation'
 
 module Papyrus
   class Error < StandardError; end
@@ -167,17 +168,19 @@ module Papyrus
       result
     end
 
-    # Ends consolidation and schedules a spool job to send the
+    # Ends consolidation and schedules a spool job by default to send the
     # consolidated papers to PrintNode.
     #
     # This will only execute if the current thread started the consolidation.
-    def end_consolidation
+    #
+    # @param [Boolean] spool Defaults to true. If set to false, the spool job will not be scheduled.
+    def end_consolidation(spool: true)
       if Papyrus.consolidation_root_thread?
         handlers = {
           after_commit: proc do
             consolidation_id = Papyrus.consolidation_id
             Papyrus.remove_thread_variables(:consolidation_id, :consolidation_root_thread)
-            Papyrus::ConsolidationSpoolJob.perform_later(consolidation_id)
+            Papyrus::ConsolidationSpoolJob.perform_later(consolidation_id) if spool
           end
         }
         ActiveRecord::Base.connection.add_transaction_record(Papyrus::ConsolidationCallback.new(handlers))
