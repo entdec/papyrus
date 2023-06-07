@@ -43,22 +43,25 @@ module Papyrus
 
     #
     # This module can be included in any Servitium::Service in order to
-    # automatically start consolidation when the service is initialized and
-    # end consolidation when the service is committed or fails.
+    # automatically start consolidation when the service called and end ccnsolidation
+    # after commit.
     #
     module Service
       def Service.included(base)
         base.class_eval do
-          after_commit { Papyrus.end_consolidation }
-          after_failure { Papyrus.end_consolidation }
-
-          def initialize(*args)
-            Papyrus.start_consolidation
-            super(*args)
+          def call
+            if Papyrus.consolidate?
+              super
+            else
+              Papyrus.start_consolidation do
+                super
+              end
+            end
           end
+
         end
       end
-    end
 
+    end
   end
 end
