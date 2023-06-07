@@ -43,7 +43,7 @@ module Papyrus
 
     #
     # This module can be included in any Servitium::Service in order to
-    # automatically start consolidation when the service called and end ccnsolidation
+    # automatically start consolidation when the service called and end consolidation
     # after commit.
     #
     module Service
