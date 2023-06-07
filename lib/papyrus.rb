@@ -159,8 +159,13 @@ module Papyrus
       result = nil
       if block
         ActiveRecord::Base.transaction(requires_new: true) do
-          result = (block.arity == 1 ? block.call(consolidation_id) : block.call)
-          end_consolidation
+          begin
+            result = (block.arity == 1 ? block.call(consolidation_id) : block.call)
+            end_consolidation
+          rescue StandardError => e
+            Papyrus.remove_thread_variables(:consolidation_id, :consolidation_root_thread)
+            raise e
+          end
         end
       else
         result = consolidation_id
