@@ -49,14 +49,12 @@ module Papyrus
     module Service
       def Service.included(base)
         base.class_eval do
-          def call
-            if Papyrus.consolidate?
-              super
-            else
-              Papyrus.start_consolidation do
-                super
-              end
-            end
+          after_commit { Papyrus.end_consolidation }
+          after_failure { Papyrus.end_consolidation }
+
+          def initialize(*args)
+            Papyrus.start_consolidation
+            super(*args)
           end
 
         end
