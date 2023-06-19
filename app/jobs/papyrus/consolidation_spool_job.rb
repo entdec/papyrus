@@ -11,8 +11,12 @@ module Papyrus
     def perform(consolidation_id)
       return if consolidation_id.nil?
 
-      papers = Papyrus::Paper.where(consolidation_id: consolidation_id).where.not(owner_id: nil).order(created_at: :asc)
-      papers = papers.group_by(&:printer_client_id).transform_values { |g| g.group_by(&:kind) }
+      papers = Papyrus::Paper.where(consolidation_id: consolidation_id).where.not(owner_id: nil)
+      total_papers = papers.count
+      Papyrus.config.logger.info("#{self.class.name} has started for consolidation_id: #{consolidation_id}, papers: #{total_papers}")
+      return if papers.blank?
+
+      papers = papers.order(created_at: :asc).group_by(&:printer_client_id).transform_values { |g| g.group_by(&:kind) }
 
       papers.each do |printer_client_id, printer_papers|
         next if printer_client_id.nil?

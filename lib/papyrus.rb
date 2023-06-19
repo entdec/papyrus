@@ -117,8 +117,7 @@ module Papyrus
 
     #
     # Start consolidation of papers that are created using the Papyrus.event method.
-    # This will ensure that all papers created within the block or
-    # until the end_consolidation method is called will be consolidated
+    # This will ensure that all papers created within the block will be consolidated
     # into a single print job.
     #
     # Example:
@@ -126,70 +125,44 @@ module Papyrus
     #    # Create print jobs here
     #   end
     #
-    #  Papyrus.start_consolidation(consolidation_id: 'my_consolidation_id')
-    #  # Create print jobs here
-    #  Papyrus.end_consolidation
-    #
     # @param [Hash] options
     # @option options [String] :consolidation_id
     #   The consolidation id to use. If the consolidation id is blank, a random UUID will be used.
-    # @option options [Boolean] :force
-    #  If set the true, the current consolidation will be ended and a new one started
-    #  using the provided consolidation_id.
     #
-    # @return [Object] The result of the block if a block is given.
-    #  return the consolidation_id if no block is given.
+    # @return The result of the block.
+    #
     def start_consolidation(options = {}, &block)
-      if consolidate?
-        if options[:force] == true
-          end_consolidation
-        else
-          return
-        end
-      end
+      return unless block
 
       consolidation_id = options[:consolidation_id]
       consolidation_id = SecureRandom.uuid if consolidation_id.blank?
 
-      Papyrus.add_thread_variables(
-        consolidation_id: consolidation_id,
-        consolidation_root_thread: true
-      )
+      Papyrus.add_thread_variables(consolidation_id: consolidation_id)
 
       result = nil
-      if block
-        ActiveRecord::Base.transaction(requires_new: true) do
-          begin
-            result = (block.arity == 1 ? block.call(consolidation_id) : block.call)
-            end_consolidation
-          rescue StandardError => e
-            Papyrus.remove_thread_variables(:consolidation_id, :consolidation_root_thread)
-            raise e
-          end
+      ActiveRecord::Base.transaction(requires_new: true) do
+        begin
+          result = (block.arity == 1 ? block.call(consolidation_id) : block.call)
+
+          handlers = {
+            after_commit: proc do
+              consolidation_id = Papyrus.consolidation_id
+              Papyrus.remove_thread_variables(:consolidation_id)
+              print_consolidation(consolidation_id)
+            end
+          }
+          ActiveRecord::Base.connection.add_transaction_record(Papyrus::ConsolidationCallback.new(handlers))
+        rescue StandardError => e
+          Papyrus.remove_thread_variables(:consolidation_id)
+          raise e
         end
-      else
-        result = consolidation_id
       end
+
       result
     end
 
-    # Ends consolidation and schedules a spool job by default to send the
-    # consolidated papers to PrintNode.
-    #
-    # This will only execute if the current thread started the consolidation.
-    #
-    # @param [Boolean] spool Defaults to true. If set to false, the spool job will not be scheduled.
-    def end_consolidation(spool: true)
-      if Papyrus.consolidation_root_thread?
-        handlers = {
-          after_commit: proc do
-            consolidation_id = Papyrus.consolidation_id
-            Papyrus.remove_thread_variables(:consolidation_id, :consolidation_root_thread)
-            Papyrus::ConsolidationSpoolJob.perform_later(consolidation_id) if spool
-          end
-        }
-        ActiveRecord::Base.connection.add_transaction_record(Papyrus::ConsolidationCallback.new(handlers))
-      end
+    def print_consolidation(consolidation_id)
+      Papyrus::ConsolidationSpoolJob.perform_later(consolidation_id)
     end
 
     def papers?(obj, event)
@@ -201,20 +174,18 @@ module Papyrus
 
     # Returns true if consolidation is currently active for the current thread.
     def consolidate?
-      Thread.current[:papyrus_variables].respond_to?(:key?) &&
-        Thread.current[:papyrus_variables][:consolidation_id].present?
+      return false unless papyrus_datastore.respond_to?(:key?)
+
+      papyrus_datastore[:consolidation_id].present?
     end
 
     # Returns the linked consolidation id for the current thread.
     def consolidation_id
-      Thread.current[:papyrus_variables][:consolidation_id] if consolidate?
+      papyrus_datastore[:consolidation_id] if consolidate?
     end
 
-    # Returns true if the current thread is the thread that started the consolidation.
-    # Only the thread that started the consolidation can end consolidation.
-    def consolidation_root_thread?
-      return Thread.current[:papyrus_variables].respond_to?(:key?) &&
-        Thread.current[:papyrus_variables][:consolidation_root_thread] == true
+    def papyrus_datastore
+      Thread.current[:papyrus_datastore] ||= HashWithIndifferentAccess.new
     end
 
     # Removes thread variables for the current thread.
@@ -222,8 +193,8 @@ module Papyrus
     # @param [Array] keys
     #  The keys to remove.
     def remove_thread_variables(*keys)
-      variables = Thread.current[:papyrus_variables]
-      return if !variables.respond_to?(:key?)
+      variables = papyrus_datastore
+      return unless variables&.respond_to?(:key?)
 
       keys.each { |key| variables.delete(key) }
     end
@@ -232,8 +203,7 @@ module Papyrus
     # (Also available via Thread.current[:papyrus_variables])
     # @param [Hash] variables
     def add_thread_variables(**variables)
-      Thread.current[:papyrus_variables] ||= {}
-      Thread.current[:papyrus_variables].merge!(variables)
+      papyrus_datastore.merge!(variables)
     end
   end
 
