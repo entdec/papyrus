@@ -93,12 +93,9 @@ module Papyrus
       return unless papers?(obj, event)
 
       options = params[:options] || {}
+      params[:consolidation_id] = consolidation_id if consolidate?
 
-      if consolidation_id.present?
-        params[:consolidation_id] = consolidation_id
-      end
-
-      if options[:perform_now] == true
+      if options[:perform_now] == true || consolidate?
         Papyrus::GenerateJob.perform_now(obj, event.to_s, params)
       else
         job = Papyrus::GenerateJob
