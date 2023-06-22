@@ -19,7 +19,7 @@ module Papyrus
 
         def deserialize(job_data)
           super
-          papyrus_datastore.merge!(job_data['papyrus_datastore'])
+          papyrus_datastore.merge!(job_data['papyrus_datastore']) if job_data['papyrus_datastore']
         end
 
         before_enqueue do |job|
