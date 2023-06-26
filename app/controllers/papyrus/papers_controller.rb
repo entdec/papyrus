@@ -11,7 +11,9 @@ module Papyrus
       if @paper.kind == 'pdf'
         redirect_to main_app.rails_blob_path(@paper.attachment, disposition: 'inline')
       else
-        metadata = @paper.metadata.present? ? @paper.metadata : @paper.template&.metadata
+        metadata = @paper.template&.metadata
+        metadata = metadata.merge!(@paper.metadata) if metadata
+
 
         pdf = Labelary::Label.render(zpl: @paper.attachment.download,
                                      content_type: 'application/pdf',
@@ -32,6 +34,7 @@ module Papyrus
         paper = @paper.dup
         paper.owner = Current.user
         paper.attachment.attach @paper.attachment.blob
+        paper.consolidation_id = nil
         paper.save!
       end
     end
@@ -41,6 +44,10 @@ module Papyrus
         Papyrus.event(@paper.template.event, @paper.papyrable,
                       owner: Current.user, options: { template_id: @paper.template_id })
       end
+    end
+
+    def print_consolidation
+      Papyrus.print_consolidation(@paper.consolidation_id) if @paper.consolidated?
     end
 
     private
