@@ -26,6 +26,7 @@ Papyrus::Engine.routes.draw do
     member do
       post 'print'
       post 'regenerate'
+      post 'print_consolidation'
     end
   end
 
