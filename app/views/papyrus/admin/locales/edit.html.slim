@@ -1,5 +1,5 @@
 = sts.form_for([:admin, @locale]) do |f|
-  = sts.card title: t('.locale'), icon: 'fad fa-language' do |card|
+  = sts.card :papyrus_locales, title: t('.locale'), icon: 'fad fa-language' do |card|
     - card.action
       = f.continue
     - card.action
