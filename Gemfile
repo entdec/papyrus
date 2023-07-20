@@ -15,7 +15,7 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
-# gem 'auxilium', '~> 3', entdec: 'auxilium'
+gem 'auxilium', '~> 3', entdec: 'auxilium'
 gem 'decoro', '~> 0.1', entdec: 'decoro'
 gem 'evento', entdec: 'evento', tag: '0.1.7'
 gem 'combine_pdf', '~> 1.0.23'
