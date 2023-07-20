@@ -24,7 +24,7 @@ module Papyrus
 
     def attachment_path
       Rails.application.routes.url_helpers.rails_blob_path(attachment, disposition: 'attachment',
-                                                                       only_path: true)
+                                                           only_path: true)
     end
 
     def consolidated?
@@ -33,6 +33,34 @@ module Papyrus
 
     def printer_client_id
       printer&.client_id
+    end
+
+    def generate_attachment
+      return attachment if attachment.attached? || !metadata['context'] || !template
+
+      context = metadata['context']&.transform_values do |v|
+        if (v.is_a?(Hash))
+          if v['type'] == 'object'
+            v['class'].constantize.find(v['id'])
+          elsif v['type'] == 'hash'
+            v['entries']
+          else
+            v
+          end
+        else
+          v
+        end
+      end.with_indifferent_access.to_h
+
+      variable_name = BaseGenerator.liquid_variable_name_for(papyrable)
+      context[variable_name] = context[variable_name].is_a?(Hash) ? context[variable_name].deep_stringify_keys : context[variable_name]&.to_liquid
+
+      template.generate_attachment(self, context, metadata['locale'])
+      attachment
+    end
+
+    def metadata
+      super&.with_indifferent_access || {}
     end
 
     private

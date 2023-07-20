@@ -1,6 +1,6 @@
 - decorate(@template, Papyrus::TemplateDecorator) do |template|
   = sts.form_for([:admin, @template]) do |f|
-    = sts.card title: t('.template'), icon: 'fad fa-file-spreadsheet' do |card|
+    = sts.card :papyrus_templates, title: t('.template'), icon: 'fad fa-file-spreadsheet' do |card|
       - card.action
         = f.continue
       - card.action
