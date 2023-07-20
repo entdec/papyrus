@@ -25,7 +25,7 @@ gem 'state_machines-activemodel', '~> 0.8'
 gem 'transactio', '~> 0.1', entdec: 'transactio'
 
 gem 'pry'
-gem 'sidekiq'
+gem 'sidekiq', '~> 7'
 gem 'solargraph'
 gem "i18n", "< 1.9.0"
 gem 'matrix'

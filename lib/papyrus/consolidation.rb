@@ -14,7 +14,7 @@ module Papyrus
         end
 
         def serialize
-          super.merge(papyrus_datastore: papyrus_datastore)
+          super.merge!({ 'papyrus_datastore' => papyrus_datastore })
         end
 
         def deserialize(job_data)
@@ -23,7 +23,7 @@ module Papyrus
         end
 
         before_enqueue do |job|
-          job.papyrus_datastore = Papyrus.papyrus_datastore.merge(async: true) if Papyrus.consolidate?
+          job.papyrus_datastore = Papyrus.papyrus_datastore.merge(async: true) if Papyrus.consolidate
         end
 
         around_perform do |job, block|
