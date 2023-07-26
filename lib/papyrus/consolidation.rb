@@ -66,7 +66,7 @@ module Papyrus
           super(*args)
         end
 
-        def perform_later(*args)
+        def perform_async(*args)
           return super(*args) if Papyrus.consolidate?
 
           begin

@@ -60,7 +60,7 @@ module Papyrus
     end
 
     def refresh!
-      Papyrus::UpdatePrintNodeInformationJob.perform_later
+      Papyrus::UpdatePrintNodeInformationJob.perform_async
     end
 
     def print_client
@@ -73,7 +73,7 @@ module Papyrus
     def generate(event)
       return unless event
 
-      Papyrus::GenerateJob.perform_later(@obj, event.to_s, @params)
+      Papyrus::GenerateJob.perform_async(@obj, event.to_s, @params)
     end
 
     deprecate generate: 'please use event instead', deprecator: Papyrus::Deprecator.new
@@ -96,11 +96,11 @@ module Papyrus
       params[:consolidation_id] = consolidation_id if consolidate?
 
       if options[:perform_now] == true || consolidate?
-        Papyrus::GenerateJob.perform_now(obj, event.to_s, params)
+        Papyrus::GenerateJob.perform_sync(obj, event.to_s, params)
       else
         job = Papyrus::GenerateJob
         job.set(wait: options[:wait]) if options[:wait]
-        job.perform_later(obj, event.to_s, params)
+        job.perform_async(obj, event.to_s, params)
       end
     end
 
@@ -159,7 +159,7 @@ module Papyrus
     end
 
     def print_consolidation(consolidation_id)
-      Papyrus::ConsolidationSpoolJob.perform_later(consolidation_id)
+      Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id)
     end
 
     def papers?(obj, event)

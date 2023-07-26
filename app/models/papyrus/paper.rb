@@ -18,7 +18,7 @@ module Papyrus
       return if Rails.env.test?
 
       print_job = printer.print_jobs.create!(paper: self)
-      Papyrus::SpoolPrintJob.perform_later(print_job)
+      Papyrus::SpoolPrintJob.perform_async(print_job)
       print_job
     end
 
