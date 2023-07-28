@@ -73,7 +73,7 @@ module Papyrus
     def generate(event)
       return unless event
 
-      Papyrus::GenerateJob.perform_async(@obj, event.to_s, @params)
+      Papyrus::GenerateJob.perform_async(@obj.id, event.to_s, @params)
     end
 
     deprecate generate: 'please use event instead', deprecator: Papyrus::Deprecator.new
@@ -96,7 +96,7 @@ module Papyrus
       params[:consolidation_id] = consolidation_id if consolidate?
 
       if options[:perform_now] == true || consolidate?
-        Papyrus::GenerateJob.perform_sync(obj, event.to_s, params)
+        Papyrus::GenerateJob.perform_sync(obj.id, event.to_s, params)
       else
         job = Papyrus::GenerateJob
         job.set(wait: options[:wait]) if options[:wait]
