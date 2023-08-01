@@ -100,7 +100,7 @@ module Papyrus
       else
         job = Papyrus::GenerateJob
         job.set(wait: options[:wait]) if options[:wait]
-        job.perform_async(obj, event.to_s, params)
+        job.perform_async(obj.id, event.to_s, params)
       end
     end
 
