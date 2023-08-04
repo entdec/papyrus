@@ -1,10 +1,10 @@
 module Papyrus
   class GenerateJob < ApplicationJob
-    def perform(obj_id, event, params = {})
-      obj = Order.find(obj_id)
-      return unless obj
+    def perform(event, obj = {}, params = {})
+      model = %w[obj_id obj_class].eql?(obj.keys) ? obj['obj_class'].constantize.find(obj['obj_id']) : obj
+      return unless model
 
-      generator = Papyrus::BaseGenerator.generator_for_obj(obj).new(obj, event, params)
+      generator = Papyrus::BaseGenerator.generator_for_obj(model).new(model, event, params)
       return unless generator.respond_to? event.to_sym
 
       generator.call
