@@ -43,6 +43,7 @@ require 'papyrus/shash'
 require 'papyrus/print_node_utils'
 require 'papyrus/consolidation_callback'
 require 'papyrus/consolidation'
+require 'papyrus/format_params'
 
 module Papyrus
   class Error < StandardError; end
@@ -73,8 +74,9 @@ module Papyrus
     def generate(event)
       return unless event
 
-      formatted_hash = convert_params_to_hash(@params)
-      model = @obj.is_a?(Hash) ? @obj : {'obj_id' => @obj.id, 'obj_class' => @obj.class.name}
+      model = Papyrus::FormatParams.new(obj).serialize
+      formatted_hash = Papyrus::FormatParams.new(@params).serialize
+
       Papyrus::GenerateJob.perform_async(event.to_s, model, formatted_hash)
     end
 
@@ -96,8 +98,8 @@ module Papyrus
 
       options = params[:options] || {}
       params[:consolidation_id] = consolidation_id if consolidate?
-      model = obj.is_a?(Hash) ? obj : {'obj_id' => obj.id, 'obj_class' => obj.class.name}
-      formatted_hash = convert_params_to_hash(params)
+      model = Papyrus::FormatParams.new(obj).serialize
+      formatted_hash = Papyrus::FormatParams.new(params).serialize
 
       if options[:perform_now] == true || consolidate?
         Papyrus::GenerateJob.perform_sync(event.to_s, model, formatted_hash)
@@ -106,19 +108,6 @@ module Papyrus
         job.set(wait: options[:wait]) if options[:wait]
         job.perform_async(event.to_s, model, formatted_hash)
       end
-    end
-
-    def convert_params_to_hash(params)
-      params.transform_values do |v|
-        if v.is_a?(ActiveRecord::Base)
-          { type: 'object', id: v.id, class: v.class.name }
-        elsif v.is_a?(Hash)
-          { type: 'hash', entries: v }
-        else
-          v
-        end
-      end
-      ::JSON.load(::JSON.dump(params))
     end
 
     def metadata_definition(field)
