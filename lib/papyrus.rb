@@ -43,6 +43,7 @@ require 'papyrus/shash'
 require 'papyrus/print_node_utils'
 require 'papyrus/consolidation_callback'
 require 'papyrus/consolidation'
+require 'papyrus/object_converter'
 
 module Papyrus
   class Error < StandardError; end
@@ -73,7 +74,10 @@ module Papyrus
     def generate(event)
       return unless event
 
-      Papyrus::GenerateJob.perform_async(@obj, event.to_s, @params)
+      model = Papyrus::ObjectConverter.serialize(obj)
+      formatted_hash = Papyrus::ObjectConverter.serialize(@params)
+
+      Papyrus::GenerateJob.perform_async(event.to_s, model, formatted_hash)
     end
 
     deprecate generate: 'please use event instead', deprecator: Papyrus::Deprecator.new
@@ -94,13 +98,15 @@ module Papyrus
 
       options = params[:options] || {}
       params[:consolidation_id] = consolidation_id if consolidate?
+      model = Papyrus::ObjectConverter.serialize(obj)
+      formatted_hash = Papyrus::ObjectConverter.serialize(params)
 
       if options[:perform_now] == true || consolidate?
-        Papyrus::GenerateJob.perform_sync(obj, event.to_s, params)
+        Papyrus::GenerateJob.perform_sync(event.to_s, model, formatted_hash)
       else
         job = Papyrus::GenerateJob
         job.set(wait: options[:wait]) if options[:wait]
-        job.perform_async(obj, event.to_s, params)
+        job.perform_async(event.to_s, model, formatted_hash)
       end
     end
 

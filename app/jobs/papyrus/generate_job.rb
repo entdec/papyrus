@@ -1,9 +1,12 @@
 module Papyrus
   class GenerateJob < ApplicationJob
-    def perform(obj, event, params = {})
-      return unless obj
+    def perform(event, obj = {}, params = {})
+      model = Papyrus::ObjectConverter.deserialize(obj)
+      return unless model
 
-      generator = Papyrus::BaseGenerator.generator_for_obj(obj).new(obj, event, params)
+      formatted_params = Papyrus::ObjectConverter.deserialize(params)
+
+      generator = Papyrus::BaseGenerator.generator_for_obj(model).new(model, event, formatted_params)
       return unless generator.respond_to? event.to_sym
 
       generator.call

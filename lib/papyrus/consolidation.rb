@@ -14,7 +14,7 @@ module Papyrus
         end
 
         def serialize
-          super.merge!({ 'papyrus_datastore' => papyrus_datastore })
+          super.merge!({ 'papyrus_datastore' => papyrus_datastore.as_json })
         end
 
         def deserialize(job_data)

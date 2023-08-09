@@ -144,9 +144,9 @@ module Papyrus
       @templates = @templates.instance_exec(@object, &template_scope_proc) if template_scope_proc
 
       # Filter templates by id, for reprocess
-      if @params.dig(:options, :template_id).present?
+      if @params.dig('options', 'template_id').present?
         @templates = @templates.select do |t|
-          t.id == @params.dig(:options, :template_id)
+          t.id == @params.dig('options', 'template_id')
         end
       end
 
