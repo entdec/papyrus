@@ -41,9 +41,8 @@ require 'papyrus/i18n_store'
 require 'papyrus/prawn_extensions'
 require 'papyrus/shash'
 require 'papyrus/print_node_utils'
-require 'papyrus/consolidation_callback'
-require 'papyrus/consolidation'
 require 'papyrus/object_converter'
+require 'papyrus/consolidation_callback'
 
 module Papyrus
   class Error < StandardError; end
@@ -118,52 +117,6 @@ module Papyrus
       config.metadata_fields
     end
 
-    #
-    # Start consolidation of papers that are created using the Papyrus.event method.
-    # This will ensure that all papers created within the block will be consolidated
-    # into a single print job.
-    #
-    # Example:
-    #   Papyrus.start_consolidation do |consolidation_id|
-    #    # Create print jobs here
-    #   end
-    #
-    # @param [Hash] options
-    # @option options [String] :consolidation_id
-    #   The consolidation id to use. If the consolidation id is blank, a random UUID will be used.
-    #
-    # @return The result of the block.
-    #
-    def start_consolidation(options = {}, &block)
-      return unless block
-
-      consolidation_id = options[:consolidation_id]
-      consolidation_id = SecureRandom.uuid if consolidation_id.blank?
-
-      Papyrus.add_thread_variables(consolidation_id: consolidation_id)
-
-      result = nil
-      ActiveRecord::Base.transaction(requires_new: true) do
-        begin
-          result = (block.arity == 1 ? block.call(consolidation_id) : block.call)
-
-          handlers = {
-            after_commit: proc do
-              consolidation_id = Papyrus.consolidation_id
-              Papyrus.remove_thread_variables(:consolidation_id)
-              print_consolidation(consolidation_id)
-            end
-          }
-          ActiveRecord::Base.connection.add_transaction_record(Papyrus::ConsolidationCallback.new(handlers))
-        rescue StandardError => e
-          Papyrus.remove_thread_variables(:consolidation_id)
-          raise e
-        end
-      end
-
-      result
-    end
-
     def print_consolidation(consolidation_id)
       Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id)
     end
@@ -188,25 +141,7 @@ module Papyrus
     end
 
     def papyrus_datastore
-      Thread.current[:papyrus_datastore] ||= HashWithIndifferentAccess.new
-    end
-
-    # Removes thread variables for the current thread.
-    # (Also available via Thread.current[:papyrus_variables])
-    # @param [Array] keys
-    #  The keys to remove.
-    def remove_thread_variables(*keys)
-      variables = papyrus_datastore
-      return unless variables&.respond_to?(:key?)
-
-      keys.each { |key| variables.delete(key) }
-    end
-
-    # Adds or updates the thread variables for the current thread.
-    # (Also available via Thread.current[:papyrus_variables])
-    # @param [Hash] variables
-    def add_thread_variables(**variables)
-      papyrus_datastore.merge!(variables)
+      Servitium::Batch::get("papyrus")
     end
   end
 

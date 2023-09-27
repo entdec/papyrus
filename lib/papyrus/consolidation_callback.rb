@@ -1,37 +1,15 @@
 module Papyrus
+  module Consolidation
+    class Callback
+      def complete(datastore)
+        consolidation_id = datastore.dig('papyrus', 'consolidation_id')
+        Papyrus.print_consolidation(consolidation_id) if consolidation_id.present?
+      end
 
-class ConsolidationCallback
-  def initialize(handlers = {}, connection: ActiveRecord::Base.connection)
-    @connection = connection
-    @handlers = handlers
+      def job_complete(job_id, datastore)
+        # Do nothing
+      end
+
+    end
   end
-
-  # rubocop: disable Naming/PredicateName
-  def has_transactional_callbacks?
-    true
-  end
-  # rubocop: enable Naming/PredicateName
-
-  def before_committed!(*)
-    @handlers[:before_commit]&.call
-  end
-
-  def trigger_transactional_callbacks?
-    true
-  end
-
-  def committed!(*)
-    @handlers[:after_commit]&.call
-  end
-
-  def rolledback!(*)
-    @handlers[:after_rollback]&.call
-  end
-
-  # Required for +transaction(requires_new: true)+
-  def add_to_transaction(*)
-        @connection.add_transaction_record(self)
-  end
-end
-
 end

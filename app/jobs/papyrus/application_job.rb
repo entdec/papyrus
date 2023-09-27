@@ -3,6 +3,6 @@ module Papyrus
     include Sidekiq::Job
     prepend Auxilium::Concerns::SidekiqCallbacks
     # discard_on ActiveJob::DeserializationError
-    include Papyrus::Consolidation
+    include Servitium::JobMetrics
   end
 end
