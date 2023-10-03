@@ -30,6 +30,12 @@ require 'barby/barcode/qr_code'
 require 'barby/barcode/upc_supplemental'
 require 'barby/outputter/prawn_outputter'
 
+require 'papyrus/consolidation/batch'
+require 'papyrus/consolidation/batch_callback'
+require 'papyrus/consolidation/sidekiq_client_middleware'
+require 'papyrus/consolidation/sidekiq_server_middleware'
+require 'papyrus/consolidation/transaction_callback'
+
 require 'papyrus/active_record_helpers'
 require 'papyrus/attachments_helpers'
 require 'papyrus/attachment_helpers'
@@ -41,8 +47,6 @@ require 'papyrus/i18n_store'
 require 'papyrus/prawn_extensions'
 require 'papyrus/shash'
 require 'papyrus/print_node_utils'
-require 'papyrus/consolidation_callback'
-require 'papyrus/consolidation'
 require 'papyrus/object_converter'
 
 module Papyrus
@@ -101,12 +105,17 @@ module Papyrus
       model = Papyrus::ObjectConverter.serialize(obj)
       formatted_hash = Papyrus::ObjectConverter.serialize(params)
 
-      if options[:perform_now] == true || consolidate?
+      if options[:perform_now] == true
         Papyrus::GenerateJob.perform_sync(event.to_s, model, formatted_hash)
       else
         job = Papyrus::GenerateJob
         job.set(wait: options[:wait]) if options[:wait]
-        job.perform_async(event.to_s, model, formatted_hash)
+        batch_id = Papyrus::Consolidation::Batch.sidekiq_batch_id
+        if batch_id
+          Sidekiq::Batch.new(batch_id).jobs { job.perform_async(event.to_s, model, formatted_hash) }
+        else
+          job.perform_async(event.to_s, model, formatted_hash)
+        end
       end
     end
 
@@ -116,52 +125,6 @@ module Papyrus
 
     def metadata_definitions
       config.metadata_fields
-    end
-
-    #
-    # Start consolidation of papers that are created using the Papyrus.event method.
-    # This will ensure that all papers created within the block will be consolidated
-    # into a single print job.
-    #
-    # Example:
-    #   Papyrus.start_consolidation do |consolidation_id|
-    #    # Create print jobs here
-    #   end
-    #
-    # @param [Hash] options
-    # @option options [String] :consolidation_id
-    #   The consolidation id to use. If the consolidation id is blank, a random UUID will be used.
-    #
-    # @return The result of the block.
-    #
-    def start_consolidation(options = {}, &block)
-      return unless block
-
-      consolidation_id = options[:consolidation_id]
-      consolidation_id = SecureRandom.uuid if consolidation_id.blank?
-
-      Papyrus.add_thread_variables(consolidation_id: consolidation_id)
-
-      result = nil
-      ActiveRecord::Base.transaction(requires_new: true) do
-        begin
-          result = (block.arity == 1 ? block.call(consolidation_id) : block.call)
-
-          handlers = {
-            after_commit: proc do
-              consolidation_id = Papyrus.consolidation_id
-              Papyrus.remove_thread_variables(:consolidation_id)
-              print_consolidation(consolidation_id)
-            end
-          }
-          ActiveRecord::Base.connection.add_transaction_record(Papyrus::ConsolidationCallback.new(handlers))
-        rescue StandardError => e
-          Papyrus.remove_thread_variables(:consolidation_id)
-          raise e
-        end
-      end
-
-      result
     end
 
     def print_consolidation(consolidation_id)
@@ -207,7 +170,13 @@ module Papyrus
     # @param [Hash] variables
     def add_thread_variables(**variables)
       papyrus_datastore.merge!(variables)
+      Sidekiq::Batch
     end
+
+    def remove_datastore
+      Thread.current[:papyrus_datastore] = nil
+    end
+
   end
 
   # Include helpers
