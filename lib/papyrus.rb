@@ -48,6 +48,7 @@ module Papyrus
 
   class << self
     attr_reader :config
+    delegate :logger, to: :@config
 
     def setup
       @config = Configuration.new

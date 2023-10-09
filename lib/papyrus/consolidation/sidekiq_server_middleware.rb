@@ -27,7 +27,7 @@ module Papyrus
           end
           yield
         rescue => ex
-          puts ex.message
+          Papyrus.logger.error ex.message
         end
 
       ensure
