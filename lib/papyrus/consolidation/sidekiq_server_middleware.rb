@@ -15,10 +15,19 @@ module Papyrus
 
         papyrus_datastore = job_payload['$papyrus_datastore']
         begin
-          Papyrus.add_thread_variables(**job_payload['$papyrus_datastore']) if papyrus_datastore.present?
+          if papyrus_datastore.present?
+            Papyrus.add_thread_variables(**job_payload['$papyrus_datastore'])
+
+            bid = if Thread.current[:sidekiq_context].present?
+                    Thread.current[:sidekiq_context][:bid]
+                  end
+            if bid.present?
+              job_instance.class.prepend(Papyrus::Consolidation::BatchClassMethods)
+            end
+          end
           yield
         rescue => ex
-          puts ex.message
+          Papyrus.logger.error ex.message
         end
 
       ensure
@@ -28,5 +37,24 @@ module Papyrus
         end
       end
     end
+
+    module BatchClassMethods
+      def perform(*args)
+        bid = if Thread.current[:sidekiq_context].present?
+                Thread.current[:sidekiq_context][:bid]
+              end
+
+        result = nil
+        if bid.present?
+          Sidekiq::Batch.new(bid).jobs do
+            result = super(*args)
+          end
+        else
+          result = super(*args)
+        end
+        result
+      end
+    end
+
   end
 end

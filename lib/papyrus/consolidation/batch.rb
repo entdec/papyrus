@@ -1,3 +1,6 @@
+require 'papyrus/consolidation/batch_callback'
+require 'papyrus/consolidation/transaction_callback'
+
 module Papyrus
   module Consolidation
     class Batch
@@ -8,29 +11,25 @@ module Papyrus
           Papyrus.papyrus_datastore[:job_count] = Papyrus.papyrus_datastore[:job_count] + 1
 
           if block.present?
-            consolidation_id = Papyrus.consolidation_id
-            if consolidation_id.blank?
-              consolidation_id = SecureRandom.urlsafe_base64(16)
-              Papyrus.add_thread_variables(consolidation_id: consolidation_id)
+            Papyrus.consolidate do
+              consolidation_id = Papyrus.consolidation_id
+              parent_batch_id = Papyrus::Consolidation::Batch.sidekiq_batch_id
+              batch = if parent_batch_id.present?
+                        Sidekiq::Batch.new(parent_batch_id)
+                      else
+                        batch = Sidekiq::Batch.new
+                        batch.description = "Papyrus consolidation batch: #{consolidation_id}"
+                        batch.on(:complete, Papyrus::Consolidation::BatchCallback, consolidation_id: consolidation_id)
+                        Papyrus.add_thread_variables(bid: batch.bid)
+                        batch
+                      end
+
+              result = nil
+              batch.jobs do
+                result = block.call
+              end
+              result
             end
-
-            parent_batch_id = Papyrus::Consolidation::Batch.sidekiq_batch_id
-            batch = if parent_batch_id.present?
-                      Sidekiq::Batch.new(parent_batch_id)
-                    else
-                      batch = Sidekiq::Batch.new
-                      batch.description = "Papyrus consolidation batch: #{consolidation_id}"
-                      batch.on(:complete, Papyrus::Consolidation::BatchCallback, consolidation_id: consolidation_id)
-                      Papyrus.add_thread_variables(bid: batch.bid)
-                      batch
-                    end
-
-            batch.jobs(&block)
-          end
-        ensure
-          if Papyrus.papyrus_datastore.present?
-            Papyrus.papyrus_datastore[:job_count] = Papyrus.papyrus_datastore[:job_count] - 1
-            Papyrus.remove_datastore if Papyrus.papyrus_datastore[:job_count] == 0
           end
         end
 

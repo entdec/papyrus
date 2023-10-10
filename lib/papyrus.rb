@@ -30,12 +30,6 @@ require 'barby/barcode/qr_code'
 require 'barby/barcode/upc_supplemental'
 require 'barby/outputter/prawn_outputter'
 
-require 'papyrus/consolidation/batch'
-require 'papyrus/consolidation/batch_callback'
-require 'papyrus/consolidation/sidekiq_client_middleware'
-require 'papyrus/consolidation/sidekiq_server_middleware'
-require 'papyrus/consolidation/transaction_callback'
-
 require 'papyrus/active_record_helpers'
 require 'papyrus/attachments_helpers'
 require 'papyrus/attachment_helpers'
@@ -54,6 +48,7 @@ module Papyrus
 
   class << self
     attr_reader :config
+    delegate :logger, to: :@config
 
     def setup
       @config = Configuration.new
@@ -110,12 +105,7 @@ module Papyrus
       else
         job = Papyrus::GenerateJob
         job.set(wait: options[:wait]) if options[:wait]
-        batch_id = Papyrus::Consolidation::Batch.sidekiq_batch_id
-        if batch_id
-          Sidekiq::Batch.new(batch_id).jobs { job.perform_async(event.to_s, model, formatted_hash) }
-        else
-          job.perform_async(event.to_s, model, formatted_hash)
-        end
+        job.perform_async(event.to_s, model, formatted_hash)
       end
     end
 
@@ -170,11 +160,26 @@ module Papyrus
     # @param [Hash] variables
     def add_thread_variables(**variables)
       papyrus_datastore.merge!(variables)
-      Sidekiq::Batch
     end
 
+    # Removes the datastore for the current thread.
+    # (Also available via Thread.current[:papyrus_datastore])
     def remove_datastore
       Thread.current[:papyrus_datastore] = nil
+    end
+
+    # Start consolidating papers (print jobs) for the current thread inside the given block.
+    # Set the consolidation_id for the current thread in the papyrus datastore so that
+    # all papers generated inside the block will be generated with the same consolidation_id.
+    # Use Papyrus.print_consolidation(consolidation_id) to print all papers generated inside the block.
+    def consolidate(&block)
+      if Papyrus.consolidation_id.blank?
+        consolidation_id = SecureRandom.urlsafe_base64(16)
+        add_thread_variables(consolidation_id: consolidation_id)
+      end
+      block.call
+    ensure
+      remove_datastore
     end
 
   end
