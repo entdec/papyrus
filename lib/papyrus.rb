@@ -174,12 +174,24 @@ module Papyrus
     # Use Papyrus.print_consolidation(consolidation_id) to print all papers generated inside the block.
     def consolidate(&block)
       if Papyrus.consolidation_id.blank?
-        consolidation_id = SecureRandom.urlsafe_base64(16)
+        consolidation_id = Papyrus.generate_consolidation_id
         add_thread_variables(consolidation_id: consolidation_id)
       end
       block.call
     ensure
       remove_datastore
+    end
+
+    def generate_consolidation_id(validate = true)
+      consolidation_id = SecureRandom.uuid
+      if validate
+        10.times do
+          break unless Papyrus::Paper.exists?(consolidation_id: consolidation_id)
+
+          consolidation_id = SecureRandom.uuid
+        end
+      end
+      consolidation_id
     end
 
   end
