@@ -10,42 +10,37 @@ module Papyrus
       # @yield the next middleware in the chain or worker `perform` method
       # @return [Void]
       def call(job_instance, job_payload, queue)
-        Papyrus.papyrus_datastore[:job_count] ||= 0
-        Papyrus.papyrus_datastore[:job_count] = Papyrus.papyrus_datastore[:job_count] + 1
+        papyrus_datastore = (job_payload['$papyrus_datastore'] if job_payload['class'] != 'Sidekiq::Batch::Empty')
 
-        papyrus_datastore = job_payload['$papyrus_datastore']
-        begin
-          if papyrus_datastore.present?
-            Papyrus.add_thread_variables(**job_payload['$papyrus_datastore'])
+        if Papyrus.papyrus_datastore.empty? && papyrus_datastore.present?
+          Thread.current[:papyrus_master_job] ||= job_instance.object_id
+          Papyrus.add_thread_variables(**papyrus_datastore)
 
-            bid = if Thread.current[:sidekiq_context].present?
-                    Thread.current[:sidekiq_context][:bid]
-                  end
-            if bid.present?
-              job_instance.class.prepend(Papyrus::Consolidation::BatchClassMethods)
-            end
+          # If we are NOT within a Sidekiq batch, we need to prepend the batch class methods.w
+          # We don't want to put yield in a batch directly as it might not be the last middleware in the chain.
+          if Thread.current[:sidekiq_batch].blank?
+            bid = (Thread.current[:sidekiq_context][:bid] if Thread.current[:sidekiq_context].present?)
+            job_instance.class.prepend(Papyrus::Consolidation::BatchClassMethods) if bid.present?
           end
-          yield
-        rescue => ex
-          Papyrus.logger.error ex.message
         end
 
+        # Go on to the next middleware in the chain or the worker `perform` method
+        yield
       ensure
-        if Papyrus.papyrus_datastore.present?
-          Papyrus.papyrus_datastore[:job_count] = Papyrus.papyrus_datastore[:job_count] - 1
-          Papyrus.remove_datastore if Papyrus.papyrus_datastore[:job_count] == 0
+        if Thread.current[:papyrus_master_job] == job_instance.object_id
+          Papyrus.remove_datastore
+          Thread.current[:papyrus_master_job] = nil
         end
       end
+
     end
 
     module BatchClassMethods
       def perform(*args)
-        bid = if Thread.current[:sidekiq_context].present?
-                Thread.current[:sidekiq_context][:bid]
-              end
+        bid = (Thread.current[:sidekiq_context][:bid] if Thread.current[:sidekiq_context].present?)
 
         result = nil
-        if bid.present?
+        if bid.present? && Thread.current[:sidekiq_batch].blank?
           Sidekiq::Batch.new(bid).jobs do
             result = super(*args)
           end
