@@ -100,7 +100,7 @@ module Papyrus
       model = Papyrus::ObjectConverter.serialize(obj)
       formatted_hash = Papyrus::ObjectConverter.serialize(params)
 
-      if options[:perform_now] == true
+      if options[:perform_now] == true || consolidate?
         Papyrus::GenerateJob.perform_sync(event.to_s, model, formatted_hash)
       else
         job = Papyrus::GenerateJob
