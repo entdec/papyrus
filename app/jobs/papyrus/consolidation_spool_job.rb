@@ -1,3 +1,5 @@
+require 'combine_pdf'
+
 module Papyrus
   class ConsolidationSpoolJob < ApplicationJob
 
@@ -38,10 +40,9 @@ module Papyrus
     def print_raw_papers(consolidation_id, printer_client_id, raw_papers)
       Papyrus::PrintNodeUtils.retry_on_rate_limit do
         combine_raw_papers(raw_papers) do |raw_data|
-          puts raw_data.to_s
           job = Papyrus.print_client.create_printjob(
             PrintNode::PrintJob.new(printer_client_id,
-                                    "Combined PDF #{consolidation_id}",
+                                    "Consolidation #{consolidation_id}",
                                     'raw_base64',
                                     Base64.encode64(raw_data),
                                     'Papyrus'),
@@ -80,15 +81,10 @@ module Papyrus
     def print_pdf_papers(consolidation_id, printer_client_id, pdf_papers)
       Papyrus::PrintNodeUtils.retry_on_rate_limit do
         combine_pdf_papers(pdf_papers) do |pdf|
-          temp = Tempfile.new
-          temp.binmode
-          temp << pdf
-          temp.flush
-
           job = Papyrus.print_client.create_printjob(
             PrintNode::PrintJob.new(printer_client_id,
-                                    "Combined PDF #{consolidation_id}",
-                         'pdf_base64',
+                                    "Consolidation #{consolidation_id}",
+                                    'pdf_base64',
                                     Base64.encode64(pdf),
                                     'Papyrus'),
             {
@@ -102,7 +98,7 @@ module Papyrus
     def combine_pdf_papers(papers)
       return unless block_given?
 
-      combined_pdf = CombinePDF.new
+      combined_pdf = ::CombinePDF.new
       total_byte_size = 0
 
       papers.each do |paper|
@@ -112,7 +108,7 @@ module Papyrus
         # open the attachment
         pdf = nil
         attachment.open do |f|
-          pdf = CombinePDF.parse(f.read)
+          pdf = ::CombinePDF.parse(f.read)
         end
 
         while copies.positive?
@@ -149,7 +145,7 @@ module Papyrus
 
           # Not all copies fit. Generate a new PDF and continue.
           yield combined_pdf.to_pdf
-          combined_pdf = CombinePDF.new
+          combined_pdf = ::CombinePDF.new
           total_byte_size = 0
         end
       end
