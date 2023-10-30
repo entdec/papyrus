@@ -42,7 +42,7 @@ module Papyrus
         combine_raw_papers(raw_papers) do |raw_data|
           job = Papyrus.print_client.create_printjob(
             PrintNode::PrintJob.new(printer_client_id,
-                                    "Boxture OMS Consolidated Print #{consolidation_id}",
+                                    "Consolidation #{consolidation_id}",
                                     'raw_base64',
                                     Base64.encode64(raw_data),
                                     'Papyrus'),
@@ -83,7 +83,7 @@ module Papyrus
         combine_pdf_papers(pdf_papers) do |pdf|
           job = Papyrus.print_client.create_printjob(
             PrintNode::PrintJob.new(printer_client_id,
-                                    "Boxture OMS Consolidated Print #{consolidation_id}",
+                                    "Consolidation #{consolidation_id}",
                                     'pdf_base64',
                                     Base64.encode64(pdf),
                                     'Papyrus'),
