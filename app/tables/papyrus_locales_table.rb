@@ -6,7 +6,7 @@ class PapyrusLocalesTable < ActionTable::ActionTable
   column(:key)
   column(:metadata) { |locale| Papyrus.config.metadata_humanize(locale.metadata) }
 
-  initial_order :mkey, :asc
+  initial_order :key
 
   row_link { |locale| papyrus.edit_admin_locale_path(locale) }
 
