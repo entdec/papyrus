@@ -21,7 +21,7 @@ module Papyrus
       end
 
       def show
-        redirect_to :edit_admin_locales
+        redirect_to :edit_admin_locale
       end
 
       def edit
