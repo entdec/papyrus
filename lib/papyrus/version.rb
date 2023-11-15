@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Papyrus
-  VERSION = "1.2.42"
+  VERSION = "1.2.43"
 end
