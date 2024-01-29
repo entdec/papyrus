@@ -1,6 +1,6 @@
 .grid.grid-cols-1.gap-4.sm:grid-cols-3
   .col-span-3.sm:col-span-3
 
-    = sts.card :papyrus_papers, title: t('.papers'), icon: 'fad fa-scroll' do |card|
+    = sts.card :papyrus_papers, icon: 'fad fa-scroll' do |card|
       = card.table(:papyrus_papers, custom_views: false, tab: :papers)
       = card.table(:papyrus_print_jobs, custom_views: false, tab: :print_jobs)
