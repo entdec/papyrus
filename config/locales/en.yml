@@ -13,3 +13,26 @@ en:
       print: (Re)Print
       regenerate: Regenerate
       print_consolidation: Print Consolidation
+    dashboard:
+      show:
+        card:
+          papyrus_papers:
+            title: Papers
+            tab:
+              Papers: Papers
+              Print Jobs: Print Jobs
+    admin:
+      templates:
+        index:
+          card:
+            papyrus_templates:
+              title: Templates
+              tab:
+                Papyrus templates: Templates
+      locales:
+        index:
+          card:
+            papyrus_locales:
+              title: Locales
+              tab:
+                Papyrus locales: Locales
