@@ -29,6 +29,16 @@ en:
               title: Templates
               tab:
                 Papyrus templates: Templates
+        edit:
+          card:
+            papyrus_templates:
+              title: Templates
+              tab:
+                basics: Basics
+                media: Media
+                example_data: Example Data
+                metadata: Metadata
+                Papers: Papers
       locales:
         index:
           card:
@@ -36,3 +46,7 @@ en:
               title: Locales
               tab:
                 Papyrus locales: Locales
+        edit:
+          card:
+            papyrus_locales:
+              title: Locales
