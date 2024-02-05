@@ -15,7 +15,7 @@ module Papyrus
 
         computer_client_ids << c.id
 
-        Papyrus.print_client.printers(c.id, '').each do |p|
+        Papyrus.print_client.printers(c.id, '').flatten.each do |p|
           printer = Papyrus::Printer.find_or_initialize_by(client_id: p.id)
           printer.name = p.name
           printer.description = p.description
