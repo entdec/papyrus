@@ -2,29 +2,28 @@ module Papyrus
   class UpdatePrintNodeInformationJob < ApplicationJob
     def perform
       return unless Papyrus.print_client
+      raise Papyrus::UpdatePrintNodeInformationException, 'API Error' if Papyrus.print_client.get('/printers').code != '200'
 
       computer_client_ids = []
       printer_client_ids = []
 
-      Papyrus.print_client.computers.each do |c|
-        computer = Papyrus::Computer.find_or_initialize_by(client_id: c.id)
-        computer.name = c.name
-        computer.hostname = c.hostname
-        computer.state = c.state
+      Papyrus.print_client.printers.each do |p|
+        computer = Papyrus::Computer.find_or_initialize_by(client_id: p.computer.id)
+        computer.name = p.computer.name
+        computer.hostname = p.computer.hostname
+        computer.state = p.computer.state
         computer.save!
 
-        computer_client_ids << c.id
+        computer_client_ids << p.computer.id
 
-        Papyrus.print_client.printers(c.id, '').flatten.each do |p|
-          printer = Papyrus::Printer.find_or_initialize_by(client_id: p.id)
-          printer.name = p.name
-          printer.description = p.description
-          printer.state = p.state
-          printer.computer = computer
+        printer = Papyrus::Printer.find_or_initialize_by(client_id: p.id)
+        printer.name = p.name
+        printer.description = p.description
+        printer.state = p.state
+        printer.computer = computer
+        printer.save!
 
-          printer.save!
-          printer_client_ids << p.id
-        end
+        printer_client_ids << p.id
       end
 
       computers = Papyrus::Computer.where.not(client_id: computer_client_ids)

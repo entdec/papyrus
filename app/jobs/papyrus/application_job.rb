@@ -4,5 +4,11 @@ module Papyrus
     prepend Auxilium::Concerns::SidekiqCallbacks
     # discard_on ActiveJob::DeserializationError
 
+    sidekiq_retry_in do |count, exception, jobhash|
+      case exception
+      when Papyrus::UpdatePrintNodeInformationException
+        :kill
+      end
+    end
   end
 end

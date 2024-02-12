@@ -46,6 +46,8 @@ require 'papyrus/object_converter'
 module Papyrus
   class Error < StandardError; end
 
+  class UpdatePrintNodeInformationException < StandardError; end
+
   class << self
     attr_reader :config
     delegate :logger, to: :@config
