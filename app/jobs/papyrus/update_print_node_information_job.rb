@@ -1,5 +1,3 @@
-require 'net/http'
-
 module Papyrus
   class UpdatePrintNodeInformationJob < ApplicationJob
     def perform
