@@ -48,6 +48,8 @@ module Papyrus
 
   class UpdatePrintNodeInformationException < StandardError; end
 
+  class Net::HTTPResponseError < StandardError; end
+
   class << self
     attr_reader :config
     delegate :logger, to: :@config

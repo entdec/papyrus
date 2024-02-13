@@ -1,20 +1,13 @@
-require 'net/http'
-
 module Papyrus
   class UpdatePrintNodeInformationJob < ApplicationJob
     def perform
       return unless Papyrus.print_client
-
-      response = Papyrus.print_client.get('/printers')
-      raise Papyrus::UpdatePrintNodeInformationException, 'Rate limit Error' if response.code == '429'
-      raise Net::HTTPResponseError.new(response.code) if response.code != '200'
+      # raise Papyrus::UpdatePrintNodeInformationException, "PrintNodeException Error" if Papyrus.print_client.status!= 200
 
       computer_client_ids = []
       printer_client_ids = []
 
-      printers = Papyrus.print_client.parse_array_to_struct(::JSON.parse(response.body))
-
-      printers.each do |p|
+      Papyrus.print_client.printers.each do |p|
         computer = Papyrus::Computer.find_or_initialize_by(client_id: p.computer.id)
         computer.name = p.computer.name
         computer.hostname = p.computer.hostname
