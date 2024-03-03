@@ -6,9 +6,9 @@ span.attachment-upload data-controller="attachment-upload" data-attachment-uploa
   | Drag or click to attach files
 br
 
-div.attachments
+.attachments__list
   - attachments.each do |attachment|
-    div.attachment
+    div.attachments__attachment
       - if attachment.previewable?
         = image_tag attachment.blob.preview(resize_to_limit: [100, 100]).processed.url
       - elsif attachment.image?
