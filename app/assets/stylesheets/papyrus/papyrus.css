@@ -1,0 +1,37 @@
+.attachments {
+    @apply mt-4;
+
+    .attachment-upload {
+        @apply rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50;
+
+        .icon {
+            @apply px-1;
+            text-align: center;
+        }
+
+        .icon.uploading {
+            display: none;
+        }
+
+        &.dragging {
+            border-style: dotted;
+        }
+
+        &.uploading {
+            .icon.upload {
+                display: none;
+            }
+            .icon.uploading {
+                display: block;
+            }
+        }
+    }
+
+    &__filename {
+        @apply text-xs pr-2;
+    }
+
+    &__button {
+        @apply rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50;
+    }
+}

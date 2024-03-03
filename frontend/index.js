@@ -1,1 +1,0 @@
-export { Papyrus } from './javascript/papyrus';

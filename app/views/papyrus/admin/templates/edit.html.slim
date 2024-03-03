@@ -1,17 +1,17 @@
 - decorate(@template, Papyrus::TemplateDecorator) do |template|
   = sts.form_for([:admin, @template]) do |f|
     = sts.card :papyrus_templates, icon: 'fad fa-file-spreadsheet' do |card|
-      - card.action
+      - card.with_action
         = f.continue
-      - card.action
+      - card.with_action
         = f.submit
       - if @template.previewable?
-        - card.action
+        - card.with_action
           =  link_to "Preview", paper_template_url(@template), class: 'button', "target": "blank", 'data-turbo' => false
 
 
       
-      - card.tab :basics, padding: true
+      - card.with_tab:basics, padding: true
         .grid.grid-cols-12.gap-4 data-controller="toggle"
           .col-span-12
             = f.input :enabled, as: :switch
@@ -54,7 +54,7 @@
             small.form-text.text-muted When condition is blank or returns any other value will result in the template being considered. Liquid can be used in condition.
 
           .col-span-12
-            = f.input :file_name_template, as: :editor, mode: 'text/plain', height: '100px'
+            = f.input :file_name_template, as: :editor, height: '100px'
 
           .col-span-12 data-toggle-target="insertion"
           template data-toggle-target="toggleable" data-toggle-value="pdf"
@@ -63,21 +63,21 @@
             = f.input :data, as: :editor, mode: 'text/plain', height: '600px'
 
 
-      - card.tab :media, padding: true
+      - card.with_tab:media, padding: true
         .grid.grid-cols-12.gap-4
           .col-span-12
             - if @template.persisted?
-              = render partial: 'papyrus/admin/templates/attachments/index', locals: { attachments: @template.attachments, upload_url: admin_template_attachments_path(@template) }
               .warning WARNING: Large images( >1000px wide) or SVG's will cause a SIGNIFICANT slowdown (seconds)
+              = render partial: 'papyrus/admin/templates/attachments/index', locals: { attachments: @template.attachments, upload_url: admin_template_attachments_path(@template) }
             - else
               .warning You can add media once the template is saved
 
-      - card.tab :example_data, padding: true
+      - card.with_tab:example_data, padding: true
         .grid.grid-cols-12.gap-4
           .col-span-12
             = f.input :example_data, as: :editor, input_html: { value: JSON.pretty_generate(f.object.example_data) }, mode: 'application/json', height: '600px'
-      - card.tab :metadata, padding: true
+      - card.with_tab:metadata, padding: true
         .grid.grid-cols-12.gap-4
           .col-span-12
-            = f.input :metadata, as: :editor, input_html: { value: YAML.dump(f.object.metadata) }, mode: 'application/yaml'
-      = card.table(:papyrus_papers, parameters: {template_id: @template.id}, custom_views: false, tab: :papers)
+            = f.input :metadata, as: :editor, input_html: { value: YAML.dump(f.object.metadata) }, lang: 'yaml'
+      = card.with_table(:papyrus_papers, parameters: {template_id: @template.id}, custom_views: false, tab: :papers)

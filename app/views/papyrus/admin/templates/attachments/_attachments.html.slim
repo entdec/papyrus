@@ -1,19 +1,22 @@
-- attachments.each do |attachment|
-  div.attachment
-    - if attachment.previewable?
-      = image_tag attachment.blob.preview(resize_to_limit: [100, 100]).processed.url
-    - elsif attachment.image?
-      = image_tag main_app.url_for(attachment.variant(resize_to_limit: [100, 100]))
-    = attachment.filename
-    = link_to admin_template_attachment_path(@template, attachment.id), data: { controller: 'attachment-delete', 'action': 'attachment-delete#delete' } do
-      i.fal.fa-xmark
-    = link_to admin_template_attachment_path(@template, attachment.id), data: { turbo: false, turbolinks: false } do
-      i.fal.fa-download
-  br
-
 span.attachment-upload data-controller="attachment-upload" data-attachment-upload-url="#{upload_url}" data-attachment-upload-param-name="attachments[]" data-attachment-upload-extra-data='{}'
   span.icon.upload
-    i.fal.fa-upload
+    i.fas.fa-upload
   span.icon.uploading
     i.fal.fa-circle-notch.fa-spin
   | Drag or click to attach files
+br
+
+div.attachments
+  - attachments.each do |attachment|
+    div.attachment
+      - if attachment.previewable?
+        = image_tag attachment.blob.preview(resize_to_limit: [100, 100]).processed.url
+      - elsif attachment.image?
+        = image_tag main_app.url_for(attachment.variant(resize_to_limit: [100, 100]))
+      span.attachments__filename
+        = attachment.filename
+      = link_to admin_template_attachment_path(@template, attachment.id), data: { controller: 'attachment-delete', 'action': 'attachment-delete#delete' }, class: 'attachments__button' do
+        i.fas.fa-xmark
+      = link_to admin_template_attachment_path(@template, attachment.id), data: { turbo: false, turbolinks: false }, class: 'attachments__button' do
+        i.fas.fa-download
+

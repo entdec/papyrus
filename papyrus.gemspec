@@ -37,6 +37,11 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'tilt', '~> 2.0'
   spec.add_dependency 'transactio'
 
+  spec.add_dependency 'tailwindcss-rails'
+  spec.add_dependency 'importmap-rails'
+  spec.add_dependency 'turbo-rails'
+  spec.add_dependency 'stimulus-rails'
+
   spec.add_development_dependency 'auxilium', '~> 3'
   spec.add_development_dependency('pdf-inspector', '>= 1.2.1', '< 2.0.a')
   spec.add_development_dependency 'pry', '~> 0.11'
