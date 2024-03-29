@@ -2,7 +2,7 @@
 
 require_relative 'papyrable'
 require_relative 'state_machine'
-require_relative 'transactio'
+require_relative 'life_cycle'
 
 module Papyrus
   module ActiveRecordHelpers
@@ -30,7 +30,8 @@ module Papyrus
         @_papyrus_papyrable_options = options
         include Papyrus::Papyrable
         include Papyrus::StateMachine if options[:use_state_machine]
-        include Papyrus::Transactio
+        include Papyrus::LifeCycle if options[:life_cycle]
+        # include Papyrus::Transactio
       end
 
       def papyrable?
