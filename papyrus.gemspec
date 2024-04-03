@@ -45,5 +45,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'auxilium', '~> 3'
   spec.add_development_dependency('pdf-inspector', '>= 1.2.1', '< 2.0.a')
   spec.add_development_dependency 'pry', '~> 0.11'
-  spec.add_development_dependency 'rubocop', '~> 0'
+  spec.add_development_dependency 'rubocop', '~> 1.4'
+  spec.add_development_dependency 'ruby-lsp', '~> 0'
 end
