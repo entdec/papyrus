@@ -23,7 +23,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'barby', '~> 0.6'
   spec.add_dependency 'combine_pdf', '~> 1.0.23'
   spec.add_dependency 'decoro', '~> 0.1'
-  spec.add_dependency 'evento', '~> 0.1' # This is our own gem, you must add it to your project's Gemfile for this to work
   spec.add_dependency 'img2zpl'
   spec.add_dependency 'labelary'
   spec.add_dependency 'liquidum'
@@ -37,7 +36,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'servitium', '~> 1.1'
   spec.add_dependency 'state_machines-activemodel', '~> 0.8'
   spec.add_dependency 'tilt', '~> 2.0'
-  spec.add_dependency 'transactio'
 
   spec.add_dependency 'tailwindcss-rails'
   spec.add_dependency 'importmap-rails'
