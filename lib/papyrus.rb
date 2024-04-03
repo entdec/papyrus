@@ -12,7 +12,6 @@ require 'prawn/measurement_extensions'
 require 'servitium'
 require 'state_machines-activemodel'
 require 'tilt'
-require 'transactio'
 
 require 'barby'
 require 'barby/barcode/bookland'
