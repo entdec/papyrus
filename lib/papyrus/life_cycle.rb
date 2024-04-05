@@ -9,13 +9,11 @@ module Papyrus
 
       after_commit do
         if previously_persisted?
-          Papyrus.event(:destroy, self)
-        elsif previously_new_record?
-          Papyrus.event(:create, self)
-          Papyrus.event(:save, self)
+          Papyrus.event(:destroy, self, Papyrus.config.default_params(:destroy, self))
         else
-          Papyrus.event(:update, self)
-          Papyrus.event(:save, self)
+          event = previously_new_record? ? :create : :update
+          Papyrus.event(event, self, Papyrus.config.default_params(event, self))
+          Papyrus.event(:save, self, Papyrus.config.default_params(:save, self))
         end
       end
 
@@ -24,5 +22,6 @@ module Papyrus
         generator.send(:define_method, event_name) { |object, options = {}| }
       end
     end
+
   end
 end

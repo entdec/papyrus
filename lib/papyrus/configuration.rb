@@ -47,8 +47,8 @@ module Papyrus
       compile_papyrable_class_names!
     end
 
-    def default_params(transaction_log_entry)
-      @default_params.is_a?(Proc) ? instance_exec(transaction_log_entry, &@default_params) : @default_params
+    def default_params(event, record)
+      @default_params.is_a?(Proc) ? instance_exec(event, record, &@default_params) : @default_params
     end
 
     def current_computer
