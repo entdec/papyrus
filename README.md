@@ -6,11 +6,12 @@ Paper generation based on templates. Web-based printing using print-client.
 
 The context of the templates will using Liquid Drops, and call `to_liquid` on your objects.
 In case you want web-printing, the params needs an owner and possibly a locale. Use `default_params` on the
-configuration object to get these or extract them from the transaction log (entry).
+configuration object to set the owner or locale of a document.
 
 ```ruby
-config.default_params = lambda { |transaction_log_entry|
-  { owner: transaction_log_entry.transaction_log.user, locale: I18n.locale }
+# config/initializers/papyrus.rb
+config.default_params = lambda { |_event, _record|
+  {owner: Current.user, locale: I18n.locale}
 }
 ```
 
@@ -25,7 +26,7 @@ Print anything this way
 or, for ZPL labels for example:
 
 ```ruby
-Papyrus::Paper.new(kind: 'liquid', use: 'label', purpose: 'whatever', owner: User.first, attachment: { io: StringIO.new("^XA^BY5,2,270^FO100,50^BC^FD12345678^FS^XZ"), filename: 'test.zpl' }).print!
+Papyrus::Paper.new(kind: 'liquid', use: 'label', purpose: 'whatever', owner: User.first, attachment: {io: StringIO.new("^XA^BY5,2,270^FO100,50^BC^FD12345678^FS^XZ"), filename: 'test.zpl'}).print!
 ```
 
 ## Print job consolidation
@@ -39,8 +40,8 @@ Example:
 
 ```ruby
 Papyrus.consolidate do
-  Papyrus::Paper.new(kind: 'liquid', use: 'label', purpose: 'whatever', owner: User.first, attachment: { io: StringIO.new("^XA^BY5,2,270^FO100,50^BC^FD12345678^FS^XZ"), filename: 'test.zpl' }, consolidation_id: 'shipment-123').print!
-  Papyrus::Paper.new(kind: 'liquid', use: 'label', purpose: 'whatever', owner: User.first, attachment: { io: StringIO.new("^XA^BY5,2,270^FO100,50^BC^FD12345678^FS^XZ"), filename: 'test.zpl' }, consolidation_id: 'shipment-123').print!
+  Papyrus::Paper.new(kind: 'liquid', use: 'label', purpose: 'whatever', owner: User.first, attachment: {io: StringIO.new("^XA^BY5,2,270^FO100,50^BC^FD12345678^FS^XZ"), filename: 'test.zpl'}, consolidation_id: 'shipment-123').print!
+  Papyrus::Paper.new(kind: 'liquid', use: 'label', purpose: 'whatever', owner: User.first, attachment: {io: StringIO.new("^XA^BY5,2,270^FO100,50^BC^FD12345678^FS^XZ"), filename: 'test.zpl'}, consolidation_id: 'shipment-123').print!
 
   # Paper 1 and 2 will be consolidated into a single print job and sent to the printer
   Papyrus.print_consolidation(Papyrus.consolidation_id)

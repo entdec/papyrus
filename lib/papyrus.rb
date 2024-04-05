@@ -98,7 +98,7 @@ module Papyrus
       return unless obj.papyrable?
       return unless papers?(obj, event)
 
-      params = Papyrus.config.default_params(event, obj).merge(params)
+      params = (Papyrus.config.default_params(event, obj) || {}).merge(params)
 
       options = params[:options] || {}
       params[:consolidation_id] = consolidation_id if consolidate?
