@@ -15,7 +15,7 @@ module Papyrus
 
       after_commit do
         Thread.current['___papyrus_state_machine_events']&.each do |event|
-          Papyrus.event(event[:event], event[:object], event[:params])
+          Papyrus.event(event[:event], event[:object])
         end
         # After events are fired we can clear the events
         Thread.current['___papyrus_state_machine_events'] = []
@@ -32,7 +32,7 @@ module Papyrus
 
         def ___record__papyrus_state_machine_event(event, object)
           Thread.current['___papyrus_state_machine_events'] ||= []
-          Thread.current['___papyrus_state_machine_events'] << {event: event, object: object, params: Papyrus.config.default_params(event, object)}
+          Thread.current['___papyrus_state_machine_events'] << {event: event, object: object}
         end
       end
     end
