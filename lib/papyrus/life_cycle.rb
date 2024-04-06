@@ -24,5 +24,6 @@ module Papyrus
         generator.send(:define_method, event_name) { |object, options = {}| }
       end
     end
+
   end
 end
