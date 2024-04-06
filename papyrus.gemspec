@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.description = 'Paperwork generation in several output formats'
   spec.license = 'MIT'
 
-  spec.files = Dir.chdir(File.expand_path("..", __FILE__)) do
+  spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   end
 
@@ -34,13 +34,13 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails', '>= 6.0.2.1'
   spec.add_dependency 'rqrcode', '~> 1.2'
   spec.add_dependency 'servitium', '~> 1.1'
-  spec.add_dependency 'state_machines-activemodel', '~> 0.8'
+  spec.add_dependency 'state_machines-activerecord', '~> 0.9'
   spec.add_dependency 'tilt', '~> 2.0'
 
-  spec.add_dependency 'tailwindcss-rails'
   spec.add_dependency 'importmap-rails'
-  spec.add_dependency 'turbo-rails'
   spec.add_dependency 'stimulus-rails'
+  spec.add_dependency 'tailwindcss-rails'
+  spec.add_dependency 'turbo-rails'
 
   spec.add_development_dependency 'auxilium', '~> 3'
   spec.add_development_dependency('pdf-inspector', '>= 1.2.1', '< 2.0.a')
