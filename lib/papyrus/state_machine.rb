@@ -8,17 +8,17 @@ module Papyrus
       raise "#{name} must be papyrable" unless papyrable?
 
       state_machine.events.map(&:name)
-                   .reject { |event_name| generator.method_defined?(event_name) }
-                   .each do |event_name|
+        .reject { |event_name| generator.method_defined?(event_name) }
+        .each do |event_name|
         generator.send(:define_method, event_name) { |object, options = {}| }
       end
 
       after_commit do
-        Thread.current['___papyrus_state_machine_events']&.each do |event|
+        Thread.current["___papyrus_state_machine_events"]&.each do |event|
           Papyrus.event(event[:event], event[:object])
         end
         # After events are fired we can clear the events
-        Thread.current['___papyrus_state_machine_events'] = []
+        Thread.current["___papyrus_state_machine_events"] = []
       end
 
       state_machine do
@@ -31,8 +31,8 @@ module Papyrus
         end
 
         def ___record__papyrus_state_machine_event(event, object)
-          Thread.current['___papyrus_state_machine_events'] ||= []
-          Thread.current['___papyrus_state_machine_events'] << {event: event, object: object}
+          Thread.current["___papyrus_state_machine_events"] ||= []
+          Thread.current["___papyrus_state_machine_events"] << {event: event, object: object}
         end
       end
     end

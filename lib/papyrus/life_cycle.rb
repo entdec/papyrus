@@ -7,16 +7,18 @@ module Papyrus
     included do
       raise "#{name} must be papyrable" unless papyrable?
 
-      after_commit do
-        if previously_persisted?
-          Papyrus.event(:destroy, self)
-        elsif previously_new_record?
-          Papyrus.event(:create, self)
-          Papyrus.event(:save, self)
-        else
-          Papyrus.event(:update, self)
-          Papyrus.event(:save, self)
-        end
+      after_create_commit do
+        Papyrus.event(:create, self)
+        Papyrus.event(:save, self)
+      end
+
+      after_update_commit do
+        Papyrus.event(:update, self)
+        Papyrus.event(:save, self)
+      end
+
+      after_destroy_commit do
+        Papyrus.event(:destroy, self)
       end
 
       %i[create destroy update save].each do |event_name|
@@ -24,6 +26,5 @@ module Papyrus
         generator.send(:define_method, event_name) { |object, options = {}| }
       end
     end
-
   end
 end
