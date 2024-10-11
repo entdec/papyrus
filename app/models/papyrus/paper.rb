@@ -16,6 +16,7 @@ module Papyrus
       super(*args, **kwargs)
       self.consolidation_id ||= Papyrus.consolidation_id
     end
+
     def print!
       return if owner.blank?
       return unless printer
