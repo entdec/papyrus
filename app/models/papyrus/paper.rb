@@ -12,6 +12,11 @@ module Papyrus
 
     after_create_commit :print!, if: -> { !consolidated? }
 
+    def initialize(*args, **kwargs)
+      super(*args, **kwargs)
+      self.consolidation_id ||= Papyrus.consolidation_id
+    end
+
     def print!
       return if owner.blank?
       return unless printer
