@@ -101,7 +101,10 @@ module Papyrus
       params = (Papyrus.config.default_params(event, obj) || {}).merge(params)
 
       options = params[:options] || {}
-      params[:consolidation_id] = consolidation_id if consolidate?
+      if consolidate?
+        params[:consolidation_id] = consolidation_id
+        params[:group_id] = consolidation_group_id
+      end
       model = Papyrus::ObjectConverter.serialize(obj)
       formatted_hash = Papyrus::ObjectConverter.serialize(params)
 

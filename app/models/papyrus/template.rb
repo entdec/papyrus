@@ -13,22 +13,23 @@ module Papyrus
       locale = params[:locale]
       owner = params[:owner]
       consolidation_id = params[:consolidation_id]
+      group_id = params[:group_id]
 
       metadata = if consolidation_id
                    context_hash = context.transform_values do |v|
                      if v.is_a?(ActiveRecord::Base)
-                       { type: "object", id: v.id, class: v.class.name }
+                       {type: "object", id: v.id, class: v.class.name}
                      elsif (v.is_a?(Hash))
-                       { type: "hash", entries: v }
+                       {type: "hash", entries: v}
                      else
                        v
                      end
                    end.with_indifferent_access.to_h
 
                    variable_name = BaseGenerator.liquid_variable_name_for(object)
-                   context_hash[variable_name] = { type: "object", id: object.id, class: object.class.name}
+                   context_hash[variable_name] = {type: "object", id: object.id, class: object.class.name}
 
-                   { locale: locale, context: context_hash }
+                   {locale: locale, context: context_hash}
                  end
 
       paper = Paper.new(template: self,
@@ -38,6 +39,7 @@ module Papyrus
                         use: use,
                         purpose: purpose,
                         consolidation_id: consolidation_id,
+                        group_id: group_id,
                         metadata: metadata
       )
 
@@ -76,8 +78,8 @@ module Papyrus
           template.render(Papyrus::Context.new(self), Shash.new(context.merge(locale: locale)))
         else
           ::Liquidum.render(data,
-                            { assigns: context.merge('template' => self, locale: locale),
-                              registers: { 'template' => self } })
+                            {assigns: context.merge('template' => self, locale: locale),
+                             registers: {'template' => self}})
         end
       end
 
@@ -90,7 +92,7 @@ module Papyrus
       result = ::Liquidum.render(condition,
                                  {
                                    assigns: context.reject { |h| h == 'pdf' }.merge('template' => self),
-                                   registers: { 'template' => self }
+                                   registers: {'template' => self}
                                  })
 
       return true if result.strip.blank?
