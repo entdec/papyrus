@@ -14,7 +14,9 @@ module Papyrus
 
     def initialize(*args, **kwargs)
       super(*args, **kwargs)
+
       self.consolidation_id ||= Papyrus.consolidation_id
+      self.group_id ||= Papyrus.group_id
     end
 
     def print!
@@ -44,9 +46,14 @@ module Papyrus
       return attachment if attachment.attached? || !metadata['context'] || !template
 
       context = metadata['context']&.transform_values do |v|
-        if (v.is_a?(Hash))
+        if v.is_a?(Hash)
           if v['type'] == 'object'
-            v['class'].constantize.find(v['id'])
+            klass = v['class']
+            klass = klass.safe_constantize if klass.is_a?(String)
+            if klass&.respond_to?(:find_by)
+              return klass.find_by(id: v['id']) || v
+            end
+            v
           elsif v['type'] == 'hash'
             v['entries']
           else
