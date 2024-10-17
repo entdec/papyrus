@@ -19,7 +19,7 @@ module Papyrus
                         Sidekiq::Batch.new(parent_batch_id)
                       else
                         batch = Sidekiq::Batch.new
-                        batch.description = "Papyrus consolidation batch: #{consolidation_id}"
+                        batch.description = "Papyrus consolidation batch: #{datastore.inspect}"
                         batch.on(:complete, Papyrus::Consolidation::BatchCallback, datastore)
                         Papyrus.add_thread_variables(bid: batch.bid)
                         batch

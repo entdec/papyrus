@@ -16,7 +16,7 @@ module Papyrus
       super(*args, **kwargs)
 
       self.consolidation_id ||= Papyrus.consolidation_id
-      self.group_id ||= Papyrus.group_id
+      self.group_id ||= Papyrus.consolidation_group_id
     end
 
     def print!

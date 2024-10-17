@@ -10,7 +10,7 @@ module Papyrus
       # @yield the next middleware in the chain or worker `perform` method
       # @return [Void]
       def call(job_instance, job_payload, queue)
-        papyrus_datastore = (job_payload['$papyrus_datastore'] if job_payload['class'] != 'Sidekiq::Batch::Empty')
+        papyrus_datastore = (job_payload['___papyrus_datastore'] if job_payload['class'] != 'Sidekiq::Batch::Empty')
 
         if Papyrus.papyrus_datastore.empty? && papyrus_datastore.present?
           Thread.current[:papyrus_master_job] ||= job_instance.object_id
@@ -23,7 +23,7 @@ module Papyrus
             prepend_class(job_instance, Papyrus::Consolidation::BatchClassMethods) if bid.present?
           end
         end
-
+        
         yield
       ensure
         if Thread.current[:papyrus_master_job] == job_instance.object_id

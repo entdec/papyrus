@@ -102,8 +102,8 @@ module Papyrus
 
       options = params[:options] || {}
       if consolidate?
-        params[:consolidation_id] = consolidation_id
-        params[:group_id] = consolidation_group_id
+        params[:consolidation_id] = Papyrus.consolidation_id if params[:consolidation_id].blank?
+        params[:group_id] = consolidation_group_id if params[:group_id].blank?
       end
       model = Papyrus::ObjectConverter.serialize(obj)
       formatted_hash = Papyrus::ObjectConverter.serialize(params)
