@@ -1,5 +1,5 @@
-require 'papyrus/consolidation/batch_callback'
-require 'papyrus/consolidation/transaction_callback'
+require "papyrus/consolidation/batch_callback"
+require "papyrus/consolidation/transaction_callback"
 
 module Papyrus
   module Consolidation
@@ -12,14 +12,15 @@ module Papyrus
 
           if block.present?
             Papyrus.consolidate do
-              consolidation_id = Papyrus.consolidation_id
+              datastore = Papyrus.papyrus_datastore.slice(:consolidation_id, :group_id, :purposes)
+
               parent_batch_id = Papyrus::Consolidation::Batch.sidekiq_batch_id
               batch = if parent_batch_id.present?
                         Sidekiq::Batch.new(parent_batch_id)
                       else
                         batch = Sidekiq::Batch.new
-                        batch.description = "Papyrus consolidation batch: #{consolidation_id}"
-                        batch.on(:complete, Papyrus::Consolidation::BatchCallback, consolidation_id: consolidation_id)
+                        batch.description = "Papyrus consolidation batch: #{datastore.inspect}"
+                        batch.on(:complete, Papyrus::Consolidation::BatchCallback, datastore)
                         Papyrus.add_thread_variables(bid: batch.bid)
                         batch
                       end

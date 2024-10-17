@@ -101,7 +101,10 @@ module Papyrus
       params = (Papyrus.config.default_params(event, obj) || {}).merge(params)
 
       options = params[:options] || {}
-      params[:consolidation_id] = consolidation_id if consolidate?
+      if consolidate?
+        params[:consolidation_id] = Papyrus.consolidation_id if params[:consolidation_id].blank?
+        params[:group_id] = consolidation_group_id if params[:group_id].blank?
+      end
       model = Papyrus::ObjectConverter.serialize(obj)
       formatted_hash = Papyrus::ObjectConverter.serialize(params)
 
@@ -122,8 +125,12 @@ module Papyrus
       config.metadata_fields
     end
 
-    def print_consolidation(consolidation_id)
-      Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id)
+    # Print all papers generated for the given consolidation id.
+    # Optionally the option group_id can be passed to  to only print papers generated under a specific group.
+    # @param [String] consolidation_id
+    # @param [Hash] options the options hash
+    def print_consolidation(consolidation_id, options = {})
+      Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id, options)
     end
 
     def papers?(obj, event)
@@ -133,14 +140,14 @@ module Papyrus
                               )).where(enabled: true).count.positive?
     end
 
-    # Returns true if consolidation is currently active for the current thread.
+    # @return [Boolean] true if the current thread is in consolidation mode.
     def consolidate?
       return false unless papyrus_datastore.respond_to?(:key?)
 
       papyrus_datastore[:consolidation_id].present?
     end
 
-    # Returns the linked consolidation id for the current thread.
+    # @return [String] the consolidation id for the current thread.
     def consolidation_id
       papyrus_datastore[:consolidation_id] if consolidate?
     end
@@ -176,7 +183,6 @@ module Papyrus
     # Start consolidating papers (print jobs) for the current thread inside the given block.
     # Set the consolidation_id for the current thread in the papyrus datastore so that
     # all papers generated inside the block will be generated with the same consolidation_id.
-    # Use Papyrus.print_consolidation(consolidation_id) to print all papers generated inside the block.
     def consolidate(&block)
       if Papyrus.consolidation_id.blank?
         consolidation_id = Papyrus.generate_consolidation_id
@@ -185,6 +191,24 @@ module Papyrus
       block.call
     ensure
       remove_datastore
+    end
+
+    # Creates a new group within the current consolidation process, assigning it a unique `group_id`.
+    # This ensures that the papers in each group are handled separately and printed in the order they are processed.
+    #
+    # Use this method to group multiple print tasks together in one consolidation session, while keeping them organized by purpose.
+    def consolidation_group(purposes = [], &block)
+      return unless consolidate? && block
+
+      group_id = uuid7
+      add_thread_variables(group_id: group_id, purposes: purposes)
+      block.call
+    ensure
+      remove_thread_variables(:group_id, :purposes)
+    end
+
+    def consolidation_group_id
+      papyrus_datastore[:group_id] if consolidate?
     end
 
     def generate_consolidation_id(validate = true)
@@ -197,6 +221,26 @@ module Papyrus
         end
       end
       consolidation_id
+    end
+
+    def uuid7
+      current_time_ms = (Time.now.to_f * 1000).to_i
+
+      if current_time_ms == @last_timestamp
+        @last_random_bits += 1
+      else
+        @last_random_bits = SecureRandom.random_number(2 ** 74)
+      end
+
+      @last_timestamp = current_time_ms
+
+      "%08x-%04x-7%03x-%04x-%012x" % [
+        (current_time_ms & 0xFFFFFFFF), # 32 bits (8 hex digits) time low
+        ((current_time_ms >> 32) & 0xFFFF), # 16 bits (4 hex digits) time mid
+        (@last_random_bits >> 61) & 0xFFF, # 12 bits (3 hex digits, with version 7 prefix)
+        (@last_random_bits >> 47) & 0xFFFF, # 16 bits (4 hex digits)
+        @last_random_bits & 0xFFFFFFFFFFFF # 48 bits (12 hex digits)
+      ]
     end
 
   end

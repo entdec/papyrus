@@ -1,9 +1,12 @@
 module Papyrus
   module Consolidation
     class TransactionCallback
-      def initialize(consolidation_id)
+      def initialize(variables = {})
         @connection = ActiveRecord::Base.connection
-        @consolidation_id = consolidation_id
+        variables = {} unless variables.is_a?(Hash)
+
+        @variables = variables.with_indifferent_access
+        @consolidation_id = @variables[:consolidation_id]
       end
 
       # rubocop: disable Naming/PredicateName
@@ -22,11 +25,11 @@ module Papyrus
       end
 
       def committed!(*)
-        print_consolidation(@consolidation_id)
+        print_consolidation(@consolidation_id, @variables) if @consolidation_id.present?
       end
 
       def rolledback!(*)
-        print_consolidation(@consolidation_id)
+        print_consolidation(@consolidation_id, @variables) if @consolidation_id.present?
       end
 
       # Required for +transaction(requires_new: true)+
@@ -34,8 +37,8 @@ module Papyrus
         @connection.add_transaction_record(self)
       end
 
-      def print_consolidation(consolidation_id)
-        Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id)
+      def print_consolidation(consolidation_id, variables)
+        Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id, variables)
       end
 
     end
