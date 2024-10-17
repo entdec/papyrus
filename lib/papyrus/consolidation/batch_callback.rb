@@ -6,6 +6,7 @@ module Papyrus
         options = {} unless options.is_a?(Hash)
         options = options.with_indifferent_access
         return unless options["consolidation_id"].present?
+        consolidation_id = options["consolidation_id"]
 
         if ActiveRecord::Base.connection.transaction_open?
           ActiveRecord::Base.connection.add_transaction_record(Papyrus::Consolidation::TransactionCallback.new(options))
