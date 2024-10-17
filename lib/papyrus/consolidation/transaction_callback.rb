@@ -38,7 +38,7 @@ module Papyrus
       end
 
       def print_consolidation(consolidation_id, variables)
-        Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id, variables)
+        Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id, variables.as_json)
       end
 
     end

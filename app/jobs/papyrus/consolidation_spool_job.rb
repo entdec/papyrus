@@ -21,26 +21,27 @@ module Papyrus
                  .joins("LEFT JOIN papyrus_preferred_printers
                    ON papyrus_preferred_printers.owner_id = papyrus_papers.owner_id
                    AND papyrus_preferred_printers.owner_type = papyrus_papers.owner_type AND papyrus_papers.use = papyrus_preferred_printers.use")
-                 .joins("LEFT JOIN papyrus_printers
-                   ON papyrus_printers.id = papyrus_preferred_printers.printer_id")
+                 .joins("LEFT JOIN papyrus_printers ON papyrus_printers.id = papyrus_preferred_printers.printer_id")
+
       papers = papers.where("papyrus_preferred_printers.computer_id = ?", Papyrus.config.current_computer) if Papyrus.config.current_computer
+
       papers = papers.where(consolidation_id: consolidation_id)
                      .where.not(owner_id: nil)
-                     .select("papyrus_papers.*, papyrus_printers.client_id AS printer_client_id")
-                     .group(:id, "papyrus_printers.client_id")
+                     .select("papyrus_papers.*, papyrus_printers.client_id")
+                     .group("papyrus_printers.client_id", :group_id, :id)
                      .order("papyrus_printers.client_id": :asc, group_id: :asc)
 
       purposes = options[:purposes]
       if purposes.present?
         case_statement = Arel::Nodes::Case.new(Arel.sql("papyrus_papers.purpose"))
         purposes.each_with_index do |purpose, index|
-          purpose = purpose.to_s
           case_statement.when(Arel::Nodes::Quoted.new(purpose)).then(index + 1)
         end
         case_statement.else(purposes.size + 1)
-        papers = papers.order(case_statement.asc)
+        papers = papers.order(case_statement.asc.nulls_last)
       end
 
+      # Then apply other sorting (kind, created_at) to refine within the groups
       papers = papers.order(kind: :asc, created_at: :asc)
 
       return if papers.empty?
@@ -52,7 +53,7 @@ module Papyrus
       current_client_id_pdf = nil
       current_client_id_raw = nil
 
-      in_batches(papers).each do |papers_batch|
+      in_batches(papers) do |papers_batch|
         papers_batch.each do |paper|
           case paper.kind
           when "pdf"
@@ -138,7 +139,7 @@ module Papyrus
     def print_pdf_papers(consolidation_id, printer_client_id, pdf_papers)
       Papyrus::PrintNodeUtils.retry_on_rate_limit do
         combine_pdf_papers(pdf_papers) do |pdf|
-          job = Papyrus.print_client.create_printjob(
+          Papyrus.print_client.create_printjob(
             PrintNode::PrintJob.new(printer_client_id,
                                     "Consolidation #{consolidation_id}",
                                     "pdf_base64",
@@ -152,11 +153,11 @@ module Papyrus
       end
     end
 
-    def in_batches(papers, batch_size: 1000, offset: 0)
+    def in_batches(papers, batch_size: 500, offset: 0)
       return unless block_given?
 
       loop do
-        papers_batch = papers.offset(offset).limit(batch_size)
+        papers_batch = papers.offset(offset).limit(batch_size).to_a
         count = papers_batch.count
         break if count.zero?
         yield papers_batch
@@ -275,7 +276,10 @@ module Papyrus
 
       case paper.kind
       when "pdf"
-        pdf = CombinePDF.parse(attachment.read)
+        pdf = nil
+        attachment.open do |f|
+          pdf = ::CombinePDF.parse(f.read)
+        end
         buffer << pdf
       else
         attachment.open do |f|
