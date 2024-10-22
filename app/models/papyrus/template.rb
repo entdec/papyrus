@@ -13,7 +13,6 @@ module Papyrus
       locale = params[:locale]
       owner = params[:owner]
       consolidation_id = params[:consolidation_id]
-      group_id = params[:group_id]
 
       metadata = if consolidation_id
                    context_hash = context.transform_values do |v|
@@ -39,7 +38,6 @@ module Papyrus
                         use: use,
                         purpose: purpose,
                         consolidation_id: consolidation_id,
-                        group_id: group_id,
                         metadata: metadata
       )
 

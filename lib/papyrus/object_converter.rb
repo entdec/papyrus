@@ -6,12 +6,11 @@ module Papyrus
       end
 
       def serialize_v(v)
-        case v
-        when ActiveRecord::Base
-          { type: v.class.name, id: v.id }
-        when Hash
-          { type: v.class.name, obj: v.transform_values { |va| serialize_v(va) } }
-        when Array
+        if v.is_a?(ActiveRecord::Base)
+          {type: v.class.name, id: v.id}
+        elsif v.is_a?(Hash)
+          {type: v.class.name, obj: v.transform_values { |va| serialize_v(va) }}
+        elsif v.is_a?(Array)
           v.map! { |va| serialize_v(va) }
         else
           v

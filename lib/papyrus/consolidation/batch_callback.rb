@@ -4,7 +4,8 @@ module Papyrus
 
       def on_complete(status, options)
         options = {} unless options.is_a?(Hash)
-        options = options.deep_dup.with_indifferent_access
+        options = options.with_indifferent_access
+
         return unless options["consolidation_id"].present?
         consolidation_id = options["consolidation_id"]
 
@@ -12,7 +13,7 @@ module Papyrus
           ActiveRecord::Base.connection.add_transaction_record(Papyrus::Consolidation::TransactionCallback.new(options.as_json))
         else
           Papyrus.remove_datastore
-          Papyrus.print_consolidation(consolidation_id, options.as_json)
+          Papyrus.print_consolidation(consolidation_id)
         end
       end
 
