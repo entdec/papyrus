@@ -23,7 +23,7 @@ module Papyrus
             prepend_class(job_instance, Papyrus::Consolidation::BatchClassMethods) if bid.present?
           end
         end
-        
+
         yield
       ensure
         if Thread.current[:papyrus_master_job] == job_instance.object_id

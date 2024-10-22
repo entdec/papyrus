@@ -25,11 +25,11 @@ module Papyrus
       end
 
       def committed!(*)
-        print_consolidation(@consolidation_id, @variables) if @consolidation_id.present?
+        print_consolidation(@consolidation_id) if @consolidation_id.present?
       end
 
       def rolledback!(*)
-        print_consolidation(@consolidation_id, @variables) if @consolidation_id.present?
+        # noop
       end
 
       # Required for +transaction(requires_new: true)+
@@ -37,8 +37,8 @@ module Papyrus
         @connection.add_transaction_record(self)
       end
 
-      def print_consolidation(consolidation_id, variables)
-        Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id, variables.as_json)
+      def print_consolidation(consolidation_id)
+        Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id)
       end
 
     end

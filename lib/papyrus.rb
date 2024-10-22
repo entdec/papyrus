@@ -98,17 +98,17 @@ module Papyrus
       return unless obj.papyrable?
       return unless papers?(obj, event)
 
-      params = (Papyrus.config.default_params(event, obj) || {}).merge(params)
+      params = (Papyrus.config.default_params(event, obj) || {}).merge(params).with_indifferent_access
 
       options = params[:options] || {}
       if consolidate?
         params[:consolidation_id] = Papyrus.consolidation_id if params[:consolidation_id].blank?
-        params[:group_id] = consolidation_group_id if params[:group_id].blank?
       end
       model = Papyrus::ObjectConverter.serialize(obj)
       formatted_hash = Papyrus::ObjectConverter.serialize(params)
 
-      if options[:perform_now] == true || consolidate?
+      perform_now = options[:perform_now] == true || ((!Papyrus::Consolidation::Batch.in_sidekiq_batch? && !Papyrus.papyrus_datastore[:bid]) && consolidate?)
+      if perform_now
         Papyrus::GenerateJob.perform_sync(event.to_s, model, formatted_hash)
       else
         job = Papyrus::GenerateJob
@@ -126,11 +126,9 @@ module Papyrus
     end
 
     # Print all papers generated for the given consolidation id.
-    # Optionally the option group_id can be passed to  to only print papers generated under a specific group.
     # @param [String] consolidation_id
-    # @param [Hash] options the options hash
-    def print_consolidation(consolidation_id, options = {})
-      Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id, options)
+    def print_consolidation(consolidation_id)
+      Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id)
     end
 
     def papers?(obj, event)
@@ -193,24 +191,6 @@ module Papyrus
       remove_datastore
     end
 
-    # Creates a new group within the current consolidation process, assigning it a unique `group_id`.
-    # This ensures that the papers in each group are handled separately and printed in the order they are processed.
-    #
-    # Use this method to group multiple print tasks together in one consolidation session, while keeping them organized by purpose.
-    def consolidation_group(purposes = [], &block)
-      return unless consolidate? && block
-
-      group_id = uuid7
-      add_thread_variables(group_id: group_id, purposes: purposes)
-      block.call
-    ensure
-      remove_thread_variables(:group_id, :purposes)
-    end
-
-    def consolidation_group_id
-      papyrus_datastore[:group_id] if consolidate?
-    end
-
     def generate_consolidation_id(validate = true)
       consolidation_id = SecureRandom.uuid
       if validate
@@ -221,26 +201,6 @@ module Papyrus
         end
       end
       consolidation_id
-    end
-
-    def uuid7
-      current_time_ms = (Time.now.to_f * 1000).to_i
-
-      if current_time_ms == @last_timestamp
-        @last_random_bits += 1
-      else
-        @last_random_bits = SecureRandom.random_number(2 ** 74)
-      end
-
-      @last_timestamp = current_time_ms
-
-      "%08x-%04x-7%03x-%04x-%012x" % [
-        (current_time_ms & 0xFFFFFFFF), # 32 bits (8 hex digits) time low
-        ((current_time_ms >> 32) & 0xFFFF), # 16 bits (4 hex digits) time mid
-        (@last_random_bits >> 61) & 0xFFF, # 12 bits (3 hex digits, with version 7 prefix)
-        (@last_random_bits >> 47) & 0xFFFF, # 16 bits (4 hex digits)
-        @last_random_bits & 0xFFFFFFFFFFFF # 48 bits (12 hex digits)
-      ]
     end
 
   end

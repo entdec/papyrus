@@ -12,7 +12,7 @@ module Papyrus
 
           if block.present?
             Papyrus.consolidate do
-              datastore = Papyrus.papyrus_datastore.slice(:consolidation_id, :group_id, :purposes)
+              datastore = Papyrus.papyrus_datastore.deep_dup
 
               parent_batch_id = Papyrus::Consolidation::Batch.sidekiq_batch_id
               batch = if parent_batch_id.present?
@@ -20,7 +20,7 @@ module Papyrus
                       else
                         batch = Sidekiq::Batch.new
                         batch.description = "Papyrus consolidation batch: #{datastore.inspect}"
-                        batch.on(:complete, Papyrus::Consolidation::BatchCallback, datastore)
+                        batch.on(:complete, Papyrus::Consolidation::BatchCallback, datastore.as_json)
                         Papyrus.add_thread_variables(bid: batch.bid)
                         batch
                       end
@@ -29,6 +29,7 @@ module Papyrus
               batch.jobs do
                 result = block.call
               end
+
               result
             end
           end
@@ -39,6 +40,10 @@ module Papyrus
           context = Thread.current[:sidekiq_context]
           bid = Thread.current[:sidekiq_context][:bid] if context.present?
           bid
+        end
+
+        def in_sidekiq_batch?
+          Papyrus::Consolidation::Batch.sidekiq_batch_id.present?
         end
 
       end
