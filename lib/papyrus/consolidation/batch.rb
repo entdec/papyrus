@@ -42,8 +42,16 @@ module Papyrus
           bid
         end
 
-        def in_sidekiq_batch?
-          Papyrus::Consolidation::Batch.sidekiq_batch_id.present?
+        def escape
+          sidekiq_batch = Thread.current[:sidekiq_batch]
+          return unless sidekiq_batch.present?
+
+          begin
+            Thread.current[:sidekiq_batch] = nil
+            yield
+          ensure
+            Thread.current[:sidekiq_batch] = sidekiq_batch
+          end
         end
 
       end
