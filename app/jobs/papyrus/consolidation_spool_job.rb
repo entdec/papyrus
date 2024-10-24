@@ -30,7 +30,7 @@ module Papyrus
           case kind
           when 'pdf'
             print_pdf_papers(consolidation_id, printer_client_id, kind_papers)
-          when 'raw'
+          when 'raw', 'liquid'
             print_raw_papers(consolidation_id, printer_client_id, kind_papers)
           end
         end
