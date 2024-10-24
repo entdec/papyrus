@@ -50,9 +50,10 @@ module Papyrus
             klass = v['class']
             klass = klass.safe_constantize if klass.is_a?(String)
             if klass&.respond_to?(:find_by)
-              return klass.find_by(id: v['id']) || v
+              klass.find_by(id: v['id']) || v
+            else
+              v
             end
-            v
           elsif v['type'] == 'hash'
             v['entries']
           else
@@ -63,7 +64,7 @@ module Papyrus
         end
       end.with_indifferent_access.to_h
 
-      variable_name = BaseGenerator.liquid_variable_name_for(papyrable)
+      variable_name = Papyrus::BaseGenerator.liquid_variable_name_for(papyrable)
       context[variable_name] = context[variable_name].is_a?(Hash) ? context[variable_name].deep_stringify_keys : context[variable_name]&.to_liquid
 
       template.generate_attachment(self, context, metadata['locale'])
