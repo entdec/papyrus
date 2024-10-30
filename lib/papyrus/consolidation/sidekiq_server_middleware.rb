@@ -42,17 +42,17 @@ module Papyrus
     end
 
     module BatchClassMethods
-      def perform(*args)
+      def perform(*)
         bid = (Thread.current[:sidekiq_context][:bid] if Thread.current[:sidekiq_context].present?)
 
         result = nil
         if bid.present? && Thread.current[:sidekiq_batch].blank?
           # Run perform in batch context so we ca pickup any new jobs queued for recursive consolidation
           Sidekiq::Batch.new(bid).jobs do
-            result = super(*args)
+            result = super
           end
         else
-          result = super(*args)
+          result = super
         end
         result
       end

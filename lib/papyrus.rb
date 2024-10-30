@@ -129,7 +129,7 @@ module Papyrus
     # Print all papers generated for the given consolidation id.
     # @param [String] consolidation_id
     def print_consolidation(consolidation_id)
-      Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id)
+      Papyrus::ConsolidationSpoolJob.perform_sync(consolidation_id)
     end
 
     def papers?(obj, event)

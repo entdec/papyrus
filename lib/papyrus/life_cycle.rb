@@ -9,11 +9,13 @@ module Papyrus
 
       after_create_commit do
         Papyrus.event(:create, self)
-        Papyrus.event(:save, self)
       end
 
       after_update_commit do
         Papyrus.event(:update, self)
+      end
+
+      after_save_commit do
         Papyrus.event(:save, self)
       end
 

@@ -38,7 +38,7 @@ module Papyrus
       end
 
       def print_consolidation(consolidation_id)
-        Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id)
+        Papyrus::ConsolidationSpoolJob.perform_sync(consolidation_id)
       end
 
     end
