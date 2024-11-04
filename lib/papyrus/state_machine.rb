@@ -15,7 +15,7 @@ module Papyrus
 
       after_commit do
         Thread.current["___papyrus_state_machine_events"]&.each do |event|
-          Papyrus.with_datastore (**event[:datastore]) { Papyrus.event(event[:event], event[:object]) }
+          Papyrus.with_datastore(**event[:datastore]) { Papyrus.event(event[:event], event[:object]) }
         end
         # After events are fired we can clear the events
         Thread.current["___papyrus_state_machine_events"] = []
