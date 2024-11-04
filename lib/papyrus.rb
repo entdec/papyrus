@@ -129,7 +129,7 @@ module Papyrus
     # Print all papers generated for the given consolidation id.
     # @param [String] consolidation_id
     def print_consolidation(consolidation_id)
-      Papyrus::ConsolidationSpoolJob.perform_async(consolidation_id)
+      Papyrus::ConsolidationSpoolJob.perform_sync(consolidation_id)
     end
 
     def papers?(obj, event)
@@ -153,6 +153,15 @@ module Papyrus
 
     def papyrus_datastore
       Thread.current[:papyrus_datastore] ||= HashWithIndifferentAccess.new
+    end
+
+    # Execute the given block with the given datastore for the current thread.
+    def with_datastore(**datastore)
+      old_datastore = Papyrus.papyrus_datastore
+      Thread.current[:papyrus_datastore] = datastore
+      yield
+    ensure
+      Thread.current[:papyrus_datastore] = old_datastore
     end
 
     # Removes thread variables for the current thread.
