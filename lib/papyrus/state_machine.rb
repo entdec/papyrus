@@ -32,7 +32,7 @@ module Papyrus
 
         def ___record__papyrus_state_machine_event(event, object)
           Thread.current["___papyrus_state_machine_events"] ||= []
-          Thread.current["___papyrus_state_machine_events"] << {event: event, object: object, datastore: Papyrus.papyrus_datastore}
+          Thread.current["___papyrus_state_machine_events"] << {event: event, object: object, datastore: Papyrus.papyrus_datastore.deep_dup}
         end
       end
     end
