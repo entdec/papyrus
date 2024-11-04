@@ -155,6 +155,15 @@ module Papyrus
       Thread.current[:papyrus_datastore] ||= HashWithIndifferentAccess.new
     end
 
+    # Execute the given block with the given datastore for the current thread.
+    def with_datastore(**datastore)
+      old_datastore = Papyrus.papyrus_datastore
+      Thread.current[:papyrus_datastore] = datastore
+      yield
+    ensure
+      Thread.current[:papyrus_datastore] = old_datastore
+    end
+
     # Removes thread variables for the current thread.
     # (Also available via Thread.current[:papyrus_variables])
     # @param [Array] keys
