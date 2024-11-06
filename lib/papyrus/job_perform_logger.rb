@@ -1,4 +1,8 @@
 module Papyrus
+
+  # Include this module in your job (where Sidekiq::Job is included)
+  # to log the `perform_inline` method call to avoid synchronous jobs from
+  # being registered on the current open batch.
   module JobPerformLogger
 
     def self.included(base)
