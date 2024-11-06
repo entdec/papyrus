@@ -41,6 +41,7 @@ require 'papyrus/prawn_extensions'
 require 'papyrus/shash'
 require 'papyrus/print_node_utils'
 require 'papyrus/object_converter'
+require 'papyrus/job_perform_logger'
 
 module Papyrus
   class Error < StandardError; end
