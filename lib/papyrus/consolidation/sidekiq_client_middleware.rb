@@ -14,11 +14,11 @@ module Papyrus
       #   return value is returned
       # @yield the next middleware in the chain or the enqueuing of the job
       def call(job_class_or_string, job_payload, queue, redis_pool)
-        if Papyrus.papyrus_datastore.present? && job_class_or_string.to_s != "Sidekiq::Batch::Empty"
+        if Papyrus.consolidate? && job_class_or_string.to_s != "Sidekiq::Batch::Empty"
           job_payload["___papyrus_datastore"] = Papyrus.papyrus_datastore.deep_dup.as_json
         end
 
-        if Thread.current[:sidekiq_batch].present? && job_class_or_string.to_s != "Sidekiq::Batch::Empty" && job_payload["bid"] == Thread.current[:sidekiq_batch]&.bid
+        if Thread.current[:sidekiq_job_sync_execution] && Thread.current[:sidekiq_batch].present?
           yield
           false
         else
