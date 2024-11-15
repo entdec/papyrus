@@ -10,52 +10,39 @@ module Papyrus
       # @yield the next middleware in the chain or worker `perform` method
       # @return [Void]
       def call(job_instance, job_payload, queue)
-        papyrus_datastore = (job_payload['___papyrus_datastore'] if job_payload['class'] != 'Sidekiq::Batch::Empty')
+        papyrus_datastore = job_payload['___papyrus_datastore']
 
-        if Papyrus.papyrus_datastore.empty? && papyrus_datastore.present?
-          Thread.current[:papyrus_master_job] ||= job_instance.object_id
-          Papyrus.add_thread_variables(**papyrus_datastore)
+        if papyrus_datastore
+          Papyrus.add_thread_variables(**papyrus_datastore) unless Papyrus.consolidate?
 
-          # If we are NOT within a Sidekiq batch, we need to prepend the batch class methods to pick up new jobs queued.
-          # We don't want to put yield in a batch directly as it might not be the last middleware in the chain.
-          if Thread.current[:sidekiq_batch].blank?
-            bid = (Thread.current[:sidekiq_context][:bid] if Thread.current[:sidekiq_context].present?)
-            prepend_class(job_instance, Papyrus::Consolidation::BatchClassMethods) if bid.present?
+          in_batch = job_payload["bid"]
+          unless in_batch
+            result = nil
+            nested_batch = Sidekiq::Batch.new
+            nested_batch.jobs { result = yield }
+            return result
           end
         end
 
         yield
       ensure
-        if Thread.current[:papyrus_master_job] == job_instance.object_id
-          Papyrus.remove_datastore
-          Thread.current[:papyrus_master_job] = nil
-        end
+        Papyrus.remove_datastore
       end
-
-      # Prepend methods to the singleton class; a singleton class is instance bound.
-      def prepend_class(instance, klass)
-        instance_klass = instance&.singleton_class
-        return unless instance_klass
-        instance_klass.prepend(klass) if instance_klass.ancestors.exclude?(klass)
-      end
-
     end
 
-    module BatchClassMethods
-      def perform(*)
-        bid = (Thread.current[:sidekiq_context][:bid] if Thread.current[:sidekiq_context].present?)
+    class SidekiqClientServerMiddleware
+      include Sidekiq::ServerMiddleware
 
-        result = nil
-        if bid.present? && Thread.current[:sidekiq_batch].blank?
-          # Run perform in batch context so we ca pickup any new jobs queued for recursive consolidation
-          Sidekiq::Batch.new(bid).jobs do
-            result = super
-          end
+      def call(job_instance, job_payload, queue)
+        consolidating = Papyrus.consolidate? || job_payload['___papyrus_datastore']
+
+        if consolidating && job_instance.class.name != "Papyrus::EventJob"
+          Sidekiq::Batch::Server.new.call(job_instance, job_payload, queue)
         else
-          result = super
+          yield
         end
-        result
       end
+
     end
 
   end

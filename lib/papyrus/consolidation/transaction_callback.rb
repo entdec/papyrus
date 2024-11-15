@@ -2,45 +2,24 @@ module Papyrus
   module Consolidation
     class TransactionCallback
       def initialize(variables = {})
-        @connection = ActiveRecord::Base.connection
         variables = {} unless variables.is_a?(Hash)
-
         @variables = variables.with_indifferent_access
         @consolidation_id = @variables[:consolidation_id]
       end
 
-      # rubocop: disable Naming/PredicateName
-      def has_transactional_callbacks?
-        true
+      def register
+        ActiveRecord::Base.after_commit on: :any do
+          perform_consolidation_spool_job
+        end
       end
 
-      # rubocop: enable Naming/PredicateName
-
-      def before_committed!(*)
-        # noop
+      def perform_consolidation_spool_job
+        Papyrus::ConsolidationSpoolJob.perform_sync(@consolidation_id)
       end
 
-      def trigger_transactional_callbacks?
-        true
+      def self.create(variables)
+        new(variables).tap(&:register)
       end
-
-      def committed!(*)
-        print_consolidation(@consolidation_id) if @consolidation_id.present?
-      end
-
-      def rolledback!(*)
-        # noop
-      end
-
-      # Required for +transaction(requires_new: true)+
-      def add_to_transaction(*)
-        @connection.add_transaction_record(self)
-      end
-
-      def print_consolidation(consolidation_id)
-        Papyrus::ConsolidationSpoolJob.perform_sync(consolidation_id)
-      end
-
     end
   end
 end

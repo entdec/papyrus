@@ -41,7 +41,7 @@ require 'papyrus/prawn_extensions'
 require 'papyrus/shash'
 require 'papyrus/print_node_utils'
 require 'papyrus/object_converter'
-require 'papyrus/job_perform_logger'
+require 'papyrus/event_record'
 
 module Papyrus
   class Error < StandardError; end
@@ -110,8 +110,7 @@ module Papyrus
 
       perform_now = options[:perform_now] == true || consolidate?
       if perform_now
-        # For some reason this queues a job in the batch which will stay pending?
-        Papyrus::Consolidation::Batch.escape { Papyrus::GenerateJob.perform_sync(event.to_s, model, formatted_hash) }
+        Papyrus::GenerateJob.perform_sync(event.to_s, model, formatted_hash)
       else
         job = Papyrus::GenerateJob
         job.set(wait: options[:wait]) if options[:wait]
@@ -157,7 +156,7 @@ module Papyrus
     end
 
     # Execute the given block with the given datastore for the current thread.
-    def with_datastore(**datastore)
+    def with_datastore(datastore)
       old_datastore = Papyrus.papyrus_datastore
       Thread.current[:papyrus_datastore] = datastore
       yield

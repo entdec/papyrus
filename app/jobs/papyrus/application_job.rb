@@ -3,7 +3,6 @@ module Papyrus
     include Sidekiq::Job
     prepend Auxilium::Concerns::SidekiqCallbacks
     # discard_on ActiveJob::DeserializationError
-    include Papyrus::JobPerformLogger
 
     sidekiq_retry_in do |count, exception, jobhash|
       case exception

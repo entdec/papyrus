@@ -7,21 +7,10 @@ module Papyrus
     included do
       raise "#{name} must be papyrable" unless papyrable?
 
-      after_create_commit do
-        Papyrus.event(:create, self)
-      end
-
-      after_update_commit do
-        Papyrus.event(:update, self)
-      end
-
-      after_save_commit do
-        Papyrus.event(:save, self)
-      end
-
-      after_destroy_commit do
-        Papyrus.event(:destroy, self)
-      end
+      after_create { Papyrus::EventRecord.create(:create, self, data_store: Papyrus.papyrus_datastore.deep_dup) }
+      after_update { Papyrus::EventRecord.create(:update, self, data_store: Papyrus.papyrus_datastore.deep_dup) }
+      after_destroy { Papyrus::EventRecord.create(:destroy, self, data_store: Papyrus.papyrus_datastore.deep_dup) }
+      after_save { Papyrus::EventRecord.create(:save, self, data_store: Papyrus.papyrus_datastore.deep_dup) }
 
       %i[create destroy update save].each do |event_name|
         next if generator.method_defined?(event_name)
