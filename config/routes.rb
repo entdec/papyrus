@@ -36,5 +36,18 @@ Papyrus::Engine.routes.draw do
       post 'paper'
     end
   end
+
+  namespace :admin do
+    resources :templates do
+      member do
+        patch :rollback, to: 'templates#rollback'
+      end
+    end
+  end
+
+  namespace :admin do
+    get 'dialog/rollback', to: 'papyrus/#rollback', as: :rollback_dialog
+  end
+
   root to: 'dashboard#show'
 end
