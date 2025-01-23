@@ -64,7 +64,7 @@
 
 
       - card.with_tab:media, padding: true
-        = sts.attachments(@template, :attachments)
+        = f.attachments :template
 
       - card.with_tab:example_data, padding: true
         .grid.grid-cols-12.gap-4
