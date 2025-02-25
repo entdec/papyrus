@@ -110,7 +110,7 @@ module Papyrus
 
       perform_now = options[:perform_now] == true || consolidate?
       if perform_now
-        Papyrus::GenerateJob.perform_sync(event.to_s, model, formatted_hash)
+        Papyrus::Consolidation::Batch.escape { Papyrus::GenerateJob.perform_sync(event.to_s, model, formatted_hash) }
       else
         job = Papyrus::GenerateJob
         job.set(wait: options[:wait]) if options[:wait]
