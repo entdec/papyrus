@@ -1,6 +1,6 @@
 module Papyrus
   class GenerateJob < ApplicationJob
-
+    after_perform :cleanup_papyrus_events
     def perform(event, obj = {}, params = {})
       begin
         model = Papyrus::ObjectConverter.deserialize(obj)
@@ -17,6 +17,17 @@ module Papyrus
       generator.call
       templates = generator.templates
       generator.dispatch(templates) if templates.present?
+    end
+
+    def cleanup_papyrus_events
+      event = arguments.first
+      obj = arguments.second
+
+      papyrus_events = Papyrus::Event.where(
+        transitionable: obj,
+        transition_event: event.to_s
+      )
+      papyrus_events.destroy_all
     end
 
   end
