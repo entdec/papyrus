@@ -25,6 +25,7 @@ module Papyrus
     has_one :template, through: :paper, class_name: 'Papyrus::Template'
 
     def spool!
+      return if printed?
       return unless Papyrus.print_client
 
       started!

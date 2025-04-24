@@ -8,6 +8,7 @@ module Papyrus
     before_action :set_objects
 
     def resend
+      @print_job.update_column(:state, 'pending')
       @print_job.spool!
     end
 
