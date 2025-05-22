@@ -4,6 +4,14 @@ module Papyrus
       extend ActiveSupport::Concern
 
       included do
+        raise "#{name} must be papyrable" unless papyrable?
+
+        state_machine.events.map(&:name)
+                     .reject { |event_name| generator.method_defined?(event_name) }
+                     .each do |event_name|
+          generator.send(:define_method, event_name) { |object, options = {}| }
+        end
+
         state_machine do
           after_transition any => any do |record, transition|
             event = Papyrus::Event.find_or_initialize_by(
@@ -20,11 +28,14 @@ module Papyrus
           end
         end
 
-        after_commit do
-          Papyrus::Event.all.each do |transition|
-            transitionable = transition.transitionable_type.constantize.find(transition.transitionable_id)
-            Papyrus.with_datastore(**transition.datastore) { Papyrus.event(transition.transition_event.to_sym, transitionable) }
-          end
+        after_commit :dispatch_papyrus_event
+      end
+      def dispatch_papyrus_event
+        Papyrus::Event.where(
+          transitionable_type: self.class.to_s,
+          transitionable_id: self.id
+        ).each do |transition|
+          Papyrus.with_datastore(**transition.datastore) { Papyrus.event(transition.transition_event.to_sym, transition.transitionable) }
         end
       end
     end

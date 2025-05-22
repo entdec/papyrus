@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'papyrable'
-require_relative 'state_machine'
 require_relative 'life_cycle'
 
 module Papyrus
@@ -30,7 +29,6 @@ module Papyrus
         @_papyrus_papyrable_options = options
         include Papyrus::Papyrable
         include Papyrus::Concerns::EventsTransaction if options[:use_state_machine]
-        include Papyrus::StateMachine if options[:use_state_machine]
         include Papyrus::LifeCycle if options[:life_cycle]
         # include Papyrus::Transactio
       end
