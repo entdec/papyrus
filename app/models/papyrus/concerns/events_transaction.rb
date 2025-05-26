@@ -44,9 +44,12 @@ module Papyrus
 
         self.class.transaction do
           events.each do |event|
+            unless event.transitionable?
+              successful_ids << event.id
+              next
+            end
             begin
-              transitionable = event.try(:transitionable) || event.transitionable
-              Papyrus.with_datastore(**event.datastore) { Papyrus.event(event.transition_event.to_sym, transitionable) }
+              Papyrus.with_datastore(**event.datastore) { Papyrus.event(event.transition_event.to_sym, event.transitionable) }
               successful_ids << event.id
             rescue => e
               Rails.logger.error("Failed to dispatch papyrus event #{event.id}: #{e.message}")
