@@ -31,13 +31,34 @@ module Papyrus
         after_commit :dispatch_papyrus_event
       end
       def dispatch_papyrus_event
-        Papyrus::Event.where(
-          transitionable_type: self.class.to_s,
-          transitionable_id: self.id
-        ).each do |transition|
-          Papyrus.with_datastore(**transition.datastore) { Papyrus.event(transition.transition_event.to_sym, transition.transitionable) }
+        events = Papyrus::Event
+                   .where(transitionable_type: self.class.to_s, transitionable_id: self.id)
+                   .lock("FOR UPDATE OF papyrus_events SKIP LOCKED")
+                   .includes(:transitionable)
+                   .select(:id, :transition_event, :transitionable_type, :transitionable_id)
+                   .to_a
+
+        return if events.empty?
+
+        successful_ids = []
+
+        self.class.transaction do
+          events.each do |event|
+            unless event.transitionable?
+              successful_ids << event.id
+              next
+            end
+            begin
+              Papyrus.with_datastore(**event.datastore) { Papyrus.event(event.transition_event.to_sym, event.transitionable) }
+              successful_ids << event.id
+            rescue => e
+              Rails.logger.error("Failed to dispatch papyrus event #{event.id}: #{e.message}")
+            end
+          end
+          Papyrus::Event.where(id: successful_ids).delete_all if successful_ids.any?
         end
       end
+
     end
   end
 end
