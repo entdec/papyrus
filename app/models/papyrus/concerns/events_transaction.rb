@@ -35,7 +35,7 @@ module Papyrus
                    .where(transitionable_type: self.class.to_s, transitionable_id: self.id)
                    .lock("FOR UPDATE OF papyrus_events SKIP LOCKED")
                    .includes(:transitionable)
-                   .select(:id, :transition_event, :transitionable_type, :transitionable_id)
+                   .select(:id, :transition_event, :transitionable_type, :transitionable_id, :datastore)
                    .to_a
 
         return if events.empty?
