@@ -158,7 +158,7 @@ module Papyrus
     # Execute the given block with the given datastore for the current thread.
     def with_datastore(**datastore)
       old_datastore = Papyrus.papyrus_datastore
-      Thread.current[:papyrus_datastore] = datastore
+      Thread.current[:papyrus_datastore] = datastore.empty? ? old_datastore : datastore
       yield
     ensure
       Thread.current[:papyrus_datastore] = old_datastore
