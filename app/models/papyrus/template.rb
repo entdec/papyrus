@@ -1,5 +1,8 @@
 module Papyrus
   class Template < ApplicationRecord
+
+    has_paper_trail if defined?(PaperTrail)
+    
     KINDS = [%w[PDF pdf], %w[Liquid liquid]].freeze
 
     has_many :papers
