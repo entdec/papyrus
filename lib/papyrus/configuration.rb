@@ -3,7 +3,7 @@
 module Papyrus
   class Configuration
     attr_accessor :admin_authentication_module, :base_controller, :add_metadata, :metadata_fields,
-                  :print_client_api_key, :default_template_scope, :allow_custom_events, :visible_scope
+                  :print_client_api_key, :default_template_scope, :allow_custom_events, :visible_scope, :allow_auto_print
     attr_writer :logger, :host, :metadata_humanize, :default_params, :current_computer
 
     def initialize
@@ -17,7 +17,7 @@ module Papyrus
 
       @default_template_scope = ->(_object) { all }
       @allow_custom_events = false
-
+      @allow_auto_print =  {} 
       @default_params = {}
 
       @papyrable_classes = []
@@ -34,6 +34,10 @@ module Papyrus
     # Make the part that is important for visible readable for humans
     def metadata_humanize(metadata)
       @metadata_humanize.is_a?(Proc) ? instance_exec(metadata, &@metadata_humanize) : @metadata_humanize
+    end
+
+    def allow_auto_print(template)
+      @allow_auto_print.is_a?(Proc) ? instance_exec(template, &@allow_auto_print) : @allow_auto_print
     end
 
     def add_papyrable_class(klass)

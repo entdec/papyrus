@@ -10,7 +10,7 @@ module Papyrus
 
     has_many :print_jobs, class_name: 'PrintJob', dependent: :destroy
 
-    after_create_commit :print!, if: -> { !consolidated? }
+    after_create_commit :print!, if: -> { !consolidated? && auto_print_paper }
 
     def initialize(*args, **kwargs)
       super(*args, **kwargs)
@@ -35,6 +35,10 @@ module Papyrus
 
     def consolidated?
       consolidation_id.present?
+    end
+
+    def auto_print_paper
+      Papyrus.config.allow_auto_print(self.template&.id) || true
     end
 
     def printer_client_id
