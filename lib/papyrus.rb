@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'auxilium'
+require 'mensa'
 require 'img2zpl'
 require 'labelary'
 require 'liquidum'

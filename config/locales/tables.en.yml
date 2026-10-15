@@ -1,0 +1,43 @@
+en:
+  activerecord:
+    models:
+      papyrus/locale:
+        one: Locale
+        other: Locales
+      papyrus/template:
+        one: Template
+        other: Templates
+      papyrus/paper:
+        one: Paper
+        other: Papers
+      papyrus/print_job:
+        one: Print job
+        other: Print jobs
+    attributes:
+      papyrus/locale:
+        key: Key
+        metadata: Metadata
+      papyrus/template:
+        description: Description
+        enabled: Enabled
+        klass: Class
+        event: Event
+        papers_count: Number of papers
+        kind: Kind
+        use: Use
+        copies: Copies
+        metadata: Metadata
+        created_at: Created at
+      papyrus/paper:
+        owner: Owner
+        template: Template
+        attachment: Attachment
+        created_at: Created at
+        consolidation_id: Consolidation ID
+      papyrus/print_job:
+        state: State
+        owner: Owner
+        computer: Computer
+        printer: Printer
+        paper: Paper
+        created_at: Created at

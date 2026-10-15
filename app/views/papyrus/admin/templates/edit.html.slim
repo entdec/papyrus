@@ -85,4 +85,5 @@
         .grid.grid-cols-12.gap-4
           .col-span-12
             = f.input :metadata, as: :editor, input_html: { value: YAML.dump(f.object.metadata) }, lang: 'yaml'
-      = card.with_table(:papyrus_papers, parameters: {template_id: @template.id}, custom_views: false, tab: :papers)
+      - card.with_tab :papers, padding: false
+        = table("papyrus/papers", params: {template_id: @template.id})

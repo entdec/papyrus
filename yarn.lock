@@ -2,58 +2,41 @@
 # yarn lockfile v1
 
 
-"@stimulus/core@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@stimulus/core/-/core-2.0.0.tgz#140c85318d6a8a8210c0faf182223b8459348877"
-  integrity sha512-ff70GafKtzc8zQ1/cG+UvL06GcifPWovf2wBEdjLMh9xO2GOYURO3y2RYgzIGYUIBefQwyfX2CLfJdZFJrEPTw==
-  dependencies:
-    "@stimulus/mutation-observers" "^2.0.0"
+"@hotwired/stimulus-webpack-helpers@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/@hotwired/stimulus-webpack-helpers/-/stimulus-webpack-helpers-1.0.1.tgz"
+  integrity sha512-wa/zupVG0eWxRYJjC1IiPBdt3Lruv0RqGN+/DTMmUWUyMAEB27KXmVY6a8YpUVTM7QwVuaLNGW4EqDgrS2upXQ==
 
-"@stimulus/multimap@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@stimulus/multimap/-/multimap-2.0.0.tgz#420cfa096ed6538df4a91dbd2b2842c1779952b2"
-  integrity sha512-pMBCewkZCFVB3e5mEMoyO9+9aKzHDITmf3OnPun51YWxlcPdHcwbjqm1ylK63fsoduIE+RowBpFwFqd3poEz4w==
+"@hotwired/stimulus@>= 3.0", "@hotwired/stimulus@>2.0":
+  version "3.2.2"
+  resolved "https://registry.npmjs.org/@hotwired/stimulus/-/stimulus-3.2.2.tgz"
+  integrity sha512-eGeIqNOQpXoPAIP7tC1+1Yc1yl1xnwYqg+3mzqxyrbE5pg5YFBZcA6YoTiByJB6DKAEsiWtl6tjTJS4IYtbB7A==
 
-"@stimulus/mutation-observers@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@stimulus/mutation-observers/-/mutation-observers-2.0.0.tgz#3dbe37453bda47a6c795a90204ee8d77a799fb87"
-  integrity sha512-kx4VAJdPhIGBQKGIoUDC2tupEKorG3A+ckc2b1UiwInKTMAC1axOHU8ebcwhaJIxRqIrs8//4SJo9YAAOx6FEg==
-  dependencies:
-    "@stimulus/multimap" "^2.0.0"
-
-"@stimulus/webpack-helpers@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@stimulus/webpack-helpers/-/webpack-helpers-2.0.0.tgz#54296d2a2dffd4f962d2e802d99a3fdd84b8845f"
-  integrity sha512-D6tJWsAC024MwGEIKlUVYU8Ln87mlrmiwHvYAjipg+s8H4eLxUMQ3PZkWyPevfipH+oR3leuHsjYsK1gN5ViQA==
+"@rails/actioncable@^6.1.2-1":
+  version "6.1.710"
+  resolved "https://registry.npmjs.org/@rails/actioncable/-/actioncable-6.1.710.tgz"
+  integrity sha512-YDzMuh8mDRNLFXiexlLVnF1NUwk1bXwwO1gtEhOCsCqIsL6D21JfxpMwAD5x8qzrMJ1J0RZVa2hLl7ofeg+Mqw==
 
 element-closest@^3.0.1:
   version "3.0.2"
-  resolved "https://registry.yarnpkg.com/element-closest/-/element-closest-3.0.2.tgz#3814a69a84f30e48e63eaf57341f4dbf4227d2aa"
+  resolved "https://registry.npmjs.org/element-closest/-/element-closest-3.0.2.tgz"
   integrity sha512-JxKQiJKX0Zr5Q2/bCaTx8P+UbfyMET1OQd61qu5xQFeWr1km3fGaxelSJtnfT27XQ5Uoztn2yIyeamAc/VX13g==
 
 lru-cache@^6.0.0:
   version "6.0.0"
-  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-6.0.0.tgz#6d6fe6570ebd96aaf90fcad1dafa3b2566db3a94"
+  resolved "https://registry.npmjs.org/lru-cache/-/lru-cache-6.0.0.tgz"
   integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
   dependencies:
     yallist "^4.0.0"
 
 semver@^7.3.4:
   version "7.3.4"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.4.tgz#27aaa7d2e4ca76452f98d3add093a72c943edc97"
+  resolved "https://registry.npmjs.org/semver/-/semver-7.3.4.tgz"
   integrity sha512-tCfb2WLjqFAtXn4KEdxIhalnRtoKFN7nAwj0B3ZXCbQloV2tq5eDbcTmT68JJD3nRJq24/XgxtQKFIpQdtvmVw==
   dependencies:
     lru-cache "^6.0.0"
 
-stimulus@^2:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/stimulus/-/stimulus-2.0.0.tgz#713c8b91a72ef90914b90955f0e705f004403047"
-  integrity sha512-xipy7BS5TVpg4fX6S8LhrYZp7cmHGjmk09WSAiVx1gF5S5g43IWsuetfUhIk8HfHUG+4MQ9nY0FQz4dRFLs/8w==
-  dependencies:
-    "@stimulus/core" "^2.0.0"
-    "@stimulus/webpack-helpers" "^2.0.0"
-
 yallist@^4.0.0:
   version "4.0.0"
-  resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
+  resolved "https://registry.npmjs.org/yallist/-/yallist-4.0.0.tgz"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==

@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_20_115901) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_15_141253) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
-  enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -52,6 +52,41 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_115901) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "mensa_exports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "table_name", null: false
+    t.uuid "table_view_id"
+    t.string "scope"
+    t.string "format"
+    t.string "status", default: "pending", null: false
+    t.jsonb "config", default: {}, null: false
+    t.string "filename"
+    t.uuid "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "repeat", default: "", null: false
+    t.datetime "last_repeat_run_at"
+    t.string "password"
+    t.index ["last_repeat_run_at"], name: "index_mensa_exports_on_last_repeat_run_at"
+    t.index ["repeat"], name: "index_mensa_exports_on_repeat"
+    t.index ["status"], name: "index_mensa_exports_on_status"
+    t.index ["table_name"], name: "index_mensa_exports_on_table_name"
+    t.index ["table_view_id"], name: "index_mensa_exports_on_table_view_id"
+    t.index ["user_id"], name: "index_mensa_exports_on_user_id"
+  end
+
+  create_table "mensa_table_views", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "table_name"
+    t.string "name"
+    t.jsonb "config"
+    t.uuid "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "description"
+    t.index ["config"], name: "index_mensa_table_views_on_config", using: :gin
+    t.index ["table_name"], name: "index_mensa_table_views_on_table_name"
+    t.index ["user_id"], name: "index_mensa_table_views_on_user_id"
+  end
+
   create_table "papyrus_computers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "client_id"
     t.string "name"
@@ -60,6 +95,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_115901) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_papyrus_computers_on_client_id"
+  end
+
+  create_table "papyrus_events", force: :cascade do |t|
+    t.string "transitionable_type"
+    t.uuid "transitionable_id"
+    t.string "transition_attribute"
+    t.string "transition_event"
+    t.string "transition_from"
+    t.string "transition_to"
+    t.jsonb "datastore"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["transitionable_type", "transitionable_id", "transition_event"], name: "index_papyrus_events_on_type_id_event"
   end
 
   create_table "papyrus_locales", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -83,7 +131,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_115901) do
     t.string "purpose"
     t.jsonb "metadata"
     t.string "consolidation_id"
+    t.string "group_id"
     t.index ["consolidation_id"], name: "index_papyrus_papers_on_consolidation_id"
+    t.index ["group_id"], name: "index_papyrus_papers_on_group_id"
     t.index ["owner_type", "owner_id"], name: "index_papyrus_papers_on_owner_type_and_owner_id"
     t.index ["template_id"], name: "index_papyrus_papers_on_template_id"
   end
@@ -168,6 +218,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_115901) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "mensa_exports", "mensa_table_views", column: "table_view_id"
   add_foreign_key "papyrus_papers", "papyrus_templates", column: "template_id"
   add_foreign_key "papyrus_preferred_printers", "papyrus_computers", column: "computer_id"
   add_foreign_key "papyrus_preferred_printers", "papyrus_printers", column: "printer_id"

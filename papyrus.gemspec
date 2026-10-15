@@ -32,7 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "prawn-svg", "~> 0.32"
   spec.add_dependency "prawn-table", "~> 0.2"
   spec.add_dependency "printnode", "~> 1.0"
-  spec.add_dependency "rails", ">= 6.0.2.1"
+  spec.add_dependency "rails", ">= 7.1"
   spec.add_dependency "rqrcode", "~> 1.2"
   spec.add_dependency "servitium", "~> 1.1"
   spec.add_dependency "state_machines-activerecord", "~> 0.9"
@@ -40,6 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sidekiq", "~> 7"
   spec.add_dependency "i18n", "< 1.9.0"
   spec.add_dependency "matrix"
+  spec.add_dependency "mensa"
 
   spec.add_dependency "importmap-rails"
   spec.add_dependency "stimulus-rails"
@@ -52,4 +53,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "ruby-lsp", "~> 0"
   spec.add_development_dependency "standard", "~> 1.35"
   spec.add_development_dependency "sprockets-rails"
+  spec.add_development_dependency "minitest", "~> 5.0"
 end

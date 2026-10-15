@@ -1,0 +1,69 @@
+nl:
+  activerecord:
+    models:
+      papyrus/locale:
+        one: Taal
+        other: Talen
+      papyrus/template:
+        one: Sjabloon
+        other: Sjablonen
+      papyrus/paper:
+        one: Document
+        other: Documenten
+      papyrus/print_job:
+        one: Afdruktaak
+        other: Afdruktaken
+    attributes:
+      papyrus/locale:
+        key: Sleutel
+        metadata: Metagegevens
+      papyrus/template:
+        description: Omschrijving
+        enabled: Ingeschakeld
+        klass: Klasse
+        event: Gebeurtenis
+        papers_count: Aantal documenten
+        kind: Soort
+        use: Gebruik
+        copies: Exemplaren
+        metadata: Metagegevens
+        created_at: Aangemaakt op
+      papyrus/paper:
+        owner: Eigenaar
+        template: Sjabloon
+        attachment: Bijlage
+        created_at: Aangemaakt op
+        consolidation_id: Consolidatie-ID
+      papyrus/print_job:
+        state: Status
+        owner: Eigenaar
+        computer: Computer
+        printer: Printer
+        paper: Document
+        created_at: Aangemaakt op
+  papyrus:
+    paper_table:
+      preview: Voorbeeld
+      print: (Opnieuw) afdrukken
+      regenerate: Opnieuw genereren
+      print_consolidation: Consolidatie afdrukken
+    print_jobs_table:
+      resend: Opnieuw verzenden
+    dashboard:
+      show:
+        card:
+          papyrus_papers:
+            title: Documenten
+            tab:
+              papers: Documenten
+              print_jobs: Afdruktaken
+    admin:
+      templates:
+        edit:
+          card:
+            papyrus_templates:
+              tab:
+                papers: Documenten
+  time:
+    formats:
+      long: "%d-%m-%Y %H:%M"

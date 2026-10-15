@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 class Current < ActiveSupport::CurrentAttributes
-  attribute :transaction_log
+  attribute :transaction_log, :user
 end

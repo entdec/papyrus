@@ -125,3 +125,29 @@ Contribution directions go here.
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+### Tables (Mensa)
+
+Papyrus tables use `Papyrus::ApplicationTable < Mensa::Base` and require Rails
+7.1 or newer (the current Mensa install migrations require Rails 8.1; the dummy
+application uses 8.1). Host applications should install Mensa with `rails g mensa:install`
+and `rails mensa:install:migrations`, migrate the database, and include Mensa's
+component paths in their Tailwind configuration (`rails mensa:tailwindcss:config`).
+The host must mount `Mensa::Engine` as `mensa` and configure Mensa's base controller
+with the same authentication and authorization used for other host tables.
+Papyrus's JavaScript entry point imports Mensa's controllers.
+
+Use `table("papyrus/papers", params: {template_id: template.id})` for embedded
+papers. Pass `papyrable_id` and `papyrable_type` explicitly when embedding by
+polymorphic record; these serializable parameters survive pagination and exports.
+Direct Ruby callers may also pass `papyrable: record`. Replace old table names
+(`papyrus_papers`, `papyrus_print_jobs`, `papyrus_templates`, `papyrus_locales`)
+with `papyrus/papers`, `papyrus/print_jobs`, `papyrus/templates`, `papyrus/locales`.
+Replace `card.with_table` with `card.with_tab :papers, padding: false` containing
+the `table` helper, and use `params:` for table parameters.
+
+Existing ActionTable saved views are not migrated automatically. Keep ActionTable
+installed in hosts that still use it for other gems. Verify the integration with
+`RAILS_ENV=test bundle exec ruby bin/rails mensa:verify_all` from the dummy application,
+and run `bundle exec rake test` from the gem root. A populated host can also run
+`bundle exec rails mensa:verify_all` with its normal user context.

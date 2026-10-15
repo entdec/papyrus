@@ -19,8 +19,8 @@ en:
           papyrus_papers:
             title: Papers
             tab:
-              Papers: Papers
-              Print Jobs: Print Jobs
+              papers: Papers
+              print_jobs: Print jobs
     admin:
       templates:
         index:
@@ -38,7 +38,7 @@ en:
                 media: Media
                 example_data: Example Data
                 metadata: Metadata
-                Papers: Papers
+                papers: Papers
       locales:
         index:
           card:
