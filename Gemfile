@@ -11,3 +11,7 @@ gem "mensa", entdec: "mensa"
 
 # Mensa's current install migrations use Rails 8.1.
 gem "rails", "~> 8.1.0"
+
+source "https://rubygems.pkg.github.com/entdec" do
+  gem "shipkit"
+end

@@ -230,7 +230,6 @@ GEM
     mini_magick (5.3.0)
       logger
     mini_mime (1.1.5)
-    mini_portile2 (2.8.9)
     minitest (5.27.0)
     multipart-post (2.4.1)
     net-http (0.6.0)
@@ -245,9 +244,6 @@ GEM
     net-smtp (0.5.2)
       net-protocol
     nio4r (2.7.5)
-    nokogiri (1.19.4)
-      mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
     nokogiri (1.19.4-aarch64-linux-gnu)
       racc (~> 1.4)
     nokogiri (1.19.4-x86_64-linux-gnu)
@@ -466,10 +462,14 @@ GEM
     yaml (0.4.0)
     zeitwerk (2.8.3)
 
+GEM
+  remote: https://rubygems.pkg.github.com/entdec/
+  specs:
+    shipkit (0.1.2)
+
 PLATFORMS
   aarch64-linux
   aarch64-linux-gnu
-  ruby
   x86_64-linux-gnu
 
 DEPENDENCIES
@@ -481,6 +481,7 @@ DEPENDENCIES
   rails (~> 8.1.0)
   rubocop (~> 1.4)
   ruby-lsp (~> 0)
+  shipkit!
   sprockets-rails
   standard (~> 1.35)
 
