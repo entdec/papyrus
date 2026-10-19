@@ -2,13 +2,19 @@ name: papyrus
 
 services:
   app:
-    image: ghcr.io/rails/devcontainer/images/ruby:4.0.5
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: papyrus-devcontainer
 
     volumes:
       - ../..:/workspaces
 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
+
+    environment:
+      REDIS_URL: redis://redis:6379/1
 
     depends_on:
       - postgres

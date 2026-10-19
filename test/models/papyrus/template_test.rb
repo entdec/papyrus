@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'sidekiq/testing'
 
 module Papyrus
   class TemplateTest < ApplicationTestCase
@@ -21,7 +22,7 @@ module Papyrus
 
     test 'renders a pdf when an item is saved' do
       item = Item.first # Needed to have papyrable class names set
-      assert_performed_jobs 1, only: [Papyrus::GenerateJob] do
+      Sidekiq::Testing.inline! do
         item = Item.create!(name: 'Test', description: 'Smurrefluts')
       end
       assert_equal 1, item.papers.count
@@ -30,7 +31,7 @@ module Papyrus
 
     test 'renders a liquid template when an item is saved' do
       item = items(:one)
-      assert_performed_jobs 1, only: [Papyrus::GenerateJob] do
+      Sidekiq::Testing.inline! do
         item.update!(name: 'Test', description: 'Smurrefluts')
       end
       assert_equal 1, item.papers.count
@@ -39,16 +40,18 @@ module Papyrus
 
     test 'does not renders a liquid template with non-matching condition when an item is allocated' do
       item = Item.create(name: 'Test', state: 'available', description: 'Smurrefluts')
-      assert_performed_jobs 1, only: [Papyrus::GenerateJob] do
+      Sidekiq::Testing.inline! do
         item.allocate
+        item.dispatch_papyrus_event
       end
       assert_equal 0, item.papers.count
     end
 
     test 'renders a liquid template with matching condition when an item is allocated' do
       item = Item.create(name: 'Yes', state: 'available', description: 'Test')
-      assert_performed_jobs 1, only: [Papyrus::GenerateJob] do
+      Sidekiq::Testing.inline! do
         item.allocate!
+        item.dispatch_papyrus_event
       end
       assert_equal 1, item.papers.count
       assert_equal 'invoice', item.papers.first.purpose

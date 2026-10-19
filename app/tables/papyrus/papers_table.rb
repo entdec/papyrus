@@ -88,10 +88,7 @@ module Papyrus
     def scope
       records = Papyrus::Paper.left_outer_joins(:template, attachment_attachment: :blob)
         .preload(:owner, attachment_attachment: :blob)
-      if params[:papyrable_id] && params[:papyrable_type]
-        Papyrus::Deprecator.new.deprecation_warning(:papyrable_id, 'Calling papyrus papers table with papyrable_type and papyrable_id is deprecated. Use papyrable instead.')
-        records = records.where(papyrable_type: params[:papyrable_type], papyrable_id: params[:papyrable_id])
-      elsif params[:papyrable]
+      if params[:papyrable]
         records = records.where(papyrable: params[:papyrable])
       end
       records = records.where(template_id: params[:template_id]) if params[:template_id].present?

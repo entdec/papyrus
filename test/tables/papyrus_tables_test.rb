@@ -27,7 +27,6 @@ class PapyrusTablesTest < ActiveSupport::TestCase
       I18n.with_locale(locale) do
         TABLES.each { |table| assert_mensa_table_valid table, user: @owner, strict: true }
         assert_mensa_table_valid Papyrus::PapersTable, params: {template_id: @template.id}, strict: true
-        assert_mensa_table_valid Papyrus::PapersTable, params: {papyrable_type: 'User', papyrable_id: @item.id}, strict: true
       end
     end
   end
@@ -35,7 +34,6 @@ class PapyrusTablesTest < ActiveSupport::TestCase
   test 'papers retain template and polymorphic parameter scopes' do
     assert_equal [@paper.id], Papyrus::PapersTable.new(params: {template_id: @template.id}).selected_scope.map(&:id)
     assert_equal [@paper.id], Papyrus::PapersTable.new(params: {papyrable: @item}).selected_scope.map(&:id)
-    assert_equal [@paper.id], Papyrus::PapersTable.new(params: {papyrable_type: 'User', papyrable_id: @item.id}).selected_scope.map(&:id)
   end
 
   test 'selected records retain computed and association data' do

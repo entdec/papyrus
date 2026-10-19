@@ -44,6 +44,7 @@ module Papyrus
       data = generate_attachment(paper, context, locale) unless consolidation_id
 
       paper.save!
+      data.rewind if data
       [paper, data]
     end
 

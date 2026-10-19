@@ -3,6 +3,6 @@
 
     = sts.card :papyrus_papers, icon: 'fad fa-scroll' do |card|
       - card.with_tab :papers, padding: false
-        = table("papyrus/papers", params: request.query_parameters.slice("template_id", "papyrable_id", "papyrable_type"))
+        = table("papyrus/papers", params: request.query_parameters.slice("template_id").merge(papyrable: @papyrable))
       - card.with_tab :print_jobs, padding: false
         = table("papyrus/print_jobs", params: {})

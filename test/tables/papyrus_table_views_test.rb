@@ -57,8 +57,9 @@ class PapyrusTableViewsTest < ActionView::TestCase
 
   test 'dashboard tabs preserve request scope parameters' do
     view.request.query_parameters.merge!('template_id' => 'template-123', 'papyrable_id' => 'item-123', 'papyrable_type' => 'Item')
+    @papyrable = Object.new
     render template: 'papyrus/dashboard/show'
-    assert_includes @calls, ['papyrus/papers', {'template_id' => 'template-123', 'papyrable_id' => 'item-123', 'papyrable_type' => 'Item'}]
+    assert_includes @calls, ['papyrus/papers', {'template_id' => 'template-123', 'papyrable' => @papyrable}]
     assert_includes @calls, ['papyrus/print_jobs', {}]
     assert_equal [[:papers, false], [:print_jobs, false]], @cards.cards.last.last.tabs.map { |name, padding, _| [name, padding] }
   end
