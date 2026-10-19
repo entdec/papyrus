@@ -88,9 +88,13 @@ module Papyrus
     def scope
       records = Papyrus::Paper.left_outer_joins(:template, attachment_attachment: :blob)
         .preload(:owner, attachment_attachment: :blob)
-      if params[:papyrable]
+
+      if params[:papyrable_id] && params[:papyrable_type]
+        records = records.where(papyrable_type: params[:papyrable_type], papyrable_id: params[:papyrable_id])
+      elsif params[:papyrable]
         records = records.where(papyrable: params[:papyrable])
       end
+
       records = records.where(template_id: params[:template_id]) if params[:template_id].present?
       records
     end
