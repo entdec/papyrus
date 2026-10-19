@@ -89,9 +89,9 @@ module Papyrus
       records = Papyrus::Paper.left_outer_joins(:template, attachment_attachment: :blob)
         .preload(:owner, attachment_attachment: :blob)
 
-      if params[:papyrable_id] && params[:papyrable_type]
+      if params[:papyrable_id].present? && params[:papyrable_type].present?
         records = records.where(papyrable_type: params[:papyrable_type], papyrable_id: params[:papyrable_id])
-      elsif params[:papyrable]
+      elsif params[:papyrable].present?
         records = records.where(papyrable: params[:papyrable])
       end
 
