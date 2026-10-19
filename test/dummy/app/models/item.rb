@@ -9,6 +9,5 @@ class Item < ApplicationRecord
     end
   end
 
-  transaction_loggable
   papyrable use_state_machine: true, life_cycle: true
 end

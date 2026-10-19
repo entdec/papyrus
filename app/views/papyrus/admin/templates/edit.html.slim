@@ -13,18 +13,8 @@
       
       - card.with_tab:basics, padding: true
         .grid.grid-cols-12.gap-4 data-controller="toggle"
-          .col-span-6
+          .col-span-12
             = f.input :enabled, as: :switch
-          .col-span-6
-            .flex.items-start.gap-3
-              .flex.flex-col
-                .text-sm.font-medium Auto Print
-                .text-xs.text-slate-500
-                  | Configure this setting from the Locations Maintenance page.
-              - if f.object.allow_auto_paper_print?
-                i.fa-solid.fa-toggle-on.text-3xl.text-blue-500
-              - else
-                i.fa-solid.fa-toggle-off.text-2xl.text-gray-400
 
           .col-span-12
             - Papyrus.metadata_definitions.each do |field, definition|

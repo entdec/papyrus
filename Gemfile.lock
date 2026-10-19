@@ -17,7 +17,7 @@ GIT
 PATH
   remote: .
   specs:
-    papyrus (1.4.28)
+    papyrus (1.5.0)
       auxilium (~> 3)
       barby (~> 0.6)
       combine_pdf (~> 1.0.23)

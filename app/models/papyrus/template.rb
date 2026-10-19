@@ -116,11 +116,6 @@ module Papyrus
       persisted? && example_data.present?
     end
 
-    def allow_auto_paper_print?
-      Papyrus.config.allow_auto_print(id) 
-    end
-
-
     private
 
     def paper_kind

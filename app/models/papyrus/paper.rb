@@ -38,8 +38,7 @@ module Papyrus
     end
 
     def auto_print_paper
-      return false unless template
-      self.template&.allow_auto_paper_print? 
+      Papyrus.config.allow_auto_print(self)
     end
 
     def printer_client_id

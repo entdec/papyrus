@@ -17,7 +17,7 @@ module Papyrus
 
       @default_template_scope = ->(_object) { all }
       @allow_custom_events = false
-      @allow_auto_print =  {} 
+      @allow_auto_print =  {}
       @default_params = {}
 
       @papyrable_classes = []
@@ -36,8 +36,8 @@ module Papyrus
       @metadata_humanize.is_a?(Proc) ? instance_exec(metadata, &@metadata_humanize) : @metadata_humanize
     end
 
-    def allow_auto_print(template)
-      @allow_auto_print.is_a?(Proc) ? instance_exec(template, &@allow_auto_print) : @allow_auto_print
+    def allow_auto_print(object)
+      @allow_auto_print.is_a?(Proc) ? instance_exec(object, &@allow_auto_print) : @allow_auto_print
     end
 
     def add_papyrable_class(klass)
