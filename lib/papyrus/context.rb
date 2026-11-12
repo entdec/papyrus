@@ -31,6 +31,8 @@ module Papyrus
         @files[filename] = StringIO.new(attachment.blob.download)
 
       elsif filename.is_a?(ActiveStorage::Attached::One) || (filename.is_a?(Liquid::Drop) && filename.is_for_a?(ActiveStorage::Attached::One) && filename.respond_to?(:download))
+        return unless filename.attached?
+
         StringIO.new(filename.download)
       end
     end
